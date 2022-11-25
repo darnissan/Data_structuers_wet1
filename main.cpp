@@ -9,7 +9,7 @@ int main()
 {
 
     OrderedTriple a(1, 20, 21);
-    // pointer to a
+    // pointer to a node
     OrderedTriple *pointer_to_a = &a;
     AvlTreeTemplate<OrderedTriple> tree;
     tree.insert(tree.root, a);
