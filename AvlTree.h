@@ -8,7 +8,7 @@ class AVLNode
 public:
     AVLNode(const T &value) : data(value), left(NULL), right(NULL) {}
     ~AVLNode() {}
-
+    void SetValue(const T &value) { data = value; }
     const T &GetValue() const { return data; }
     void SetLeft(AVLNode *node) { left = node; }
     AVLNode *GetLeft() const { return left; }
@@ -44,7 +44,7 @@ public:
     AVLNode<T> *RotateRL(AVLNode<T> *root);
 
     AVLNode<T> *Insert(AVLNode<T> *root, const T &value);
-    AVLNode<T> *Remove(const T &value);
+    AVLNode<T> *Remove(AVLNode<T> *node, const T &value);
     void PrintInOrder(AVLNode<T> *root) const;
 
 private:
@@ -89,23 +89,23 @@ AVLNode<T> *AvlTree<T>::find(AVLNode<T> *root, const T &value) const
     }
 }
 template <class T>
-int AvlTree<T>::height(AVLNode<T> *root) const
+int AvlTree<T>::height(AVLNode<T> *node) const
 {
     int Ownheight = 0;
-    if (root == NULL)
+    if (node == NULL)
     {
         return 0;
     }
-    int leftHeight = height(root->GetLeft());
-    int rightHeight = height(root->GetRight());
+    int leftHeight = height(node->GetLeft());
+    int rightHeight = height(node->GetRight());
     Ownheight = 1 + ((leftHeight > rightHeight) ? leftHeight : rightHeight);
     return Ownheight;
 }
 template <class T>
-int AvlTree<T>::GetBF(AVLNode<T> *root) const
+int AvlTree<T>::GetBF(AVLNode<T> *node) const
 {
-    int leftHeight = height(root->GetLeft());
-    int rightHeight = height(root->GetRight());
+    int leftHeight = height(node->GetLeft());
+    int rightHeight = height(node->GetRight());
     int balanceFactor = leftHeight - rightHeight;
     return balanceFactor;
 }
@@ -130,15 +130,19 @@ AVLNode<T> *AvlTree<T>::RotateRR(AVLNode<T> *node)
 template <class T>
 AVLNode<T> *AvlTree<T>::RotateLR(AVLNode<T> *node)
 {
-    RotateRR(node->GetLeft());
-    RotateLL(node);
+    AVLNode<T> *temp = RotateRR(node->GetLeft());
+    node->SetLeft(temp->GetRight());
+    temp->SetRight(node);
+    node = temp;
     return node;
 }
 template <class T>
 AVLNode<T> *AvlTree<T>::RotateRL(AVLNode<T> *node)
 {
-    RotateLL(node->GetRight());
-    RotateRR(node);
+    AVLNode<T> *temp = RotateLL(node->GetRight());
+    node->SetRight(temp->GetLeft());
+    temp->SetLeft(node);
+    node = temp;
     return node;
 }
 template <class T>
@@ -186,60 +190,66 @@ AVLNode<T> *AvlTree<T>::Insert(AVLNode<T> *node, const T &value)
     return node;
 }
 template <class T>
-AVLNode<T> *AvlTree<T>::Remove(const T &value)
+AVLNode<T> *AvlTree<T>::Remove(AVLNode<T> *node, const T &value)
 {
-    if (root == NULL)
+    if (node->GetLeft() == NULL && node->GetRight() == NULL)
     {
-        return root;
+        if (node == this->root)
+        {
+            this->root = NULL;
+        }
+
+        delete node;
+        return NULL;
     }
-    if (value < root->GetValue())
+    if (value < node->GetValue())
     {
-        root->GetLeft() = Remove(root->GetLeft(), value);
+        node->SetLeft(Remove(node->GetLeft(), value));
     }
-    else if (value > root->GetValue())
+    else if (value > node->GetValue())
     {
-        root->GetRight() = Remove(root->GetRight(), value);
+        node->SetRight(Remove(node->GetRight(), value));
     }
     else
     {
-        if (root->GetLeft() == NULL)
+        if (node->GetLeft() == NULL)
         {
-            AVLNode<T> *temp = root->GetRight();
-            delete root;
+            AVLNode<T> *temp = node->GetRight();
+            delete node;
             return temp;
         }
-        else if (root->GetRight() == NULL)
+        else if (node->GetRight() == NULL)
         {
-            AVLNode<T> *temp = root->GetLeft();
-            delete root;
+            AVLNode<T> *temp = node->GetLeft();
+            delete node;
             return temp;
         }
-        AVLNode<T> *temp = root->GetRight();
+        AVLNode<T> *temp = node->GetRight();
         while (temp->GetLeft() != NULL)
         {
             temp = temp->GetLeft();
         }
-        root->SetValue(temp->GetValue());
-        root->GetRight() = Remove(root->GetRight(), temp->GetValue());
+        node->SetValue(temp->GetValue());
+        node->SetRight(Remove(node->GetRight(), temp->GetValue()));
     }
-    int balanceFactor = GetBF(root);
-    if (balanceFactor == 2 && GetBF(root.GetLeft()) >= 0)
+    int balanceFactor = GetBF(node);
+    if (balanceFactor == 2 && GetBF(node->GetLeft()) >= 0)
     {
-        RotateLL(root);
+        node = RotateLL(node);
     }
-    else if (balanceFactor == 2 && GetBF(root.GetLeft()) == -1)
+    else if (balanceFactor == 2 && GetBF(node->GetLeft()) == -1)
     {
-        RotateLR(root);
+        node = RotateLR(node);
     }
-    else if (balanceFactor == -2 && GetBF(root.GetRight()) <= -1)
+    else if (balanceFactor == -2 && GetBF(node->GetRight()) <= 0)
     {
-        RotateRR(root);
+        node = RotateRR(node);
     }
-    else if (balanceFactor == -2 && GetBF(root.GetRight()) == 1)
+    else if (balanceFactor == -2 && GetBF(node->GetRight()) == 1)
     {
-        RotateRL(root);
+        node = RotateRL(node);
     }
-    return root;
+    return node;
 }
 template <class T>
 void AvlTree<T>::PrintInOrder(AVLNode<T> *root) const
