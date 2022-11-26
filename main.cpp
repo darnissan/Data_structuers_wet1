@@ -1,4 +1,4 @@
-#include "AvlTreeTemplate.h"
+#include "AvlTree.h"
 #include "orderedTriple.h"
 #include <iostream>
 #include <string>
@@ -8,10 +8,13 @@ using namespace std;
 int main()
 {
 
-    OrderedTriple a(1, 20, 21);
-    // pointer to a node
-    OrderedTriple *pointer_to_a = &a;
-    AvlTreeTemplate<OrderedTriple> tree;
-    tree.insert(tree.root, a);
-    tree.printTree(tree.root);
+    AvlTree<OrderedTriple> tree;
+    OrderedTriple a(1, 2, 3);
+    OrderedTriple b(1, 2, 4);
+    OrderedTriple c(1, 2, 5);
+
+    tree.root = tree.Insert(tree.GetRoot(), a);
+    tree.root = tree.Insert(tree.GetRoot(), b);
+    tree.root = tree.Insert(tree.GetRoot(), c);
+    tree.PrintInOrder(tree.GetRoot());
 }

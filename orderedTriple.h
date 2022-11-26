@@ -48,6 +48,7 @@ public:
                     return false;
             }
         }
+        return false;
     }
     bool operator>(const OrderedTriple &other) const
     {
@@ -69,6 +70,7 @@ public:
                     return false;
             }
         }
+        return false;
     }
 
     friend std::ostream &operator<<(std::ostream &os, const OrderedTriple &triple)
