@@ -44,7 +44,6 @@ int main()
     OrderedTriple k(1, 2, 11);
     OrderedTriple m(1, 2, 12);
     OrderedTriple n(1, 2, 13);
-
     tree.root = tree.Insert(tree.root, a);
     tree.root = tree.Insert(tree.root, b);
     tree.root = tree.Insert(tree.root, c);
