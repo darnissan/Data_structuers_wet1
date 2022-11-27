@@ -65,16 +65,16 @@ void ClosestDifffromRight(AVLNode<OrderedTriple> *node, OrderedTriple &searcher,
         ClosestDifffromRight(node->GetRight(), searcher, minDiffcurrent);
     }
 }
-int ClosestDiffFromRightWrapper(AVLNode<OrderedTriple> *root, OrderedTriple &searcher)
+OrderedTriple ClosestDiffFromRightWrapper(AVLNode<OrderedTriple> *root, OrderedTriple &searcher)
 {
     if (root == NULL)
     {
-        return 0;
+        return OrderedTriple(0,0,0);
     }
 
     OrderedTriple minDiffcurrent = OrderedTriple(INT_MAX, 0, -1);
     ClosestDifffromRight(root, searcher, minDiffcurrent);
-    return minDiffcurrent.getThird();
+    return minDiffcurrent;
 }
     void ClosestDiffFromLeft(AVLNode<OrderedTriple> * node, OrderedTriple & searcher, OrderedTriple & minDiffcurrent)
     {
@@ -102,17 +102,78 @@ int ClosestDiffFromRightWrapper(AVLNode<OrderedTriple> *root, OrderedTriple &sea
             ClosestDiffFromLeft(node->GetRight(), searcher, minDiffcurrent);
         }
     }
-    int ClosestDiffFromLeftWrapper(AVLNode<OrderedTriple> * root, OrderedTriple & searcher)
+    OrderedTriple ClosestDiffFromLeftWrapper(AVLNode<OrderedTriple> * root, OrderedTriple & searcher)
     {
         if (root == NULL)
         {
-            return 0;
+            return OrderedTriple(0, 0, 0);
         }
 
         OrderedTriple minDiffcurrent = OrderedTriple(-1, 0, -1);
         ClosestDiffFromLeft(root, searcher, minDiffcurrent);
-        return minDiffcurrent.getThird();
+        return minDiffcurrent;
     }
+
+int closestsDealBreaker(OrderedTriple &triple,OrderedTriple &left,OrderedTriple &right)
+{
+    if (left==OrderedTriple(0,0,0))
+    {
+        return right.getThird();
+    }
+    else if (right==OrderedTriple(0,0,0))
+    {
+        return left.getThird();
+    }
+    else
+    {
+        
+        if (abs(left.getFirst()-triple.getFirst())<abs(right.getFirst()-triple.getFirst()))
+        {
+            return left.getThird();
+        }
+        else if (abs(left.getFirst() - triple.getFirst()) > abs(right.getFirst() - triple.getFirst()))
+        {
+            return right.getThird();
+        }
+        else
+        {
+            if (abs(left.getSecond() - triple.getSecond()) < abs(right.getSecond() - triple.getSecond()))
+            {
+                return left.getThird();
+            }
+            else if (abs(left.getSecond() - triple.getSecond()) > abs(right.getSecond() - triple.getSecond()))
+            {
+                return right.getThird();
+            }
+            else
+            {
+                if (abs(left.getThird() - triple.getThird()) < abs(right.getThird() - triple.getThird()))
+                {
+                    return left.getThird();
+                }
+                else if (abs(left.getThird() - triple.getThird()) > abs(right.getThird() - triple.getThird()))
+                {
+                    return right.getThird();
+                }
+                else
+                {
+                    return max(left.getThird(), right.getThird());
+                }
+            }
+        }
+    }
+
+
+}
+
+int ClosestDealBreakerWrapper(AVLNode<OrderedTriple> *root, OrderedTriple &triple)
+{
+    OrderedTriple left = ClosestDiffFromLeftWrapper(root, triple);
+    OrderedTriple right = ClosestDiffFromRightWrapper(root, triple);
+    return closestsDealBreaker(triple, left, right);
+}
+
+
 
     int main()
 {
@@ -130,9 +191,10 @@ int ClosestDiffFromRightWrapper(AVLNode<OrderedTriple> *root, OrderedTriple &sea
     tree.root=tree.Insert(tree.GetRoot(),d);
     tree.root=tree.Insert(tree.GetRoot(),e);
     tree.root=tree.Insert(tree.GetRoot(),f);
-    cout << d << endl;
-    cout << ClosestDiffFromLeftWrapper(tree.GetRoot(), e) << endl;
-    cout << ClosestDiffFromRightWrapper(tree.GetRoot(), e) << endl;
+    cout << f<< endl;
+    cout << ClosestDiffFromLeftWrapper(tree.GetRoot(), f) << endl;
+    cout << ClosestDiffFromRightWrapper(tree.GetRoot(), f) << endl;
+    cout << ClosestDealBreakerWrapper(tree.GetRoot(), f) << endl;
   //  printBTs(tree.GetRoot());
     tree.PrintInOrder(tree.GetRoot());
     return 0;
