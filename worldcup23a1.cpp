@@ -1,7 +1,7 @@
 #include "worldcup23a1.h"
 
 AVLNode<Team> *findTeamById(AVLNode<Team> *root, int teamId);
-AVLNode<Team> *findPlayerById(AVLNode<Player> *node, int playerId);
+AVLNode<Player> *findPlayerById(AVLNode<Player> *node, int playerId);
 bool isLeagelTeam(AVLNode<Team> *node);
 
 world_cup_t::world_cup_t()
@@ -95,7 +95,7 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 }
 
 StatusType world_cup_t::remove_player(int playerId)
-{
+{	/*
 	// TODO: Your code goes here
 	if(playerId<=0)
 		return StatusType::INVALID_INPUT;
@@ -113,6 +113,7 @@ StatusType world_cup_t::remove_player(int playerId)
 	}
 	numberOfPlayers--;
 	return StatusType::SUCCESS;
+	*/
 }
 
 StatusType world_cup_t::update_player_stats(int playerId, int gamesPlayed,
@@ -198,17 +199,17 @@ AVLNode<Team> *findTeamById(AVLNode<Team> *node, int teamId)
 		return findTeamById(node->GetRight(), teamId);
 	}
 }
-AVLNode<Team> *findPlayerById(AVLNode<Player> *node, int playerId)
+AVLNode<Player> *findPlayerById(AVLNode<Player> *node, int playerId)
 {
 	if (node == NULL)
 	{
 		return nullptr;
 	}
-	if (node->GetValue().getId() == playerId)
+	if (node->GetValue().getPlayerId() == playerId)
 	{
 		return node;
 	}
-	if (node->GetValue().getId() > playerId)
+	if (node->GetValue().getPlayerId() > playerId)
 	{
 		return findPlayerById(node->GetLeft(), playerId);
 	}

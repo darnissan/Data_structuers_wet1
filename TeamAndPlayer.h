@@ -19,7 +19,7 @@ private:
     Player *closesetFromRight;
     Team *pointerToTeam;
 
-    void DeletePlayer(Player *player)
+    void DeletePlayer(Player *player);
 
 public: 
     //defualt constructor
@@ -52,6 +52,10 @@ public:
     ~Player()
     {
         
+    }
+    int getPlayerId() const
+    {
+        return playerId;
     }
 };
 
