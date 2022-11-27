@@ -27,11 +27,113 @@ void printBTs(const AVLNode<T> *node)
     printBT("", node, false);
 }
 
-int main()
+
+void insertToTreeWithClosest(AvlTree<OrderedTriple> &tree, OrderedTriple &triple)
+{
+    if (tree.GetRoot() == NULL)
+    {  
+        tree.Insert(tree.GetRoot(), triple);
+        return;
+    }
+    //NEEDS TO DO
+    return ;
+    
+}
+void ClosestDifffromRight(AVLNode<OrderedTriple> *node, OrderedTriple &searcher, OrderedTriple &minDiffcurrent)
 {
 
-    world_cup_t *worldCup = new world_cup_t();
-    worldCup->add_team(1, 1);
+    if (node == NULL)
+    {
+        return;
+    }
 
+    if (node->GetValue() > searcher && node->GetValue() < minDiffcurrent)
+    {
+        minDiffcurrent = node->GetValue();
+    }
+
+    if (node->GetValue().getThird() == searcher.getThird())
+    {
+        return ClosestDifffromRight(node->GetRight(), searcher, minDiffcurrent);
+    }
+    if (searcher < node->GetValue())
+    {
+        ClosestDifffromRight(node->GetLeft(), searcher, minDiffcurrent);
+    }
+    else
+    {
+        ClosestDifffromRight(node->GetRight(), searcher, minDiffcurrent);
+    }
+}
+int ClosestDiffFromRightWrapper(AVLNode<OrderedTriple> *root, OrderedTriple &searcher)
+{
+    if (root == NULL)
+    {
+        return 0;
+    }
+
+    OrderedTriple minDiffcurrent = OrderedTriple(INT_MAX, 0, -1);
+    ClosestDifffromRight(root, searcher, minDiffcurrent);
+    return minDiffcurrent.getThird();
+}
+    void ClosestDiffFromLeft(AVLNode<OrderedTriple> * node, OrderedTriple & searcher, OrderedTriple & minDiffcurrent)
+    {
+
+        if (node == NULL)
+        {
+            return;
+        }
+
+        if (node->GetValue() < searcher && node->GetValue() > minDiffcurrent)
+        {
+            minDiffcurrent = node->GetValue();
+        }
+
+        if (node->GetValue().getThird() == searcher.getThird())
+        {
+            return ClosestDiffFromLeft(node->GetLeft(), searcher, minDiffcurrent);
+        }
+        if (searcher < node->GetValue())
+        {
+            ClosestDiffFromLeft(node->GetLeft(), searcher, minDiffcurrent);
+        }
+        else
+        {
+            ClosestDiffFromLeft(node->GetRight(), searcher, minDiffcurrent);
+        }
+    }
+    int ClosestDiffFromLeftWrapper(AVLNode<OrderedTriple> * root, OrderedTriple & searcher)
+    {
+        if (root == NULL)
+        {
+            return 0;
+        }
+
+        OrderedTriple minDiffcurrent = OrderedTriple(-1, 0, -1);
+        ClosestDiffFromLeft(root, searcher, minDiffcurrent);
+        return minDiffcurrent.getThird();
+    }
+
+    int main()
+{
+
+    AvlTree<OrderedTriple> tree;
+    OrderedTriple a(1, 20, 21);
+    OrderedTriple b(1, 20, 25);
+    OrderedTriple c(1, 5, 3);
+    OrderedTriple d(1, 1, 4);
+    OrderedTriple e(2, 5, 5);
+    OrderedTriple f(2, 4, 6);
+    tree.root=tree.Insert(tree.GetRoot(),a);
+    tree.root=tree.Insert(tree.GetRoot(),b);
+    tree.root=tree.Insert(tree.GetRoot(),c);
+    tree.root=tree.Insert(tree.GetRoot(),d);
+    tree.root=tree.Insert(tree.GetRoot(),e);
+    tree.root=tree.Insert(tree.GetRoot(),f);
+    cout << d << endl;
+    cout << ClosestDiffFromLeftWrapper(tree.GetRoot(), e) << endl;
+    cout << ClosestDiffFromRightWrapper(tree.GetRoot(), e) << endl;
+  //  printBTs(tree.GetRoot());
+    tree.PrintInOrder(tree.GetRoot());
     return 0;
 }
