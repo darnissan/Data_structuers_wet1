@@ -17,7 +17,7 @@
 
 #include "wet1util.h"
 #include "TeamAndPlayer.h"
-#include "AvlTree.h"
+
 class world_cup_t
 {
 private:

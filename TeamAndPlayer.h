@@ -9,16 +9,26 @@ class Team
 {
 private:
     int id;
-    int numOfPlayers;
-    int numOfGoalKeepers;
-    int points;
-    int gamesTeamPlayed;
-    int TotalGoalsScored;
-    int TotalCards;
+    int numOfPlayers = 0;
+    int numOfGoalKeepers = 0;
+    int points = 0;
+    int gamesTeamPlayed = 0;
+    int TotalGoalsScored = 0;
+    int TotalCards = 0;
     AvlTree<Player> *players;
 
 public:
-    Team(int id, int points) : id(id), points(points), numOfPlayers(0), numOfGoalKeepers(0), gamesTeamPlayed(0), TotalGoalsScored(0), TotalCards(0)
+    Team()
+    {
+        this->id = 0;
+        this->numOfPlayers = 0;
+        this->numOfGoalKeepers = 0;
+        this->points = 0;
+        this->gamesTeamPlayed = 0;
+        this->TotalGoalsScored = 0;
+        this->TotalCards = 0;
+    }
+    Team(int id, int points) : id(id), numOfPlayers(0), numOfGoalKeepers(0), points(points), gamesTeamPlayed(0), TotalGoalsScored(0), TotalCards(0)
     {
         players = new AvlTree<Player>();
     }
@@ -46,10 +56,7 @@ public:
     Team(const Team &other) : id(other.id), numOfPlayers(other.numOfPlayers), numOfGoalKeepers(other.numOfGoalKeepers),
                               points(other.points), gamesTeamPlayed(other.gamesTeamPlayed), TotalGoalsScored(other.TotalGoalsScored), TotalCards(other.TotalCards), players(other.players) {}
     // defult constructor
-    Team() : id(0), numOfPlayers(0), numOfGoalKeepers(0), points(0), gamesTeamPlayed(0), TotalGoalsScored(0), TotalCards(0)
-    {
-        players = new AvlTree<Player>();
-    }
+
     // operator== for team
     bool operator==(const Team &other) const
     {
