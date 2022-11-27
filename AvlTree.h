@@ -42,7 +42,7 @@ public:
     AVLNode<T> *RotateRR(AVLNode<T> *root);
     AVLNode<T> *RotateLR(AVLNode<T> *root);
     AVLNode<T> *RotateRL(AVLNode<T> *root);
-
+    bool isItInTree(AVLNode<T> *root, const T &value) const;
     AVLNode<T> *Insert(AVLNode<T> *root, const T &value);
     AVLNode<T> *Remove(AVLNode<T> *node, const T &value);
     void PrintInOrder(AVLNode<T> *root) const;
@@ -262,5 +262,25 @@ void AvlTree<T>::PrintInOrder(AVLNode<T> *root) const
     std::cout << root->GetValue() << " ";
     PrintInOrder(root->GetRight());
 }
-
+template <class T>
+bool AvlTree<T>::isItInTree(AVLNode<T> *node, const T &value) const
+{
+    if (node == NULL)
+    {
+        return false;
+    }
+    if (node->GetValue() == value)
+    {
+        return true;
+    }
+    if (node->GetValue() > value)
+    {
+        return isItInTree(node->GetLeft(), value);
+    }
+    else
+    {
+        return isItInTree(node->GetRight(), value);
+    }
+    return false;
+}
 #endif // AVL_TREE_H

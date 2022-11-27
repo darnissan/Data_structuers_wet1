@@ -72,6 +72,12 @@ public:
         }
         return false;
     }
+    bool operator==(const OrderedTriple &other) const
+    {
+        if (first == other.first && second == other.second && third == other.third)
+            return true;
+        return false;
+    }
 
     friend std::ostream &operator<<(std::ostream &os, const OrderedTriple &triple)
     {
