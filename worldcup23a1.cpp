@@ -1,11 +1,10 @@
 #include "worldcup23a1.h"
 
 AVLNode<Team> *findTeamById(AVLNode<Team> *root, int teamId);
+AVLNode<Team> *findPlayerById(AVLNode<Player> *node, int playerId);
 bool isLeagelTeam(AVLNode<Team> *node);
 
-
-
-	world_cup_t::world_cup_t()
+world_cup_t::world_cup_t()
 {
 	// TODO: Your code goes here
 }
@@ -13,7 +12,6 @@ bool isLeagelTeam(AVLNode<Team> *node);
 world_cup_t::~world_cup_t()
 {
 	// TODO: Your code goes here
-	
 }
 
 StatusType world_cup_t::add_team(int teamId, int points)
@@ -45,22 +43,22 @@ StatusType world_cup_t::add_team(int teamId, int points)
 StatusType world_cup_t::remove_team(int teamId)
 {
 	// TODO: Your code goes here
-	if (teamId<=0) 
+	if (teamId <= 0)
 	{
 		return StatusType::INVALID_INPUT;
 	}
-	AVLNode<Team> *TeamAfterSearch = findTeamById(AllTeams.GetRoot(), teamId) ;
-	if (TeamAfterSearch == NULL || TeamAfterSearch->GetValue().getNumOfPlayers()>0)
+	AVLNode<Team> *TeamAfterSearch = findTeamById(AllTeams.GetRoot(), teamId);
+	if (TeamAfterSearch == NULL || TeamAfterSearch->GetValue().getNumOfPlayers() > 0)
 
 	{
 		return StatusType::FAILURE;
 	}
-	AllTeams.root = AllTeams.Remove(AllTeams.GetRoot(), TeamAfterSearch->GetValue()); 
+	AllTeams.root = AllTeams.Remove(AllTeams.GetRoot(), TeamAfterSearch->GetValue());
 	numberOfTeams--;
 	if (isLeagelTeam(TeamAfterSearch))
-		{
-			numberOfLeagelTeams--;
-		}
+	{
+		numberOfLeagelTeams--;
+	}
 	return StatusType::SUCCESS;
 }
 
@@ -68,26 +66,52 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 								   int goals, int cards, bool goalKeeper)
 {
 	// TODO: Your code goes here
-	if (playerId<=0 || teamId <=0 || gamesPlayed<0 || goals<0 || cards<0 || (gamesPlayed==0 && (goals>0 || cards>0)))
-		return StatusType::INVALID_INPUT;
+	// checking invalid input
+	// Adding  player to All players tree held by worldCup
+	// Adding player  to players tree held by its team
+	// Adding player to All players_ordered_by_stats
+	AVLNode<Team> *PlayersTeamNode = findTeamById(AllTeams.GetRoot(), teamId);
 
+	if (playerId <= 0 || teamId <= 0 || gamesPlayed < 0 || goals < 0 || cards < 0 || (gamesPlayed == 0 && (goals > 0 || cards > 0)))
+		return StatusType::INVALID_INPUT;
+	if (PlayersTeamNode==nullptr || findPlayerById(AllPlayers.GetRoot(),playerId)!=nullptr)
+	{
+		return StatusType::FAILURE;
+	}
 	Player newPlayer;
 	try
 	{
-		newPlayer = Player();
+		newPlayer = Player(playerId, teamId, gamesPlayed, goals, cards, goalKeeper);
 	}
 	catch (std::bad_alloc &e)
 	{
 		return StatusType::ALLOCATION_ERROR;
 	}
+	PlayersTeamNode->GetValue().InsertPlayerToTeam(newPlayer);
 
-	
+												   numberOfPlayers++;
 	return StatusType::SUCCESS;
+		
 }
 
 StatusType world_cup_t::remove_player(int playerId)
 {
 	// TODO: Your code goes here
+	if(playerId<=0)
+		return StatusType::INVALID_INPUT;
+	player = findPlayerById(AllPlayers.GetRoot(),playerId);
+	if(player==nullptr)
+		return StatusType::FAILURE;
+	try
+	{
+		//remove code is in the destructor
+		delete player 
+	}
+	catch(std::bad_alloc &e)
+	{
+		return StatusType::ALLOCATION_ERROR;
+	}
+	numberOfPlayers--;
 	return StatusType::SUCCESS;
 }
 
@@ -155,11 +179,11 @@ output_t<int> world_cup_t::knockout_winner(int minTeamId, int maxTeamId)
 	return 2;
 }
 
-AVLNode<Team> *findTeamById(AVLNode<Team> *node,int teamId)
+AVLNode<Team> *findTeamById(AVLNode<Team> *node, int teamId)
 {
 	if (node == NULL)
 	{
-		return NULL;
+		return nullptr;
 	}
 	if (node->GetValue().getId() == teamId)
 	{
@@ -174,9 +198,28 @@ AVLNode<Team> *findTeamById(AVLNode<Team> *node,int teamId)
 		return findTeamById(node->GetRight(), teamId);
 	}
 }
+AVLNode<Team> *findPlayerById(AVLNode<Player> *node, int playerId)
+{
+	if (node == NULL)
+	{
+		return nullptr;
+	}
+	if (node->GetValue().getId() == playerId)
+	{
+		return node;
+	}
+	if (node->GetValue().getId() > playerId)
+	{
+		return findPlayerById(node->GetLeft(), playerId);
+	}
+	else
+	{
+		return findPlayerById(node->GetRight(), playerId);
+	}
+}
 bool isLeagelTeam(AVLNode<Team> *node)
 {
-	if (node->GetValue().getNumOfGoalKeepers()>0 && node->GetValue().getNumOfPlayers()>=11)
+	if (node->GetValue().getNumOfGoalKeepers() > 0 && node->GetValue().getNumOfPlayers() >= 11)
 	{
 		return true;
 	}

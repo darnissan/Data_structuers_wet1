@@ -4,7 +4,58 @@
 
 #include "AvlTree.h"
 
-class Player;
+class Player
+{
+private:
+    int playerId;
+    int teamId;
+    int gamesPlayed;
+    int goals;
+    int cards;
+    bool goalKeeper;
+
+    int gamesTeamPlayedBefore;
+    Player *closesetFromLeft;
+    Player *closesetFromRight;
+    Team *pointerToTeam;
+
+    void DeletePlayer(Player *player)
+
+public: 
+    //defualt constructor
+    Player(){
+        playerId = 0;
+        teamId = 0;
+        gamesPlayed = 0;
+        goals = 0;
+        cards = 0;
+        goalKeeper = false;
+        gamesTeamPlayedBefore = 0;
+        closesetFromLeft = NULL;
+        closesetFromRight = NULL;
+        pointerToTeam = NULL;
+    }
+    Player(int playerId, int teamId) : playerId(playerId), teamId(teamId), gamesPlayed(0), goals(0), cards(0), goalKeeper(false) {
+        //gamesTeamPlayedBefore =
+        //closesetFromLeft =
+        //closesetFromRight =
+        //pointerToTeam =
+    }
+    Player(int playerId, int teamId, int gamesPlayed, int goals, int cards, bool goalKeeper) : playerId(playerId), teamId(teamId), gamesPlayed(gamesPlayed),
+                                                                                                goals(goals), cards(cards), goalKeeper(goalKeeper)
+    {
+        //gamesTeamPlayedBefore =
+        //closesetFromLeft =
+        //closesetFromRight =
+        //pointerToTeam =
+    }
+    ~Player()
+    {
+        
+    }
+};
+
+
 class Team
 {
 private:
@@ -15,9 +66,10 @@ private:
     int gamesTeamPlayed = 0;
     int TotalGoalsScored = 0;
     int TotalCards = 0;
-    AvlTree<Player> players;
+   
     
 public:
+    AvlTree<Player> players;
     Team()
     {
         this->id = 0;
@@ -100,6 +152,10 @@ public:
     {
         return TotalCards;
     }
+    void InsertPlayerToTeam( const Player &playerToInsert) 
+    {
+        players.root = players.Insert(players.GetRoot(), playerToInsert);
+    }
 
     //<< operator for team
     friend std::ostream &operator<<(std::ostream &os, const Team &team)
@@ -108,17 +164,5 @@ public:
         return os;
     }
 };
-class Player
-{
-private:
-    int id;
-    bool isGoalKeeper;
-    int goalsScored;
-    int gamesPlayed;
-    int gamesTeamPlayedBefore;
-    int cards;
-    Player *closesetFromLeft;
-    Player *closesetFromRight;
-    Team *pointerToTeam;
-};
+
 #endif // TEAMANDPLAYER_H_

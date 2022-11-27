@@ -10,6 +10,7 @@ public:
     ~AVLNode() {}
     void SetValue(const T &value) { data = value; }
     const T &GetValue() const { return data; }
+     T &GetValue() { return data; }
     void SetLeft(AVLNode *node) { left = node; }
     AVLNode *GetLeft() const { return left; }
     void SetRight(AVLNode *node) { right = node; }
