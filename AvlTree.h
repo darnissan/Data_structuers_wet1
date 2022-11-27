@@ -69,23 +69,23 @@ void AvlTree<T>::DeleteAvlNode(AVLNode<T> *nodeToRemove)
     }
 }
 template <class T>
-AVLNode<T> *AvlTree<T>::find(AVLNode<T> *root, const T &value) const
+AVLNode<T> *AvlTree<T>::find(AVLNode<T> *node, const T &value) const
 {
-    if (root == NULL)
+    if (node == NULL)
     {
         return NULL;
     }
-    if (root->GetValue() == value)
+    if (node->GetValue() == value)
     {
-        return root;
+        return node;
     }
-    if (root->GetValue() > value)
+    if (node->GetValue() > value)
     {
-        return find(root->GetLeft(), value);
+        return find(node->GetLeft(), value);
     }
     else
     {
-        return find(root->GetRight(), value);
+        return find(node->GetRight(), value);
     }
 }
 template <class T>

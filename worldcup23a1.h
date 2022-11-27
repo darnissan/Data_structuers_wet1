@@ -25,10 +25,9 @@ private:
 	// Here you may add anything you want
 	//
 	AvlTree<Team> AllTeams;
-	AvlTree<Team> *ALLLeagelTeams;
-	AvlTree<Player> *AllPlayers;
-	int numberOfLeagelTeams;
-
+	
+	int numberOfTeams=0;
+	int numberOfLeagelTeams=0;
 public:
 	// <DO-NOT-MODIFY> {
 

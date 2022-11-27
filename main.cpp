@@ -32,6 +32,7 @@ int main()
 
     world_cup_t *worldCup = new world_cup_t();
     worldCup->add_team(1, 1);
-
+    worldCup->add_team(1, 1);
+    delete worldCup;
     return 0;
 }

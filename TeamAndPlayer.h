@@ -15,8 +15,8 @@ private:
     int gamesTeamPlayed = 0;
     int TotalGoalsScored = 0;
     int TotalCards = 0;
-    AvlTree<Player> *players;
-
+    AvlTree<Player> players;
+    
 public:
     Team()
     {
@@ -30,11 +30,11 @@ public:
     }
     Team(int id, int points) : id(id), numOfPlayers(0), numOfGoalKeepers(0), points(points), gamesTeamPlayed(0), TotalGoalsScored(0), TotalCards(0)
     {
-        players = new AvlTree<Player>();
+        
     }
     ~Team()
     {
-        delete players;
+        
     }
     // assign operator
     Team &operator=(const Team &other)
@@ -100,10 +100,7 @@ public:
     {
         return TotalCards;
     }
-    AvlTree<Player> *getPlayers() const
-    {
-        return players;
-    }
+
     //<< operator for team
     friend std::ostream &operator<<(std::ostream &os, const Team &team)
     {

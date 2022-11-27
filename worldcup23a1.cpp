@@ -1,6 +1,11 @@
 #include "worldcup23a1.h"
 
-world_cup_t::world_cup_t()
+AVLNode<Team> *findTeamById(AVLNode<Team> *root, int teamId);
+bool isLeagelTeam(AVLNode<Team> *node);
+
+
+
+	world_cup_t::world_cup_t()
 {
 	// TODO: Your code goes here
 }
@@ -8,6 +13,7 @@ world_cup_t::world_cup_t()
 world_cup_t::~world_cup_t()
 {
 	// TODO: Your code goes here
+	
 }
 
 StatusType world_cup_t::add_team(int teamId, int points)
@@ -32,19 +38,50 @@ StatusType world_cup_t::add_team(int teamId, int points)
 		return StatusType::FAILURE;
 	AllTeams.root = AllTeams.Insert(AllTeams.GetRoot(), newTeam);
 	AllTeams.PrintInOrder(AllTeams.GetRoot());
+	numberOfTeams++;
 	return StatusType::SUCCESS;
 }
 
 StatusType world_cup_t::remove_team(int teamId)
 {
 	// TODO: Your code goes here
-	return StatusType::FAILURE;
+	if (teamId<=0) 
+	{
+		return StatusType::INVALID_INPUT;
+	}
+	AVLNode<Team> *TeamAfterSearch = findTeamById(AllTeams.GetRoot(), teamId) ;
+	if (TeamAfterSearch == NULL || TeamAfterSearch->GetValue().getNumOfPlayers()>0)
+
+	{
+		return StatusType::FAILURE;
+	}
+	AllTeams.root = AllTeams.Remove(AllTeams.GetRoot(), TeamAfterSearch->GetValue()); 
+	numberOfTeams--;
+	if (isLeagelTeam(TeamAfterSearch))
+		{
+			numberOfLeagelTeams--;
+		}
+	return StatusType::SUCCESS;
 }
 
 StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 								   int goals, int cards, bool goalKeeper)
 {
 	// TODO: Your code goes here
+	if (playerId<=0 || teamId <=0 || gamesPlayed<0 || goals<0 || cards<0 || (gamesPlayed==0 && (goals>0 || cards>0)))
+		return StatusType::INVALID_INPUT;
+
+	Player newPlayer;
+	try
+	{
+		newPlayer = Player();
+	}
+	catch (std::bad_alloc &e)
+	{
+		return StatusType::ALLOCATION_ERROR;
+	}
+
+	
 	return StatusType::SUCCESS;
 }
 
@@ -116,4 +153,32 @@ output_t<int> world_cup_t::knockout_winner(int minTeamId, int maxTeamId)
 {
 	// TODO: Your code goes here
 	return 2;
+}
+
+AVLNode<Team> *findTeamById(AVLNode<Team> *node,int teamId)
+{
+	if (node == NULL)
+	{
+		return NULL;
+	}
+	if (node->GetValue().getId() == teamId)
+	{
+		return node;
+	}
+	if (node->GetValue().getId() > teamId)
+	{
+		return findTeamById(node->GetLeft(), teamId);
+	}
+	else
+	{
+		return findTeamById(node->GetRight(), teamId);
+	}
+}
+bool isLeagelTeam(AVLNode<Team> *node)
+{
+	if (node->GetValue().getNumOfGoalKeepers()>0 && node->GetValue().getNumOfPlayers()>=11)
+	{
+		return true;
+	}
+	return false;
 }
