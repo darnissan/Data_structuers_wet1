@@ -16,8 +16,9 @@
 #define WORLDCUP23A1_H_
 
 #include "wet1util.h"
-#include "TeamAndPlayer.h"
-
+#include "Team.h"
+#include "Player.h"
+#include "PlayerStats.h"
 class world_cup_t
 {
 private:
@@ -26,11 +27,13 @@ private:
 	//
 	AvlTree<Team> AllTeams;
 	AvlTree<Player> AllPlayers;
-	AvlTree<Player> ALLPayersOrderdByStats;
+	AvlTree<PlayerStats> ALLPayersOrderdByStats; 
 	int numberOfPlayers = 0;
 	int numberOfTeams = 0;
 	int numberOfLeagelTeams = 0;
-
+	int topScorerGoals = 0;
+	int topScorerId = 0;
+	int topScorerCards = 0;
 public:
 	// <DO-NOT-MODIFY> {
 
@@ -68,6 +71,7 @@ public:
 	output_t<int> knockout_winner(int minTeamId, int maxTeamId);
 
 	// } </DO-NOT-MODIFY>
+	int ClosestDiffFromRightWrapper(AVLNode<PlayerStats> *node, PlayerStats &searcher);
 };
 
 #endif // WORLDCUP23A1_H_

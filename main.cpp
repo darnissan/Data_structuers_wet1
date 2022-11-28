@@ -3,6 +3,7 @@
 #include "worldcup23a1.h"
 #include <string>
 #include <iostream>
+#include <climits>
 using namespace std;
 template <class T>
 void printBT(const std::string &prefix, const AVLNode<T> *node, bool isLeft)
@@ -193,6 +194,10 @@ int main()
     // tree.PrintInOrder(tree.GetRoot());
     world_cup_t *world_cup = new world_cup_t();
     world_cup->add_team(1, 1);
+    world_cup->add_team(2, 2);
+    world_cup->add_team(3, 3);
+    world_cup->remove_team(2);
+    world_cup->add_player(999,1,1,1,1,false);
     delete world_cup; //  printBTs(tree.GetRoot());
 
     return 0;
