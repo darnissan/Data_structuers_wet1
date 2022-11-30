@@ -130,7 +130,8 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 
 	newPlayer.SetpointerToPlayerStatsAvlNodeONTeam(TheTeamOfThePlayerNode->GetValue().InsertPlayerToTeamStatsTree(newPlayerStats)); // o(logn)
 	// setting the pointer held by the player instance to the player stats tree
-	newPlayer.setpointerToPlayerStatsAvlNodeONAllPlayers(ALLPayersOrderdByStats.Insert(ALLPayersOrderdByStats.GetRoot(), newPlayerStats));
+	ALLPayersOrderdByStats.root=ALLPayersOrderdByStats.Insert(ALLPayersOrderdByStats.GetRoot(), newPlayerStats);
+	newPlayer.setpointerToPlayerStatsAvlNodeONAllPlayers(findPlayerStatsByStats(ALLPayersOrderdByStats.GetRoot(), newPlayerStats));
 
 	// updating the left and right closets from both all players and team players stats
 	updateClosest(closestFromAllLeftId);
@@ -149,13 +150,49 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 	// adding player to All players_ordered_by_stats
 	PlayerNodeOnTeamPlayersTree->GetValue().setpointerToPlayerStatsAvlNodeONAllPlayers(ALLPayersOrderdByStats.find(ALLPayersOrderdByStats.GetRoot(), newPlayerStats));
 
+	if (newPlayer.getGoals()>topScorerGoals)
+	{
+		topScorerGoals=newPlayer.getGoals();
+		topScorerId=newPlayer.getPlayerId();
+		topScorerCards=newPlayer.getCards();
+	}
+	else if (newPlayer.getGoals()==topScorerGoals)
+	{
+		if (newPlayer.getCards()<topScorerCards)
+		{
+			topScorerGoals=newPlayer.getGoals();
+			topScorerId=newPlayer.getPlayerId();
+			topScorerCards=newPlayer.getCards();
+		}
+		else if (newPlayer.getCards()==topScorerCards)
+		{
+			if (newPlayer.getPlayerId()>topScorerId)
+			{
+				topScorerGoals=newPlayer.getGoals();
+				topScorerId=newPlayer.getPlayerId();
+				topScorerCards=newPlayer.getCards();
+			}
+		}
+	}
+	/*
+	std::cout << "player added" <<newPlayer << std::endl;
+	std::cout<<"--------------------------------------"<<std::endl;
+	std::cout<<"closest from all left id: "<<closestFromAllLeftId<<std::endl;
+	std::cout<<"closest from all right id: "<<closestFromAllRightId<<std::endl;
+	std::cout<<"closest from team left id: "<<closestFromTeamLeftId<<std::endl;
+	std::cout<<"closest from team right id: "<<closestFromTeamRightId<<std::endl;
+	std::cout << "--------------------------------------" << std::endl;
+	std::cout << "inorder of stats tree" << std::endl;
+	printBTs( ALLPayersOrderdByStats.GetRoot());
+	std::cout << "--------------------------------------" << std::endl;
+	*/
 	numberOfPlayers++;
 
 	return StatusType::SUCCESS;
 }
 
 StatusType world_cup_t::remove_player(int playerId)
-{
+{/*
 	// TODO: Your code goes here
 	if (playerId <= 0)
 		return StatusType::INVALID_INPUT;
@@ -173,7 +210,7 @@ StatusType world_cup_t::remove_player(int playerId)
 	}
 
 	numberOfPlayers--;
-
+*/
 	return StatusType::SUCCESS;
 }
 
@@ -296,7 +333,7 @@ void ClosestDiffFromLeft(AVLNode<PlayerStats> *node, PlayerStats &searcher, Play
 	{
 		return;
 	}
-
+	
 	if (node->GetValue() < searcher && node->GetValue() > minDiffcurrent)
 	{
 		minDiffcurrent = node->GetValue();
@@ -360,7 +397,7 @@ int world_cup_t::ClosestDiffFromRightWrapper(AVLNode<PlayerStats> *node, PlayerS
 		return -1;
 	}
 
-	PlayerStats minDiffcurrent = PlayerStats(topScorerId, topScorerGoals, topScorerCards);
+	PlayerStats minDiffcurrent = PlayerStats(-1, topScorerGoals+1, topScorerCards);
 	ClosestDifffromRight(node, searcher, minDiffcurrent);
 	return minDiffcurrent.getPlayerId();
 }
@@ -432,7 +469,8 @@ void printBTs(const AVLNode<T> *node)
 
 int world_cup_t::GetWinningClosestBySearcherID(int id)
 {
-	AVLNode<PlayerStats> *searcher = findPlayerById(AllPlayers.GetRoot(), id)->GetValue().getpointerToPlayerStatsAvlNodeONAllPlayers();
+	AVLNode<Player> *searcherPlayerNode = findPlayerById(AllPlayers.GetRoot(), id);
+	AVLNode<PlayerStats> *searcher = searcherPlayerNode->GetValue().getpointerToPlayerStatsAvlNodeONAllPlayers();
 	
 	return MatchTheWinningClosest(searcher->GetValue(), searcher->GetValue().getClosestFromAllLeftID(),searcher->GetValue().getClosestFromAllRightID()); 
 }
@@ -450,24 +488,25 @@ int world_cup_t::MatchTheWinningClosest(PlayerStats &searcher, int leftID, int r
 	}
 	PlayerStats leftPlayerStats = findPlayerById(AllPlayers.GetRoot(), leftID)->GetValue().getpointerToPlayerStatsAvlNodeONAllPlayers()->GetValue();
 	PlayerStats rightPlayerStats = findPlayerById(AllPlayers.GetRoot(), rightID)->GetValue().getpointerToPlayerStatsAvlNodeONAllPlayers()->GetValue();
-	if (leftPlayerStats.getGoals() > rightPlayerStats.getGoals())
+	if (abs(leftPlayerStats.getGoals()-searcher.getGoals()) < abs(rightPlayerStats.getGoals()-searcher.getGoals()))
 	{
 		return leftID;
 	}
-	else if (leftPlayerStats.getGoals() < rightPlayerStats.getGoals())
+	else if (abs(leftPlayerStats.getGoals()-searcher.getGoals()) > abs(rightPlayerStats.getGoals()-searcher.getGoals()))
 	{
 		return rightID;
 	}
 	else
 	{
-		if (leftPlayerStats.getCards() < rightPlayerStats.getCards())
+		if (abs(leftPlayerStats.getCards()-searcher.getCards()) < abs(rightPlayerStats.getCards()-searcher.getCards()))
 		{
 			return leftID;
 		}
-		else if (leftPlayerStats.getCards() > rightPlayerStats.getCards())
+		else if (abs(leftPlayerStats.getCards()-searcher.getCards()) > abs(rightPlayerStats.getCards()-searcher.getCards()))
 		{
 			return rightID;
 		}
+		
 		else
 		{
 			if (abs(leftPlayerStats.getPlayerId() - searcher.getPlayerId()) < abs(rightPlayerStats.getPlayerId() - searcher.getPlayerId()))
@@ -488,5 +527,25 @@ int world_cup_t::MatchTheWinningClosest(PlayerStats &searcher, int leftID, int r
 		}
 
 		return -1;
+	}
+}
+
+AVLNode<PlayerStats> *world_cup_t::findPlayerStatsByStats(AVLNode<PlayerStats> *node, PlayerStats &playerStats)
+{
+	if (node==nullptr)
+	{
+		return nullptr;
+	}
+	if (node->GetValue().getPlayerId()==playerStats.getPlayerId())
+	{
+		return node;
+	}
+	else if (playerStats<node->GetValue())
+	{
+		return findPlayerStatsByStats(node->GetLeft(), playerStats);
+	}
+	else
+	{
+		return findPlayerStatsByStats(node->GetRight(), playerStats);
 	}
 }

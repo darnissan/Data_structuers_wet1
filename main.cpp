@@ -197,7 +197,7 @@ int main()
     world_cup->add_team(2, 2);
     world_cup->add_team(3, 3);
     
-    world_cup->add_player(1,1,1,1,1,false);
+    
     world_cup->add_player(21,1,1,1,20,true); //add player args go by (player id ,team id ,games played, goals,cards)
     world_cup->add_player(25,1,1,1,20,true);
     world_cup->add_player(3, 1, 1, 1, 5, true);
@@ -206,9 +206,12 @@ int main()
     world_cup->add_player(6,2,1,2,4,true);
     world_cup->add_player(24,2,1,2,3,true);
     world_cup->add_player(7,2,1,2,2,true);
+    world_cup->add_player(8,3,1,2,1,true);
     
-    world_cup->printTeam(1);
-    world_cup->printTeam(2);
+   // world_cup->printTeam(1);
+    //world_cup->printTeam(2);
+
+    std::cout<<"the closest of 8 is: "<<world_cup->GetWinningClosestBySearcherID(8)<<std::endl;
     delete world_cup; //  printBTs(tree.GetRoot());
 
     return 0;

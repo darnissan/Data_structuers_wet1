@@ -8,10 +8,10 @@ private:
     int playerId;
     int goals;
     int cards;
-    int closesetFromAllLeftID;
-    int closesetFromAllRightID;
-    int closesetFromTeamLeftID;
-    int closesetFromTeamRightID;
+    int closesetFromAllLeftID=-1;
+    int closesetFromAllRightID=-1;
+    int closesetFromTeamLeftID=-1;
+    int closesetFromTeamRightID=-1;
 
         public : PlayerStats() : playerId(0), goals(0), cards(0), closesetFromAllLeftID(-1), closesetFromAllRightID(-1), closesetFromTeamLeftID(-1), closesetFromTeamRightID(-1)
     {
@@ -59,7 +59,7 @@ private:
     {
         return closesetFromTeamRightID;
     }
-    
+
     // operator <
     bool operator<(const PlayerStats &other) const
     {

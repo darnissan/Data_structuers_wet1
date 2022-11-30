@@ -36,9 +36,9 @@ public:
 
         pointerToTeamAvlNode = NULL;
     }
-    ~Player()
-    {
-    }
+    //~Player()
+    //{
+    //}
 
     Player(int playerId, int teamId) : playerId(playerId), teamId(teamId), gamesPlayed(0), goals(0), cards(0), goalKeeper(false)
     {
@@ -123,7 +123,7 @@ public:
     // operator <<
     friend std::ostream &operator<<(std::ostream &os, const Player &player)
     {
-        os << "playerId: " << player.playerId << " teamId: " << player.teamId << " gamesPlayed: " << player.gamesPlayed << " goals: " << player.goals << " cards: " << player.cards << " goalKeeper: " << player.goalKeeper << std::endl;
+        os << "playerId: " << player.playerId << " teamId: " << player.teamId << " gamesPlayed: " << player.gamesPlayed << " goals: " << player.goals << " cards: " << player.cards << " goalKeeper: " << player.goalKeeper  << std::endl;
         return os;
     }
     void setpointerToPlayerStatsAvlNodeONAllPlayers(AVLNode<PlayerStats> *pointerToPlayerStatsAvlNodeONAllPlayers)

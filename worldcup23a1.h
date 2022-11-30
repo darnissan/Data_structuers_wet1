@@ -36,11 +36,11 @@ private:
 	int topScorerCards = 0;
 	void updateClosest(int ToBeUpdatedID);
 	int MatchTheWinningClosest(PlayerStats &searcher, int leftID, int rightID);
-	
+	AVLNode<PlayerStats> *findPlayerStatsByStats(AVLNode<PlayerStats> *node, PlayerStats &playerStats);
 
-public:
-	// <DO-NOT-MODIFY> {
-	int GetWinningClosestBySearcherID(int id);
+		public :
+		// <DO-NOT-MODIFY> {
+		int GetWinningClosestBySearcherID(int id);
 	void printTeam(int teamId);
 	world_cup_t();
 	virtual ~world_cup_t();

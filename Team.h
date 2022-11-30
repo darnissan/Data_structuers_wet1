@@ -116,8 +116,8 @@ public:
         {
             numOfGoalKeepers++;
         }
-        std::cout<<"Player "<<playerToInsert.getPlayerId()<<" was added to team "<<id<<std::endl;
-        players.PrintInOrder(players.GetRoot());
+     //   std::cout<<"Player "<<playerToInsert.getPlayerId()<<" was added to team "<<id<<std::endl;
+     //   players.PrintInOrder(players.GetRoot());
 
 
         return players.find(players.GetRoot(), playerToInsert);
