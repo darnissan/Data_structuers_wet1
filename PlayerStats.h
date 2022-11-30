@@ -1,18 +1,22 @@
 #ifndef PLAYER_STATS_H_
 #define PLAYER_STATS_H_
 #include <iostream>
+#include "AvlTree.h"
 class PlayerStats 
 {
 private:
     int playerId;
     int goals;
     int cards;
-    int closesetFromLeftID;
-    int closesetFromRightID;
+    int closesetFromAllLeftID;
+    int closesetFromAllRightID;
+    int closesetFromTeamLeftID;
+    int closesetFromTeamRightID;
 
-public:
-    PlayerStats() : playerId(0), goals(0), cards(0), closesetFromLeftID(0), closesetFromRightID(0) {}
-   
+        public : PlayerStats() : playerId(0), goals(0), cards(0), closesetFromAllLeftID(-1), closesetFromAllRightID(-1), closesetFromTeamLeftID(-1), closesetFromTeamRightID(-1)
+    {
+    }
+
     explicit PlayerStats(int playerId, int goals, int cards)
     {
         this->playerId = playerId;
@@ -22,15 +26,40 @@ public:
   
  
 
-    void setClosestFromLeftID(int id)
+    void setClosestFromAllLeftID(int id)
     {
-        closesetFromLeftID = id;
+        closesetFromAllLeftID = id;
     }
 
-    void setClosestFromRightID(int id)
+    void setClosestFromAllRightID(int id)
     {
-        closesetFromRightID = id;
+        closesetFromAllRightID = id;
     }
+    void setClosestFromTeamLeftID(int id)
+    {
+        closesetFromTeamLeftID = id;
+    }
+    void setClosestFromTeamRightID(int id)
+    {
+        closesetFromTeamRightID = id;
+    }
+    int getClosestFromAllLeftID()
+    {
+        return closesetFromAllLeftID;
+    }
+    int getClosestFromAllRightID()
+    {
+        return closesetFromAllRightID;
+    }
+    int getClosestFromTeamLeftID()
+    {
+        return closesetFromTeamLeftID;
+    }
+    int getClosestFromTeamRightID()
+    {
+        return closesetFromTeamRightID;
+    }
+    
     // operator <
     bool operator<(const PlayerStats &other) const
     {
@@ -112,6 +141,6 @@ public:
     {
         return cards;
     }
-
+   
 };
 #endif // PLAYER_STATS_H_

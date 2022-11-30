@@ -27,16 +27,21 @@ private:
 	//
 	AvlTree<Team> AllTeams;
 	AvlTree<Player> AllPlayers;
-	AvlTree<PlayerStats> ALLPayersOrderdByStats; 
+	AvlTree<PlayerStats> ALLPayersOrderdByStats;
 	int numberOfPlayers = 0;
 	int numberOfTeams = 0;
 	int numberOfLeagelTeams = 0;
 	int topScorerGoals = 0;
 	int topScorerId = 0;
 	int topScorerCards = 0;
+	void updateClosest(int ToBeUpdatedID);
+	int MatchTheWinningClosest(PlayerStats &searcher, int leftID, int rightID);
+	
+
 public:
 	// <DO-NOT-MODIFY> {
-
+	int GetWinningClosestBySearcherID(int id);
+	void printTeam(int teamId);
 	world_cup_t();
 	virtual ~world_cup_t();
 

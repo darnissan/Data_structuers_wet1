@@ -21,6 +21,7 @@ private:
     
 public:
     AvlTree<Player> players;
+    AvlTree<PlayerStats> PlayersOnTeamOrderdByStats;
     Team()
     {
         this->id = 0;
@@ -37,7 +38,7 @@ public:
     }
     ~Team()
     {
-        
+       
     }
     // assign operator
     Team &operator=(const Team &other)
@@ -117,7 +118,14 @@ public:
         }
         std::cout<<"Player "<<playerToInsert.getPlayerId()<<" was added to team "<<id<<std::endl;
         players.PrintInOrder(players.GetRoot());
+
+
         return players.find(players.GetRoot(), playerToInsert);
+    }
+    AVLNode<PlayerStats> *InsertPlayerToTeamStatsTree(const PlayerStats &playerToInsert)
+    {
+        PlayersOnTeamOrderdByStats.root = PlayersOnTeamOrderdByStats.Insert(PlayersOnTeamOrderdByStats.GetRoot(), playerToInsert);//o(logn)
+        return PlayersOnTeamOrderdByStats.find(PlayersOnTeamOrderdByStats.GetRoot(), playerToInsert);//o(logn)
     }
 
     //<< operator for team
@@ -125,6 +133,30 @@ public:
     {
         os <<"team id" << team.id << " " << team.numOfPlayers << " " << team.numOfGoalKeepers << " " << "points:"<< team.points << " " << team.gamesTeamPlayed << " " << team.TotalGoalsScored << " " << team.TotalCards<<"---"<<std::endl;
         return os;
+    }
+
+    
+
+   
+
+    AVLNode<Player> *findPlayerById(AVLNode<Player> *node, int playerId)
+    {
+        if (node == NULL)
+        {
+            return nullptr;
+        }
+        if (node->GetValue().getPlayerId() == playerId)
+        {
+            return node;
+        }
+        if (node->GetValue().getPlayerId() > playerId)
+        {
+            return findPlayerById(node->GetLeft(), playerId);
+        }
+        else
+        {
+            return findPlayerById(node->GetRight(), playerId);
+        }
     }
 };
 

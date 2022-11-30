@@ -16,14 +16,14 @@ protected:
     bool goalKeeper;
 
     int gamesTeamPlayedBefore;
-    AVLNode<PlayerStats> *pointerToPlayerStatsAvlNodeONAllPlayers=nullptr;
+    AVLNode<PlayerStats> *pointerToPlayerStatsAvlNodeONAllPlayers = nullptr;
     AVLNode<Team> *pointerToTeamAvlNode;
-
+    AVLNode<PlayerStats> *pointerToPlayerStatsAvlNodeONTeam;
     void DeletePlayer(Player *player);
 
 public:
     // defualt constructor
-    
+
     Player()
     {
         playerId = 0;
@@ -33,18 +33,13 @@ public:
         cards = 0;
         goalKeeper = false;
         gamesTeamPlayedBefore = 0;
-       
+
         pointerToTeamAvlNode = NULL;
-        
     }
     ~Player()
     {
-        if (pointerToPlayerStatsAvlNodeONAllPlayers != nullptr)
-        {
-            delete pointerToPlayerStatsAvlNodeONAllPlayers;
-        }
     }
-    
+
     Player(int playerId, int teamId) : playerId(playerId), teamId(teamId), gamesPlayed(0), goals(0), cards(0), goalKeeper(false)
     {
         // gamesTeamPlayedBefore =
@@ -60,7 +55,7 @@ public:
         // closesetFromRight =
         // pointerToTeam =
     }
-    //get pointer to team
+    // get pointer to team
     AVLNode<Team> *getPointerToTeamAvlNode() const
     {
         return pointerToTeamAvlNode;
@@ -69,7 +64,7 @@ public:
     {
         this->pointerToTeamAvlNode = pointerToTeam;
     }
-   
+
     bool isGoalKeeper() const
     {
         return goalKeeper;
@@ -77,6 +72,14 @@ public:
     int getPlayerId() const
     {
         return playerId;
+    }
+    int getGoals() const
+    {
+        return goals;
+    }
+    int getCards() const
+    {
+        return cards;
     }
     // operator <
     bool operator<(const Player &player) const
@@ -113,6 +116,10 @@ public:
             return true;
         }
     }
+    void setGamesTeamPlayedBefore(int gamesTeamPlayedBefore)
+    {
+        this->gamesTeamPlayedBefore = gamesTeamPlayedBefore;
+    }
     // operator <<
     friend std::ostream &operator<<(std::ostream &os, const Player &player)
     {
@@ -123,10 +130,22 @@ public:
     {
         this->pointerToPlayerStatsAvlNodeONAllPlayers = pointerToPlayerStatsAvlNodeONAllPlayers;
     }
-    
+    void SetpointerToPlayerStatsAvlNodeONTeam(AVLNode<PlayerStats> *pointerToPlayerStatsAvlNodeONTeam)
+    {
+        this->pointerToPlayerStatsAvlNodeONTeam = pointerToPlayerStatsAvlNodeONTeam;
+    }
+    AVLNode<Team> *getTeamNode() const
+    {
+        return pointerToTeamAvlNode;
+    }
+    AVLNode<PlayerStats> *getpointerToPlayerStatsAvlNodeONAllPlayers() const
+    {
+        return pointerToPlayerStatsAvlNodeONAllPlayers;
+    }
+    AVLNode<PlayerStats> *getpointerToPlayerStatsAvlNodeONTeam() const
+    {
+        return pointerToPlayerStatsAvlNodeONTeam;
+    }
 };
-
-
-
 
 #endif // PLAYER_H_
