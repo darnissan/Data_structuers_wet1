@@ -207,11 +207,14 @@ int main()
     world_cup->add_player(24,2,1,2,3,true);
     world_cup->add_player(7,2,1,2,2,true);
     world_cup->add_player(8,3,1,2,1,true);
-    
+    world_cup->add_player(9,3,1,13,5,true);
+    world_cup->add_player(10,3,1,15,5,true);
+    world_cup->add_player(11,3,1,17,5,true);
+    world_cup->add_player(12,3,1,14,5,true);
    // world_cup->printTeam(1);
     //world_cup->printTeam(2);
 
-    std::cout<<"the closest of 8 is: "<<world_cup->GetWinningClosestBySearcherID(8)<<std::endl;
+    std::cout<<"the closest of 10 is: "<<world_cup->GetWinningClosestBySearcherID(10)<<std::endl;
     delete world_cup; //  printBTs(tree.GetRoot());
 
     return 0;

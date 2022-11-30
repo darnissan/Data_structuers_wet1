@@ -108,6 +108,31 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 		return StatusType::ALLOCATION_ERROR;
 	}
 
+	//updating top scorer
+	if (newPlayer.getGoals() > topScorerGoals)
+	{
+		topScorerGoals = newPlayer.getGoals();
+		topScorerId = newPlayer.getPlayerId();
+		topScorerCards = newPlayer.getCards();
+	}
+	else if (newPlayer.getGoals() == topScorerGoals)
+	{
+		if (newPlayer.getCards() < topScorerCards)
+		{
+			topScorerGoals = newPlayer.getGoals();
+			topScorerId = newPlayer.getPlayerId();
+			topScorerCards = newPlayer.getCards();
+		}
+		else if (newPlayer.getCards() == topScorerCards)
+		{
+			if (newPlayer.getPlayerId() > topScorerId)
+			{
+				topScorerGoals = newPlayer.getGoals();
+				topScorerId = newPlayer.getPlayerId();
+				topScorerCards = newPlayer.getCards();
+			}
+		}
+	}
 	// creating the node of the player thats going to be added to the tree of players held by the team
 	AVLNode<Player> *PlayerNodeOnTeamPlayersTree;
 	// setting the player node to point on the team node in the tree of teams
@@ -150,30 +175,7 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 	// adding player to All players_ordered_by_stats
 	PlayerNodeOnTeamPlayersTree->GetValue().setpointerToPlayerStatsAvlNodeONAllPlayers(ALLPayersOrderdByStats.find(ALLPayersOrderdByStats.GetRoot(), newPlayerStats));
 
-	if (newPlayer.getGoals()>topScorerGoals)
-	{
-		topScorerGoals=newPlayer.getGoals();
-		topScorerId=newPlayer.getPlayerId();
-		topScorerCards=newPlayer.getCards();
-	}
-	else if (newPlayer.getGoals()==topScorerGoals)
-	{
-		if (newPlayer.getCards()<topScorerCards)
-		{
-			topScorerGoals=newPlayer.getGoals();
-			topScorerId=newPlayer.getPlayerId();
-			topScorerCards=newPlayer.getCards();
-		}
-		else if (newPlayer.getCards()==topScorerCards)
-		{
-			if (newPlayer.getPlayerId()>topScorerId)
-			{
-				topScorerGoals=newPlayer.getGoals();
-				topScorerId=newPlayer.getPlayerId();
-				topScorerCards=newPlayer.getCards();
-			}
-		}
-	}
+	
 	/*
 	std::cout << "player added" <<newPlayer << std::endl;
 	std::cout<<"--------------------------------------"<<std::endl;
