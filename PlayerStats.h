@@ -141,6 +141,11 @@ private:
     {
         return cards;
     }
-   
+    void updatePlayerStats( int goals, int cards)
+    {
+        
+        this->goals += goals;
+        this->cards += cards;
+    }
 };
 #endif // PLAYER_STATS_H_

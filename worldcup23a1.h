@@ -40,6 +40,7 @@ private:
 
 		public :
 		// <DO-NOT-MODIFY> {
+		void printInOrderAllPlayerStats();
 		int GetWinningClosestBySearcherID(int id);
 	void printTeam(int teamId);
 	world_cup_t();

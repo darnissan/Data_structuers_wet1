@@ -127,7 +127,7 @@ public:
         PlayersOnTeamOrderdByStats.root = PlayersOnTeamOrderdByStats.Insert(PlayersOnTeamOrderdByStats.GetRoot(), playerToInsert);//o(logn)
         return PlayersOnTeamOrderdByStats.find(PlayersOnTeamOrderdByStats.GetRoot(), playerToInsert);//o(logn)
     }
-
+   
     //<< operator for team
     friend std::ostream &operator<<(std::ostream &os, const Team &team)
     {

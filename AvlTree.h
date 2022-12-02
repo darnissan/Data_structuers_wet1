@@ -193,6 +193,10 @@ AVLNode<T> *AvlTree<T>::Insert(AVLNode<T> *node, const T &value)
 template <class T>
 AVLNode<T> *AvlTree<T>::Remove(AVLNode<T> *node, const T &value)
 {
+    if (node == NULL)
+    {
+        return NULL;
+    }
     if (node->GetLeft() == NULL && node->GetRight() == NULL)
     {
         if (node == this->root)
@@ -203,13 +207,13 @@ AVLNode<T> *AvlTree<T>::Remove(AVLNode<T> *node, const T &value)
         delete node;
         return NULL;
     }
-    if (value < node->GetValue())
+    if (value < node->GetValue() && node->GetLeft()!=NULL)
     {
-        node->SetLeft(Remove(node->GetLeft(), value));
+        node->SetLeft(this->Remove(node->GetLeft(), value));
     }
-    else if (value > node->GetValue())
+    else if (value > node->GetValue() && node->GetRight() != NULL)
     {
-        node->SetRight(Remove(node->GetRight(), value));
+        node->SetRight(this->Remove(node->GetRight(), value));
     }
     else
     {

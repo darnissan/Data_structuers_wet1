@@ -17,8 +17,8 @@ protected:
 
     int gamesTeamPlayedBefore;
     AVLNode<PlayerStats> *pointerToPlayerStatsAvlNodeONAllPlayers = nullptr;
-    AVLNode<Team> *pointerToTeamAvlNode;
-    AVLNode<PlayerStats> *pointerToPlayerStatsAvlNodeONTeam;
+    AVLNode<Team> *pointerToTeamAvlNode=nullptr;
+    AVLNode<PlayerStats> *pointerToPlayerStatsAvlNodeONTeam=nullptr;
     void DeletePlayer(Player *player);
 
 public:
@@ -128,7 +128,11 @@ public:
     }
     void setpointerToPlayerStatsAvlNodeONAllPlayers(AVLNode<PlayerStats> *pointerToPlayerStatsAvlNodeONAllPlayers)
     {
+        
+            
+        
         this->pointerToPlayerStatsAvlNodeONAllPlayers = pointerToPlayerStatsAvlNodeONAllPlayers;
+      
     }
     void SetpointerToPlayerStatsAvlNodeONTeam(AVLNode<PlayerStats> *pointerToPlayerStatsAvlNodeONTeam)
     {
@@ -145,6 +149,12 @@ public:
     AVLNode<PlayerStats> *getpointerToPlayerStatsAvlNodeONTeam() const
     {
         return pointerToPlayerStatsAvlNodeONTeam;
+    }
+    void updatePlayerStats(int gamesPlayed,int goals, int cards)
+    {
+        this->gamesPlayed += gamesPlayed;
+        this->goals += goals;
+        this->cards += cards;
     }
 };
 

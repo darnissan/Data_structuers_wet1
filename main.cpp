@@ -196,25 +196,60 @@ int main()
     world_cup->add_team(1, 1);
     world_cup->add_team(2, 2);
     world_cup->add_team(3, 3);
-    
-    
-    world_cup->add_player(21,1,1,1,20,true); //add player args go by (player id ,team id ,games played, goals,cards)
-    world_cup->add_player(25,1,1,1,20,true);
+
+    world_cup->add_player(21, 1, 1, 1, 20, true); // add player args go by (player id ,team id ,games played, goals,cards)
+    world_cup->add_player(25, 1, 1, 1, 20, true);
     world_cup->add_player(3, 1, 1, 1, 5, true);
     world_cup->add_player(4, 1, 1, 1, 1, true);
-    world_cup->add_player(5,2,1,2,5,true);
-    world_cup->add_player(6,2,1,2,4,true);
-    world_cup->add_player(24,2,1,2,3,true);
-    world_cup->add_player(7,2,1,2,2,true);
-    world_cup->add_player(8,3,1,2,1,true);
-    world_cup->add_player(9,3,1,13,5,true);
-    world_cup->add_player(10,3,1,15,5,true);
-    world_cup->add_player(11,3,1,17,5,true);
-    world_cup->add_player(12,3,1,14,5,true);
-   // world_cup->printTeam(1);
-    //world_cup->printTeam(2);
+    world_cup->add_player(5, 2, 1, 2, 5, true);
+    world_cup->add_player(6, 2, 1, 2, 4, true);
+    world_cup->add_player(24, 2, 1, 2, 3, true);
+    world_cup->add_player(7, 2, 1, 2, 2, true);
+    world_cup->add_player(8, 3, 1, 2, 1, true);
+    world_cup->add_player(9, 3, 1, 13, 5, true);
+    world_cup->add_player(10, 3, 1, 15, 5, true);
+    world_cup->add_player(11, 3, 1, 17, 5, true);
+    world_cup->add_player(12, 3, 1, 14, 5, true);
+    world_cup->add_player(13, 3, 1, 300, 5, true);
+    // world_cup->printTeam(1);
+    // world_cup->printTeam(2);
+    world_cup->printInOrderAllPlayerStats();
+    
+    std::cout << "the closest of 21 is: " << world_cup->GetWinningClosestBySearcherID(21) << std::endl;
+    std::cout << "the closest of 25 is: " << world_cup->GetWinningClosestBySearcherID(25) << std::endl;
+    std::cout << "the closest of 4 is: " << world_cup->GetWinningClosestBySearcherID(4) << std::endl;
+    std::cout << "the closest of 6 is: " << world_cup->GetWinningClosestBySearcherID(6) << std::endl;
+    std::cout << "the closest of 7 is: " << world_cup->GetWinningClosestBySearcherID(7) << std::endl;
+    std::cout << "the closest of 11 is: " << world_cup->GetWinningClosestBySearcherID(11) << std::endl;
+    std::cout << "the closest of 13 is: " << world_cup->GetWinningClosestBySearcherID(13) << std::endl;
+    
+    std::cout<<"--------------------------------------"<<std::endl;
 
-    std::cout<<"the closest of 10 is: "<<world_cup->GetWinningClosestBySearcherID(10)<<std::endl;
+    world_cup->update_player_stats(21, 1,1,1);
+    
+    world_cup->printInOrderAllPlayerStats();
+    std::cout << "the closest of 21 is: " << world_cup->GetWinningClosestBySearcherID(21) << std::endl;
+    std::cout << "the closest of 25 is: " << world_cup->GetWinningClosestBySearcherID(25) << std::endl;
+    std::cout << "the closest of 4 is: " << world_cup->GetWinningClosestBySearcherID(4) << std::endl;
+    std::cout << "the closest of 6 is: " << world_cup->GetWinningClosestBySearcherID(6) << std::endl;
+    std::cout << "the closest of 7 is: " << world_cup->GetWinningClosestBySearcherID(7) << std::endl;
+    std::cout << "the closest of 11 is: " << world_cup->GetWinningClosestBySearcherID(11) << std::endl;
+    std::cout << "the closest of 13 is: " << world_cup->GetWinningClosestBySearcherID(13) << std::endl;
+    
+    std::cout << "--------------------------------------" << std::endl;
+
+    world_cup->update_player_stats(25, 200,1,1);
+    
+    world_cup->printInOrderAllPlayerStats();
+    std::cout << "the closest of 21 is: " << world_cup->GetWinningClosestBySearcherID(21) << std::endl;
+    std::cout << "the closest of 25 is: " << world_cup->GetWinningClosestBySearcherID(25) << std::endl;
+    std::cout << "the closest of 4 is: " << world_cup->GetWinningClosestBySearcherID(4) << std::endl;
+    std::cout << "the closest of 6 is: " << world_cup->GetWinningClosestBySearcherID(6) << std::endl;
+    std::cout << "the closest of 7 is: " << world_cup->GetWinningClosestBySearcherID(7) << std::endl;
+    std::cout << "the closest of 11 is: " << world_cup->GetWinningClosestBySearcherID(11) << std::endl;
+    std::cout << "the closest of 13 is: " << world_cup->GetWinningClosestBySearcherID(13) << std::endl;
+    
+    std::cout << "--------------------------------------" << std::endl;
     delete world_cup; //  printBTs(tree.GetRoot());
 
     return 0;

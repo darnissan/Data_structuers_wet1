@@ -41,8 +41,7 @@ StatusType world_cup_t::add_team(int teamId, int points)
 	if (AllTeams.isItInTree(AllTeams.GetRoot(), newTeam))
 		return StatusType::FAILURE;
 	AllTeams.root = AllTeams.Insert(AllTeams.GetRoot(), newTeam);
-	std::cout << "team added" << std::endl;
-	AllTeams.PrintInOrder(AllTeams.GetRoot());
+	
 	numberOfTeams++;
 	return StatusType::SUCCESS;
 }
@@ -89,7 +88,7 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 		return StatusType::INVALID_INPUT;
 
 	// checking whether the team exists or the player already exists
-	if (TheTeamOfThePlayerNode == nullptr || findPlayerById(AllPlayers.GetRoot(), playerId) != nullptr)
+	if (TheTeamOfThePlayerNode == NULL || findPlayerById(AllPlayers.GetRoot(), playerId) != NULL)
 	{
 		return StatusType::FAILURE;
 	}
@@ -194,12 +193,13 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 }
 
 StatusType world_cup_t::remove_player(int playerId)
-{/*
+{
+	/*
 	// TODO: Your code goes here
 	if (playerId <= 0)
 		return StatusType::INVALID_INPUT;
 	player = findPlayerById(AllPlayers.GetRoot(), playerId);
-	if (player == nullptr)
+	if (player == NULL)
 		return StatusType::FAILURE;
 	try
 	{
@@ -212,16 +212,200 @@ StatusType world_cup_t::remove_player(int playerId)
 	}
 
 	numberOfPlayers--;
-*/
+	*/
 	return StatusType::SUCCESS;
+	
 }
 
 StatusType world_cup_t::update_player_stats(int playerId, int gamesPlayed,
 											int scoredGoals, int cardsReceived)
 {
+	if (playerId <= 0 || gamesPlayed < 0 || scoredGoals < 0 || cardsReceived < 0)
+		return StatusType::INVALID_INPUT;
+	if (findPlayerById(AllPlayers.GetRoot(), playerId) == NULL)
+		return StatusType::FAILURE;
 
-	// TODO: Your code goes here
-	return StatusType::SUCCESS;
+	try
+	{
+
+
+
+		AVLNode<Player> *playerNodeOnAllPlayersTree;
+		AVLNode<Player> *playerNodeOnTeamPlayersTree;
+		//AVLNode<PlayerStats> *playerNodeOnAllPlayersStatsTree;
+		//AVLNode<PlayerStats> *playerNodeOnTeamPlayersStatsTree;
+		AVLNode<Team> *teamNodeOnTeamsTree;
+		PlayerStats oldPlayerStats;
+		PlayerStats newPlayerStats;
+
+		
+
+		playerNodeOnAllPlayersTree = findPlayerById(AllPlayers.GetRoot(), playerId);
+
+		int oldGoals = playerNodeOnAllPlayersTree->GetValue().getGoals();
+		int oldCards = playerNodeOnAllPlayersTree->GetValue().getCards();
+		oldPlayerStats=PlayerStats(playerId,oldGoals,oldCards);
+
+
+		int newGoals = oldGoals + scoredGoals;
+		int newCards = oldCards + cardsReceived;
+		newPlayerStats = PlayerStats(playerId, newGoals, newCards);
+
+		teamNodeOnTeamsTree = playerNodeOnAllPlayersTree->GetValue().getPointerToTeamAvlNode();
+		playerNodeOnTeamPlayersTree=teamNodeOnTeamsTree->GetValue().findPlayerById(teamNodeOnTeamsTree->GetValue().players.GetRoot(), playerId);
+		//playerNodeOnAllPlayersStatsTree = playerNodeOnAllPlayersTree->GetValue().getpointerToPlayerStatsAvlNodeONAllPlayers();
+		//playerNodeOnTeamPlayersStatsTree = playerNodeOnAllPlayersTree->GetValue().getpointerToPlayerStatsAvlNodeONTeam();
+		
+
+		// updating the player stats
+		playerNodeOnAllPlayersTree->GetValue().updatePlayerStats(gamesPlayed, scoredGoals, cardsReceived);
+		playerNodeOnTeamPlayersTree->GetValue().updatePlayerStats(gamesPlayed, scoredGoals, cardsReceived);
+		
+		
+		//playerNodeOnAllPlayersStatsTree->GetValue().updatePlayerStats(scoredGoals, cardsReceived);
+		//playerNodeOnTeamPlayersStatsTree->GetValue().updatePlayerStats(scoredGoals, cardsReceived);
+
+		//updating top scorer
+		if (newGoals > topScorerGoals)
+		{
+			topScorerGoals = newGoals;
+			topScorerId = playerId;
+			topScorerCards = newCards;
+		}
+		else if (newGoals == topScorerGoals)
+		{
+			if (newCards < topScorerCards)
+			{
+				topScorerGoals = newGoals;
+				topScorerId = playerId;
+				topScorerCards = newCards;
+			}
+			else if (newCards == topScorerCards)
+			{
+				if (playerId > topScorerId)
+				{
+					topScorerGoals = newGoals;
+					topScorerId = playerId;
+					topScorerCards = newCards;
+				}
+			}
+		}
+
+		// updating the closest from all players stats
+		int OldclosestFromAllLeftId = ClosestDiffFromLeftWrapper(ALLPayersOrderdByStats.GetRoot(), oldPlayerStats); // o(logn)
+		
+		int OldclosestFromAllRightId = ClosestDiffFromRightWrapper(ALLPayersOrderdByStats.GetRoot(), oldPlayerStats); // o(logn)
+		int OldclosestFromTeamLeftId = ClosestDiffFromLeftWrapper(teamNodeOnTeamsTree->GetValue().PlayersOnTeamOrderdByStats.GetRoot(),oldPlayerStats); // o(logn)
+		int OldclosestFromTeamRightId = ClosestDiffFromRightWrapper(teamNodeOnTeamsTree->GetValue().PlayersOnTeamOrderdByStats.GetRoot(), oldPlayerStats); // o(logn)
+
+		ALLPayersOrderdByStats.root = ALLPayersOrderdByStats.Remove(ALLPayersOrderdByStats.GetRoot(), oldPlayerStats);
+		teamNodeOnTeamsTree->GetValue().PlayersOnTeamOrderdByStats.root = teamNodeOnTeamsTree->GetValue().PlayersOnTeamOrderdByStats.Remove(teamNodeOnTeamsTree->GetValue().PlayersOnTeamOrderdByStats.GetRoot(), oldPlayerStats);
+
+		// updating the closest from team players stats
+		/*
+		if (closestFromTeamLeftId!= -1)
+		{
+			updateClosest(closestFromTeamLeftId);
+		}
+		if (closestFromTeamRightId != -1)
+		{
+			updateClosest(closestFromTeamRightId);
+		}
+		if (closestFromAllLeftId != -1)
+		{
+			updateClosest(closestFromAllLeftId);
+		}
+		if (closestFromAllRightId != -1)
+		{
+			updateClosest(closestFromAllRightId);
+		}
+		*/
+		
+		
+
+		
+		ALLPayersOrderdByStats.root = ALLPayersOrderdByStats.Insert(ALLPayersOrderdByStats.GetRoot(), newPlayerStats);
+		teamNodeOnTeamsTree->GetValue().PlayersOnTeamOrderdByStats.root = teamNodeOnTeamsTree->GetValue().PlayersOnTeamOrderdByStats.Insert(teamNodeOnTeamsTree->GetValue().PlayersOnTeamOrderdByStats.GetRoot(), newPlayerStats);
+		//NEED TO LINK THE PLAYER STATS TO THE PLAYER
+		playerNodeOnAllPlayersTree->GetValue().setpointerToPlayerStatsAvlNodeONAllPlayers(ALLPayersOrderdByStats.find(ALLPayersOrderdByStats.GetRoot(), newPlayerStats));
+		playerNodeOnTeamPlayersTree->GetValue().SetpointerToPlayerStatsAvlNodeONTeam(teamNodeOnTeamsTree->GetValue().PlayersOnTeamOrderdByStats.find(teamNodeOnTeamsTree->GetValue().PlayersOnTeamOrderdByStats.GetRoot(), newPlayerStats));
+
+		
+		//THE BUG IS HERE
+		
+		 int NewclosestFromAllLeftId = ClosestDiffFromLeftWrapper(ALLPayersOrderdByStats.GetRoot(), newPlayerStats);	
+		 									  // o(logn)
+		 int NewclosestFromAllRightId = ClosestDiffFromRightWrapper(ALLPayersOrderdByStats.GetRoot(), newPlayerStats);										  // o(logn)
+		 int NewclosestFromTeamLeftId = ClosestDiffFromLeftWrapper(teamNodeOnTeamsTree->GetValue().PlayersOnTeamOrderdByStats.GetRoot(), newPlayerStats);	  // o(logn)
+		 int NewclosestFromTeamRightId = ClosestDiffFromRightWrapper(teamNodeOnTeamsTree->GetValue().PlayersOnTeamOrderdByStats.GetRoot(), newPlayerStats); // o(logn)
+		
+		// updating the closest from team players stats
+		
+		 if (OldclosestFromAllLeftId != -1)
+		 {
+			 updateClosest(OldclosestFromAllLeftId);
+		 }
+		 if (OldclosestFromAllRightId != -1)
+		 {
+			 updateClosest(OldclosestFromAllRightId);
+		 }
+		 if (OldclosestFromTeamLeftId != -1)
+		 {
+			 updateClosest(OldclosestFromTeamLeftId);
+		 }
+		 if (OldclosestFromTeamRightId != -1)
+		 {
+			 updateClosest(OldclosestFromTeamRightId);
+		 }
+		 
+		 if (NewclosestFromAllLeftId != -1)
+		 {
+			 updateClosest(NewclosestFromAllLeftId);
+		 }
+		 if (NewclosestFromAllRightId != -1)
+		 {
+			 updateClosest(NewclosestFromAllRightId);
+		 }
+		 if (NewclosestFromTeamLeftId != -1)
+		 {
+			 updateClosest(NewclosestFromTeamLeftId);
+		 }
+		 if (NewclosestFromTeamRightId!=-1)
+		 {
+			 updateClosest(NewclosestFromTeamRightId);
+		 }
+		 
+		 /*
+		 updateClosest(closestFromAllRightId);
+		 updateClosest(closestFromTeamLeftId);
+		 updateClosest(closestFromTeamRightId);
+
+		 playerNodeOnAllPlayersStatsTree=ALLPayersOrderdByStats.find(ALLPayersOrderdByStats.GetRoot(), newPlayerStats);
+
+		 // updating the closest from all players stats
+		 playerNodeOnAllPlayersStatsTree->GetValue().setClosestFromAllLeftID(closestFromAllLeftId);
+		 playerNodeOnAllPlayersStatsTree->GetValue().setClosestFromAllRightID(closestFromAllRightId);
+		 playerNodeOnAllPlayersStatsTree->GetValue().setClosestFromTeamLeftID(closestFromTeamLeftId);
+		 playerNodeOnAllPlayersStatsTree->GetValue().setClosestFromTeamRightID(closestFromTeamRightId);
+
+		 playerNodeOnTeamPlayersStatsTree = teamNodeOnTeamsTree->GetValue().PlayersOnTeamOrderdByStats.find(teamNodeOnTeamsTree->GetValue().PlayersOnTeamOrderdByStats.GetRoot(), newPlayerStats);
+
+		 // updating the closest from team players stats
+		 playerNodeOnTeamPlayersStatsTree->GetValue().setClosestFromAllLeftID(closestFromAllLeftId);
+		 playerNodeOnTeamPlayersStatsTree->GetValue().setClosestFromAllRightID(closestFromAllRightId);
+		 playerNodeOnTeamPlayersStatsTree->GetValue().setClosestFromTeamLeftID(closestFromTeamLeftId);
+		 playerNodeOnTeamPlayersStatsTree->GetValue().setClosestFromTeamRightID(closestFromTeamRightId);
+			 */
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
+	
+	
+
+		// TODO: Your code goes here
+		return StatusType::SUCCESS;
 }
 
 StatusType world_cup_t::play_match(int teamId1, int teamId2)
@@ -285,7 +469,7 @@ AVLNode<Team> *findTeamById(AVLNode<Team> *node, int teamId)
 {
 	if (node == NULL)
 	{
-		return nullptr;
+		return NULL;
 	}
 	if (node->GetValue().getId() == teamId)
 	{
@@ -304,7 +488,7 @@ AVLNode<Player> *findPlayerById(AVLNode<Player> *node, int playerId)
 {
 	if (node == NULL)
 	{
-		return nullptr;
+		return NULL;
 	}
 	if (node->GetValue().getPlayerId() == playerId)
 	{
@@ -331,7 +515,7 @@ bool isLeagelTeam(AVLNode<Team> *node)
 void ClosestDiffFromLeft(AVLNode<PlayerStats> *node, PlayerStats &searcher, PlayerStats &minDiffcurrent)
 {
 
-	if (node == nullptr)
+	if (node == NULL)
 	{
 		return;
 	}
@@ -356,7 +540,7 @@ void ClosestDiffFromLeft(AVLNode<PlayerStats> *node, PlayerStats &searcher, Play
 }
 int ClosestDiffFromLeftWrapper(AVLNode<PlayerStats> *node, PlayerStats &searcher)
 {
-	if (node == nullptr)
+	if (node == NULL)
 	{
 		return -1;
 	}
@@ -369,7 +553,7 @@ int ClosestDiffFromLeftWrapper(AVLNode<PlayerStats> *node, PlayerStats &searcher
 void ClosestDifffromRight(AVLNode<PlayerStats> *node, PlayerStats &searcher, PlayerStats &minDiffcurrent)
 {
 
-	if (node == nullptr)
+	if (node == NULL)
 	{
 		return;
 	}
@@ -394,7 +578,7 @@ void ClosestDifffromRight(AVLNode<PlayerStats> *node, PlayerStats &searcher, Pla
 }
 int world_cup_t::ClosestDiffFromRightWrapper(AVLNode<PlayerStats> *node, PlayerStats &searcher)
 {
-	if (node == nullptr)
+	if (node == NULL)
 	{
 		return -1;
 	}
@@ -411,15 +595,23 @@ void world_cup_t::updateClosest(int ToBeUpdatedID)
 		PlayerStats ToBeUpdatedStats;
 		AVLNode<Player> *ToBeUpdatedNode = findPlayerById(AllPlayers.GetRoot(), ToBeUpdatedID);
 		AVLNode<Team> *TheTeamOfThePlayerNode = ToBeUpdatedNode->GetValue().getPointerToTeamAvlNode();
+		AVLNode<PlayerStats> *ThePlayerStatsNode = ToBeUpdatedNode->GetValue().getpointerToPlayerStatsAvlNodeONAllPlayers();
 		ToBeUpdatedStats = PlayerStats(ToBeUpdatedNode->GetValue().getPlayerId(), ToBeUpdatedNode->GetValue().getGoals(), ToBeUpdatedNode->GetValue().getCards());
 		int closestFromTeamLeftId = ClosestDiffFromLeftWrapper(TheTeamOfThePlayerNode->GetValue().PlayersOnTeamOrderdByStats.GetRoot(), ToBeUpdatedStats);
 		int closestFromTeamRightId = ClosestDiffFromRightWrapper(TheTeamOfThePlayerNode->GetValue().PlayersOnTeamOrderdByStats.GetRoot(), ToBeUpdatedStats);
 		int closestFromAllLeftId = ClosestDiffFromLeftWrapper(ALLPayersOrderdByStats.GetRoot(), ToBeUpdatedStats);
 		int closestFromAllRightId = ClosestDiffFromRightWrapper(ALLPayersOrderdByStats.GetRoot(), ToBeUpdatedStats);
+
+		ThePlayerStatsNode->GetValue().setClosestFromTeamLeftID(closestFromTeamLeftId);
+		ThePlayerStatsNode->GetValue().setClosestFromTeamRightID(closestFromTeamRightId);
+		ThePlayerStatsNode->GetValue().setClosestFromAllLeftID(closestFromAllLeftId);
+		ThePlayerStatsNode->GetValue().setClosestFromAllRightID(closestFromAllRightId);
+		/*
 		ToBeUpdatedNode->GetValue().getpointerToPlayerStatsAvlNodeONAllPlayers()->GetValue().setClosestFromAllLeftID(closestFromAllLeftId);
 		ToBeUpdatedNode->GetValue().getpointerToPlayerStatsAvlNodeONAllPlayers()->GetValue().setClosestFromAllRightID(closestFromAllRightId);
 		ToBeUpdatedNode->GetValue().getpointerToPlayerStatsAvlNodeONAllPlayers()->GetValue().setClosestFromTeamLeftID(closestFromTeamLeftId);
 		ToBeUpdatedNode->GetValue().getpointerToPlayerStatsAvlNodeONAllPlayers()->GetValue().setClosestFromTeamRightID(closestFromTeamRightId);
+		*/
 	}
 }
 void world_cup_t::printTeam(int teamId)
@@ -449,7 +641,7 @@ void world_cup_t::printTeam(int teamId)
 template <class T>
 void printBT(const std::string &prefix, const AVLNode<T> *node, bool isLeft)
 {
-	if (node != nullptr)
+	if (node != NULL)
 	{
 		std::cout << prefix;
 
@@ -534,9 +726,9 @@ int world_cup_t::MatchTheWinningClosest(PlayerStats &searcher, int leftID, int r
 
 AVLNode<PlayerStats> *world_cup_t::findPlayerStatsByStats(AVLNode<PlayerStats> *node, PlayerStats &playerStats)
 {
-	if (node==nullptr)
+	if (node==NULL)
 	{
-		return nullptr;
+		return NULL;
 	}
 	if (node->GetValue().getPlayerId()==playerStats.getPlayerId())
 	{
@@ -550,4 +742,8 @@ AVLNode<PlayerStats> *world_cup_t::findPlayerStatsByStats(AVLNode<PlayerStats> *
 	{
 		return findPlayerStatsByStats(node->GetRight(), playerStats);
 	}
+}
+void world_cup_t::printInOrderAllPlayerStats()
+{
+	ALLPayersOrderdByStats.PrintInOrder(ALLPayersOrderdByStats.GetRoot());
 }
