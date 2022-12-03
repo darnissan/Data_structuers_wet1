@@ -53,6 +53,7 @@ public:
             this->TotalGoalsScored = other.TotalGoalsScored;
             this->TotalCards = other.TotalCards;
             this->players = other.players;
+            this->PlayersOnTeamOrderdByStats = other.PlayersOnTeamOrderdByStats;
         }
         return *this;
     }
@@ -76,6 +77,31 @@ public:
     {
         return (this->id < other.id);
     }
+    void setNumOfPlayers(int numOfPlayers)
+    {
+        this->numOfPlayers = numOfPlayers;
+    }
+    void setNumOfGoalKeepers(int numOfGoalKeepers)
+    {
+        this->numOfGoalKeepers = numOfGoalKeepers;
+    }
+    void setPoints(int points)
+    {
+        this->points = points;
+    }
+    void setGamesTeamPlayed(int gamesTeamPlayed)
+    {
+        this->gamesTeamPlayed = gamesTeamPlayed;
+    }
+    void setTotalGoalsScored(int TotalGoalsScored)
+    {
+        this->TotalGoalsScored = TotalGoalsScored;
+    }
+    void setTotalCards(int TotalCards)
+    {
+        this->TotalCards = TotalCards;
+    }
+
     int getId() const
     {
         return id;
@@ -103,10 +129,6 @@ public:
     int getTotalCards() const
     {
         return TotalCards;
-    }
-    void setGamesTeamPlayed(int gamesTeamPlayed)
-    {
-        this->gamesTeamPlayed = gamesTeamPlayed;
     }
     AVLNode<Player> *InsertPlayerToTeam( const Player &playerToInsert) 
     {
