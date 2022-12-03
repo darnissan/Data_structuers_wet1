@@ -41,43 +41,43 @@ private:
 		public :
 		// <DO-NOT-MODIFY> {
 		void printInOrderAllPlayerStats();
-		int GetWinningClosestBySearcherID(int id);
-	void printTeam(int teamId);
-	world_cup_t();
-	virtual ~world_cup_t();
+		int GetWinningClosestBySearcherID(int TeamId, int Playerid) ;
+		void printTeam(int teamId);
+		world_cup_t();
+		virtual ~world_cup_t();
 
-	StatusType add_team(int teamId, int points);
+		StatusType add_team(int teamId, int points);
 
-	StatusType remove_team(int teamId);
+		StatusType remove_team(int teamId);
 
-	StatusType add_player(int playerId, int teamId, int gamesPlayed,
-						  int goals, int cards, bool goalKeeper);
+		StatusType add_player(int playerId, int teamId, int gamesPlayed,
+							  int goals, int cards, bool goalKeeper);
 
-	StatusType remove_player(int playerId);
+		StatusType remove_player(int playerId);
 
-	StatusType update_player_stats(int playerId, int gamesPlayed,
-								   int scoredGoals, int cardsReceived);
+		StatusType update_player_stats(int playerId, int gamesPlayed,
+									   int scoredGoals, int cardsReceived);
 
-	StatusType play_match(int teamId1, int teamId2);
+		StatusType play_match(int teamId1, int teamId2);
 
-	output_t<int> get_num_played_games(int playerId);
+		output_t<int> get_num_played_games(int playerId);
 
-	output_t<int> get_team_points(int teamId);
+		output_t<int> get_team_points(int teamId);
 
-	StatusType unite_teams(int teamId1, int teamId2, int newTeamId);
+		StatusType unite_teams(int teamId1, int teamId2, int newTeamId);
 
-	output_t<int> get_top_scorer(int teamId);
+		output_t<int> get_top_scorer(int teamId);
 
-	output_t<int> get_all_players_count(int teamId);
+		output_t<int> get_all_players_count(int teamId);
 
-	StatusType get_all_players(int teamId, int *const output);
+		StatusType get_all_players(int teamId, int *const output);
 
-	output_t<int> get_closest_player(int playerId, int teamId);
+		output_t<int> get_closest_player(int playerId, int teamId);
 
-	output_t<int> knockout_winner(int minTeamId, int maxTeamId);
+		output_t<int> knockout_winner(int minTeamId, int maxTeamId);
 
-	// } </DO-NOT-MODIFY>
-	int ClosestDiffFromRightWrapper(AVLNode<PlayerStats> *node, PlayerStats &searcher);
+		// } </DO-NOT-MODIFY>
+		int ClosestDiffFromRightWrapper(AVLNode<PlayerStats> *node, PlayerStats &searcher);
 };
 
 #endif // WORLDCUP23A1_H_
