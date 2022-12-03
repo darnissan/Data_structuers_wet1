@@ -156,6 +156,11 @@ public:
         this->goals += goals;
         this->cards += cards;
     }
+
+    void setTeamId(int newTeamId)
+    {
+        this->teamId=newTeamId;
+    }
 };
 
 #endif // PLAYER_H_

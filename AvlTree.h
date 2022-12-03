@@ -17,9 +17,10 @@ public:
     AVLNode *GetRight() const { return right; }
 
     void Print() const { std::cout << data << std::endl; }
+    AVLNode()=default;
 
 private:
-    AVLNode();
+    
 
     T data;
     AVLNode *left;
@@ -47,10 +48,21 @@ public:
     AVLNode<T> *Insert(AVLNode<T> *root, const T &value);
     AVLNode<T> *Remove(AVLNode<T> *node, const T &value);
     void PrintInOrder(AVLNode<T> *root) const;
-
+    void DeleteTree(AVLNode<T> *root);
 private:
     void DeleteAvlNode(AVLNode<T> *nodeToRemove); // function used by the destructor
 };
+template <class T>
+void AvlTree<T>::DeleteTree(AVLNode<T> *root)
+{
+    if (root == NULL)
+    {
+        return;
+    }
+    DeleteTree(root->GetLeft());
+    DeleteTree(root->GetRight());
+    delete root;
+}
 template <class T>
 AvlTree<T>::~AvlTree()
 {

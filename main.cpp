@@ -198,6 +198,7 @@ int main()
     world_cup->add_team(3, 3);
 
     world_cup->add_player(21, 1, 1, 1, 20, true); // add player args go by (player id ,team id ,games played, goals,cards)
+    
     world_cup->add_player(25, 1, 1, 1, 20, true);
     world_cup->add_player(3, 1, 1, 1, 5, true);
     world_cup->add_player(4, 1, 1, 1, 1, true);
@@ -271,9 +272,11 @@ int main()
     std::cout << "the closest of 13 is: " << world_cup->GetWinningClosestBySearcherID(3, 13) << std::endl;
 
     std::cout << "--------------------------------------" << std::endl;
-
-
-
+    std::cout << "--------------------------------------" << std::endl;
+    std::cout << "--------------------------------------" << std::endl;
+    std::cout << "--------------------------------------" << std::endl;
+    world_cup->unite_teams(1, 2,1);
+    world_cup->printTeam(1);
     delete world_cup; //  printBTs(tree.GetRoot());
 
     return 0;
