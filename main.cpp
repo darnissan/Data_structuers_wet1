@@ -275,8 +275,11 @@ int main()
     std::cout << "--------------------------------------" << std::endl;
     std::cout << "--------------------------------------" << std::endl;
     std::cout << "--------------------------------------" << std::endl;
-    world_cup->unite_teams(3, 1,3);
-    world_cup->printTeam(3);
+    world_cup->unite_teams(3, 1,1);
+    world_cup->printTeam(1);
+
+
+
     delete world_cup; //  printBTs(tree.GetRoot());
 
     return 0;
