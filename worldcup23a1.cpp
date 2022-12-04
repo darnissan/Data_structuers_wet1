@@ -34,6 +34,7 @@ world_cup_t::world_cup_t()
 
 world_cup_t::~world_cup_t()
 {
+	
 	// TODO: Your code goes here
 }
 
@@ -451,6 +452,37 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
 			team2Node->GetValue().setTotalCards(team1Node->GetValue().getTotalCards() + team2Node->GetValue().getTotalCards());
 			// team2Node->GetValue().setTeamID(-1);
 			AllTeams.root = AllTeams.Remove(AllTeams.GetRoot(), team1Node->GetValue());
+		}
+		else
+		{
+			int newPoints = team1Node->GetValue().getPoints() + team2Node->GetValue().getPoints();
+			int newGamesPlayed = team1Node->GetValue().getGamesTeamPlayed() + team2Node->GetValue().getGamesTeamPlayed();
+			int newGoalsScored = team1Node->GetValue().getTotalGoalsScored() + team2Node->GetValue().getTotalGoalsScored();
+			int newTotalCards = team1Node->GetValue().getTotalCards() + team2Node->GetValue().getTotalCards();
+			int newNumOfPlayers = team1Node->GetValue().getNumOfPlayers() + team2Node->GetValue().getNumOfPlayers();
+
+			AVLNode<Team> *newTeamNode;
+			AllTeams.root=AllTeams.Insert(AllTeams.GetRoot(), Team(newTeamId,newPoints));
+			newTeamNode = findTeamById(AllTeams.GetRoot(), newTeamId);
+			newTeamNode->GetValue().setGamesTeamPlayed(newGamesPlayed);
+			newTeamNode->GetValue().setTotalGoalsScored(newGoalsScored);
+			newTeamNode->GetValue().setTotalCards(newTotalCards);
+			newTeamNode->GetValue().setNumOfPlayers(newNumOfPlayers);
+			newTeamNode->GetValue().setGamesTeamPlayed(newGamesPlayed);
+
+			AVLNode<Player> *newPlayerTree = MergeTwoTrees(team1Node->GetValue().players.GetRoot(), team2Node->GetValue().players.GetRoot(), team1Node->GetValue().getNumOfPlayers(), team2Node->GetValue().getNumOfPlayers());
+			AVLNode<PlayerStats> *newPlayerStatsTree = MergeTwoTrees(team1Node->GetValue().PlayersOnTeamOrderdByStats.GetRoot(), team2Node->GetValue().PlayersOnTeamOrderdByStats.GetRoot(), team1Node->GetValue().getNumOfPlayers(), team2Node->GetValue().getNumOfPlayers());
+			newTeamNode->GetValue().PlayersOnTeamOrderdByStats.root=newPlayerStatsTree;
+			newTeamNode->GetValue().players.root = newPlayerTree;
+
+			AllTeams.root = AllTeams.Remove(AllTeams.GetRoot(), team1Node->GetValue());
+			AllTeams.root = AllTeams.Remove(AllTeams.GetRoot(), team2Node->GetValue());
+			
+
+			
+			ChangePlayersTeamId(newTeamNode->GetValue().players.root, newTeamId);
+			ChangePlayersTeamPointer(newTeamNode->GetValue().players.root, newTeamNode);
+			
 		}
 			 
 			// inOrder travesrsal on both team's players tree to change to the teamId

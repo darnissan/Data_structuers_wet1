@@ -63,7 +63,7 @@ public:
     }
     // copy constructor
     Team(const Team &other) : id(other.id), numOfPlayers(other.numOfPlayers), numOfGoalKeepers(other.numOfGoalKeepers),
-                              points(other.points), gamesTeamPlayed(other.gamesTeamPlayed), TotalGoalsScored(other.TotalGoalsScored), TotalCards(other.TotalCards), players(other.players) {}
+                              points(other.points), gamesTeamPlayed(other.gamesTeamPlayed), TotalGoalsScored(other.TotalGoalsScored), TotalCards(other.TotalCards), players(other.players), PlayersOnTeamOrderdByStats(other.PlayersOnTeamOrderdByStats) {}
     // defult constructor
 
     // operator== for team
