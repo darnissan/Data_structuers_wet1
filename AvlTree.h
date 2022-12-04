@@ -76,8 +76,15 @@ void AvlTree<T>::DeleteAvlNode(AVLNode<T> *nodeToRemove)
 {
     if (nodeToRemove)
     {
-        DeleteAvlNode(nodeToRemove->GetLeft());
-        DeleteAvlNode(nodeToRemove->GetRight());
+        if (nodeToRemove->GetLeft())
+        {
+            DeleteAvlNode(nodeToRemove->GetLeft());
+        }
+        if (nodeToRemove->GetRight())
+        {
+            DeleteAvlNode(nodeToRemove->GetRight());
+        }
+        
         delete nodeToRemove;
     }
 }

@@ -40,6 +40,10 @@ public:
     {
        
     }
+    void setTeamID(int id)
+    {
+        this->id = id;
+    }
     // assign operator
     Team &operator=(const Team &other)
     {
