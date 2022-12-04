@@ -56,8 +56,8 @@ public:
             this->gamesTeamPlayed = other.gamesTeamPlayed;
             this->TotalGoalsScored = other.TotalGoalsScored;
             this->TotalCards = other.TotalCards;
-            this->players = other.players;
-            this->PlayersOnTeamOrderdByStats = other.PlayersOnTeamOrderdByStats;
+            copyTree(this->players.root, other.players.root);
+            copyTree(this->PlayersOnTeamOrderdByStats.root, other.PlayersOnTeamOrderdByStats.root);
         }
         return *this;
     }
@@ -160,10 +160,22 @@ public:
         os <<"team id" << team.id << " " << team.numOfPlayers << " " << team.numOfGoalKeepers << " " << "points:"<< team.points << " " << team.gamesTeamPlayed << " " << team.TotalGoalsScored << " " << team.TotalCards<<"---"<<std::endl;
         return os;
     }
+template <class T>
+    void copyTree(AVLNode<T> *src, AVLNode<T> *dst)
+    {
+        // Check if the source tree is empty. If it is, there is nothing to copy,
+        // so we can return immediately.
+        if (src == nullptr)
+            return;
 
-    
+        // Copy the value from the source tree to the destination tree
+        dst->SetValue ( src->GetValue() );
 
-   
+        // Recursively copy the left and right subtrees of the source tree
+        // to the destination tree
+        copyTree(src->GetLeft(), dst->GetLeft());
+        copyTree(src->GetRight(), dst->GetRight());
+    }
 
     AVLNode<Player> *findPlayerById(AVLNode<Player> *node, int playerId)
     {
