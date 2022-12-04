@@ -56,7 +56,9 @@ public:
             this->gamesTeamPlayed = other.gamesTeamPlayed;
             this->TotalGoalsScored = other.TotalGoalsScored;
             this->TotalCards = other.TotalCards;
+            this->players.Clear();
             copyTree(this->players.root, other.players.root);
+            this->PlayersOnTeamOrderdByStats.Clear();
             copyTree(this->PlayersOnTeamOrderdByStats.root, other.PlayersOnTeamOrderdByStats.root);
         }
         return *this;
@@ -178,7 +180,11 @@ template <class T>
         // to the destination tree
         copyTree(src->GetLeft(), dst->GetLeft());
         copyTree(src->GetRight(), dst->GetRight());
-        delete dst;
+        //how to delete the new memory carfully?
+    
+        
+
+
     }
 
     AVLNode<Player> *findPlayerById(AVLNode<Player> *node, int playerId)

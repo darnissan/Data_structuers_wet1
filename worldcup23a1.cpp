@@ -423,8 +423,8 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
 				ChangePlayersTeamPointer(team2Node->GetValue().players.root, team1Node);
 				AVLNode<Player> *newPlayerTree = MergeTwoTrees(team1Node->GetValue().players.GetRoot(), team2Node->GetValue().players.GetRoot(), team1Node->GetValue().getNumOfPlayers(), team2Node->GetValue().getNumOfPlayers());
 				AVLNode<PlayerStats> *newPlayerStatsTree = MergeTwoTrees(team1Node->GetValue().PlayersOnTeamOrderdByStats.GetRoot(), team2Node->GetValue().PlayersOnTeamOrderdByStats.GetRoot(), team1Node->GetValue().getNumOfPlayers(), team2Node->GetValue().getNumOfPlayers());
-				team1Node->GetValue().PlayersOnTeamOrderdByStats.DeleteTree(team1Node->GetValue().PlayersOnTeamOrderdByStats.GetRoot());
-				team1Node->GetValue().players.DeleteTree(team1Node->GetValue().players.GetRoot());
+				team1Node->GetValue().PlayersOnTeamOrderdByStats.root = team1Node->GetValue().PlayersOnTeamOrderdByStats.Clear(team1Node->GetValue().PlayersOnTeamOrderdByStats.root);
+				team1Node->GetValue().players.root=team1Node->GetValue().players.Clear(team1Node->GetValue().players.root);
 				team1Node->GetValue().players.root = newPlayerTree;
 				team1Node->GetValue().PlayersOnTeamOrderdByStats.root = newPlayerStatsTree;
 				team1Node->GetValue().setNumOfPlayers(team1Node->GetValue().getNumOfPlayers() + team2Node->GetValue().getNumOfPlayers());

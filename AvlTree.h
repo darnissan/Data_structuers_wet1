@@ -10,18 +10,16 @@ public:
     ~AVLNode() {}
     void SetValue(const T &value) { data = value; }
     const T &GetValue() const { return data; }
-     T &GetValue() { return data; }
+    T &GetValue() { return data; }
     void SetLeft(AVLNode *node) { left = node; }
     AVLNode *GetLeft() const { return left; }
     void SetRight(AVLNode *node) { right = node; }
     AVLNode *GetRight() const { return right; }
 
     void Print() const { std::cout << data << std::endl; }
-    AVLNode()=default;
+    AVLNode() = default;
 
 private:
-    
-
     T data;
     AVLNode *left;
     AVLNode *right;
@@ -49,27 +47,46 @@ public:
     AVLNode<T> *Remove(AVLNode<T> *node, const T &value);
     void PrintInOrder(AVLNode<T> *root) const;
     void DeleteTree(AVLNode<T> *root);
+    void Clear();
+    AVLNode<T> *Clear(AVLNode<T> *root);
+
 private:
     void DeleteAvlNode(AVLNode<T> *nodeToRemove); // function used by the destructor
 };
 template <class T>
-void AvlTree<T>::DeleteTree(AVLNode<T> *root)
+void AvlTree<T>::DeleteTree(AVLNode<T> *node)
 {
-    if (root == NULL)
+    if (node == NULL)
     {
         return;
     }
-    DeleteTree(root->GetLeft());
-    DeleteTree(root->GetRight());
-    delete root;
+    node->SetLeft(this->Clear(node->GetLeft()));
+    node->SetRight(this->Clear(node->GetRight()));
+    delete node;
+    return;
 }
 template <class T>
 AvlTree<T>::~AvlTree()
 {
-    if (root)
+    this->Clear();
+}
+template <class T>
+void AvlTree<T>::Clear()
+{
+    this->root = this->Clear(this->root);
+}
+
+template <class T>
+AVLNode<T> *AvlTree<T>::Clear(AVLNode<T> *node)
+{
+    if (node == NULL)
     {
-        DeleteAvlNode(root);
+        return NULL;
     }
+    node->SetLeft(this->Clear(node->GetLeft()));
+    node->SetRight(this->Clear(node->GetRight()));
+    delete node;
+    return NULL;
 }
 template <class T>
 void AvlTree<T>::DeleteAvlNode(AVLNode<T> *nodeToRemove)
@@ -84,7 +101,7 @@ void AvlTree<T>::DeleteAvlNode(AVLNode<T> *nodeToRemove)
         {
             DeleteAvlNode(nodeToRemove->GetRight());
         }
-        
+
         delete nodeToRemove;
     }
 }
@@ -212,31 +229,30 @@ AVLNode<T> *AvlTree<T>::Insert(AVLNode<T> *node, const T &value)
 template <class T>
 AVLNode<T> *AvlTree<T>::Remove(AVLNode<T> *node, const T &value)
 {
-    if (node == NULL)
+    if (node == NULL) // meaning we've reached a Null
     {
         return NULL;
     }
-    if (node->GetLeft() == NULL && node->GetRight() == NULL)
-    {
-        if (node == this->root)
-        {
-            this->root = NULL;
-        }
-
-        delete node;
-        return NULL;
-    }
-    if (value < node->GetValue() && node->GetLeft()!=NULL)
+    if (value < node->GetValue()) // Meaning value to remove is in the left Subtree
     {
         node->SetLeft(this->Remove(node->GetLeft(), value));
     }
-    else if (value > node->GetValue() && node->GetRight() != NULL)
+    else if (value > node->GetValue())
     {
         node->SetRight(this->Remove(node->GetRight(), value));
     }
-    else
+    else if (value == node->GetValue())
     {
-        if (node->GetLeft() == NULL)
+        if (node->GetLeft() == NULL && node->GetRight() == NULL)
+        {
+            if (node == this->root)
+            {
+                this->root = NULL;
+            }
+            delete node;
+            return NULL;
+        }
+        else if (node->GetLeft() == NULL)
         {
             AVLNode<T> *temp = node->GetRight();
             delete node;
@@ -248,13 +264,16 @@ AVLNode<T> *AvlTree<T>::Remove(AVLNode<T> *node, const T &value)
             delete node;
             return temp;
         }
-        AVLNode<T> *temp = node->GetRight();
-        while (temp->GetLeft() != NULL)
+        else
         {
-            temp = temp->GetLeft();
+            AVLNode<T> *temp = node->GetRight();
+            while (temp->GetLeft() != NULL)
+            {
+                temp = temp->GetLeft();
+            }
+            node->SetValue(temp->GetValue());
+            node->SetRight(Remove(node->GetRight(), temp->GetValue()));
         }
-        node->SetValue(temp->GetValue());
-        node->SetRight(Remove(node->GetRight(), temp->GetValue()));
     }
     int balanceFactor = GetBF(node);
     if (balanceFactor == 2 && GetBF(node->GetLeft()) >= 0)
