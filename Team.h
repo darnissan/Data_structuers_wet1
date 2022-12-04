@@ -168,6 +168,9 @@ template <class T>
         if (src == nullptr)
             return;
 
+        if (dst == nullptr){
+            dst = new AVLNode<T>(src->GetValue());
+        }
         // Copy the value from the source tree to the destination tree
         dst->SetValue ( src->GetValue() );
 
@@ -175,6 +178,7 @@ template <class T>
         // to the destination tree
         copyTree(src->GetLeft(), dst->GetLeft());
         copyTree(src->GetRight(), dst->GetRight());
+        delete dst;
     }
 
     AVLNode<Player> *findPlayerById(AVLNode<Player> *node, int playerId)
