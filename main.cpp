@@ -275,8 +275,8 @@ int main()
     std::cout << "--------------------------------------" << std::endl;
     std::cout << "--------------------------------------" << std::endl;
     std::cout << "--------------------------------------" << std::endl;
-    world_cup->unite_teams(3, 2,3);
-    world_cup->printTeam(3);
+    world_cup->unite_teams(1, 2,1);
+    world_cup->printTeam(1);
 
 
 

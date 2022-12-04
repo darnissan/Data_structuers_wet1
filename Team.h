@@ -57,9 +57,12 @@ public:
             this->TotalGoalsScored = other.TotalGoalsScored;
             this->TotalCards = other.TotalCards;
             this->players.Clear();
-            copyTree(this->players.root, other.players.root);
+            this->players.root=nullptr;
+
+            this->players.root = copyTree(this->players.root, other.players.root);
             this->PlayersOnTeamOrderdByStats.Clear();
-            copyTree(this->PlayersOnTeamOrderdByStats.root, other.PlayersOnTeamOrderdByStats.root);
+            this->PlayersOnTeamOrderdByStats.root=nullptr;
+            this->PlayersOnTeamOrderdByStats.root=copyTree(this->PlayersOnTeamOrderdByStats.root, other.PlayersOnTeamOrderdByStats.root);
         }
         return *this;
     }
@@ -162,13 +165,13 @@ public:
         os <<"team id" << team.id << " " << team.numOfPlayers << " " << team.numOfGoalKeepers << " " << "points:"<< team.points << " " << team.gamesTeamPlayed << " " << team.TotalGoalsScored << " " << team.TotalCards<<"---"<<std::endl;
         return os;
     }
-template <class T>
-    void copyTree(AVLNode<T> *src, AVLNode<T> *dst)
+    template <class T>
+    AVLNode<T> *copyTree(AVLNode<T> *dst, AVLNode<T> *src)
     {
         // Check if the source tree is empty. If it is, there is nothing to copy,
         // so we can return immediately.
         if (src == nullptr)
-            return;
+            return nullptr;
 
         if (dst == nullptr){
             dst = new AVLNode<T>(src->GetValue());
@@ -178,10 +181,10 @@ template <class T>
 
         // Recursively copy the left and right subtrees of the source tree
         // to the destination tree
-        copyTree(src->GetLeft(), dst->GetLeft());
-        copyTree(src->GetRight(), dst->GetRight());
+        dst->SetLeft(copyTree(dst->GetLeft(), src->GetLeft()));
+        dst->SetRight(copyTree(dst->GetRight() ,src->GetRight()));
         //how to delete the new memory carfully?
-    
+        return dst;
         
 
 
