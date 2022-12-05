@@ -275,11 +275,12 @@ StatusType world_cup_t::remove_player(int playerId)
 	int closestFromAllLeftId = playerNodeOnPlayerStatsTree->GetValue().getClosestFromAllLeftID();
 	int closestFromAllRightId = playerNodeOnPlayerStatsTree->GetValue().getClosestFromAllRightID();
 	std::cout << "closest right: " << closestFromAllLeftId;
-	update_player_stats(closestFromAllLeftId, 0, 0, 0);
-	update_player_stats(closestFromAllRightId, 0, 0, 0);
+	updateClosest(closestFromAllLeftId);
+	updateClosest(closestFromAllRightId);
+	TheTeamOfThePlayerNode->GetValue().setNumOfPlayers(TheTeamOfThePlayerNode->GetValue().getNumOfPlayers() - 1);
+	
 
-
-	if (playerId == topScorerId)
+		if (playerId == topScorerId)
 	{
 		;
 		}//find new top scorer 
@@ -304,6 +305,7 @@ StatusType world_cup_t::remove_player(int playerId)
 	if (!(isLeagelTeam(TheTeamOfThePlayerNode)))
 	{
 		numberOfLeagelTeams--;
+		leagelTeams.root = leagelTeams.Remove(leagelTeams.root, IDandTotalPoints(TheTeamOfThePlayerNode->GetValue().getId(),0));
 	}
 	return StatusType::SUCCESS;
 }
@@ -877,6 +879,9 @@ void world_cup_t::printTeam(int teamId)
 	std::cout << "Printing the given " << teamId << " team players by stats tree" << std::endl;
 	// TheTeamNode->GetValue().PlayersOnTeamOrderdByStats.PrintInOrder(TheTeamNode->GetValue().PlayersOnTeamOrderdByStats.GetRoot());
 	printBTs(TheTeamNode->GetValue().PlayersOnTeamOrderdByStats.GetRoot());
+
+	std::cout<<" Printing legeal team"<< std::endl;
+	printBTs(leagelTeams.GetRoot());
 }
 
 template <class T>

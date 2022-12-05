@@ -305,9 +305,11 @@ int main()
 
    world_cup->unite_teams(1, 4,4);
     world_cup->printTeam(4);
-
+    world_cup->remove_player(28);
+    world_cup->remove_player(29);
+    world_cup->remove_player(30);
     world_cup->knockout_winner(2,10);
-
+    world_cup->printTeam(2);
 
     delete world_cup; //  printBTs(tree.GetRoot());
 
