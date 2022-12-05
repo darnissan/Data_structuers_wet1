@@ -280,6 +280,7 @@ StatusType world_cup_t::remove_player(int playerId)
 	{
 		AllPlayers.root = AllPlayers.Remove(AllPlayers.GetRoot(), playerNodeOnAllPlayersTree->GetValue());
 		ALLPayersOrderdByStats.root = ALLPayersOrderdByStats.Remove(ALLPayersOrderdByStats.GetRoot(), playerNodeOnPlayerStatsTree->GetValue());
+		//remove from player tree by team and player tree by stats in team
 	}
 	catch (std::bad_alloc &e)
 	{
