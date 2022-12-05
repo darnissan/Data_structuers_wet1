@@ -7,34 +7,33 @@ class IDandTotalPoints
 {
     int id;
     int totalPoints;
+
 public:
-int getId() const
-{
-    return id;
-
-}
-int getTotalPoints() const
-{
-    return totalPoints;
-}
-IDandTotalPoints(int id, int totalPoints) : id(id), totalPoints(totalPoints)
-{
-}
-void setTotalPoints(int totalPoints)
-{
-    this->totalPoints = totalPoints;
-}
-void setId(int id)
-{
-    this->id = id;
-}
-friend std::ostream &operator<<(std::ostream &os, const IDandTotalPoints &idAndTotalPoints)
-{
-    os << "id: " << idAndTotalPoints.id << " totalPoints: " << idAndTotalPoints.totalPoints;
-    return os;
-}
+    int getId() const
+    {
+        return id;
+    }
+    int getTotalPoints() const
+    {
+        return totalPoints;
+    }
+    IDandTotalPoints(int id, int totalPoints) : id(id), totalPoints(totalPoints)
+    {
+    }
+    void setTotalPoints(int totalPoints)
+    {
+        this->totalPoints = totalPoints;
+    }
+    void setId(int id)
+    {
+        this->id = id;
+    }
+    friend std::ostream &operator<<(std::ostream &os, const IDandTotalPoints &idAndTotalPoints)
+    {
+        os << "id: " << idAndTotalPoints.id << " totalPoints: " << idAndTotalPoints.totalPoints;
+        return os;
+    }
 };
-
 
 template <class T>
 class ListNode
@@ -49,10 +48,10 @@ public:
 
     ListNode *GetNext() const { return next; }
     void SetNext(ListNode *next) { this->next = next; }
-    
-    private :
-        // The value and next pointer of the node
-        T value;
+
+private:
+    // The value and next pointer of the node
+    T value;
     ListNode *next;
 };
 
@@ -63,7 +62,7 @@ class LinkedList
 public:
     // Default constructor to initialize the head and tail pointers of the list
     LinkedList() : head(nullptr), tail(nullptr) {}
-    
+
     // Destructor to free the memory used by the nodes in the list
     ~LinkedList()
     {
@@ -76,12 +75,9 @@ public:
             node = next;
         }
     }
-    
-   
-   
 
-        // Getter and setter methods for the head and tail pointers of the list
-        ListNode<T> *GetHead() const
+    // Getter and setter methods for the head and tail pointers of the list
+    ListNode<T> *GetHead() const
     {
         return head;
     }
@@ -143,6 +139,8 @@ public:
         }
     }
 
+
+
     bool IsEmpty() const
     {
         return head == nullptr;
@@ -186,31 +184,31 @@ public:
         return os;
     }
 
-void getValuesInRange(AVLNode<Team> *node,int min,int max)
-{
-    if (node==NULL)
+    void getValuesInRange(AVLNode<Team> *node, int min, int max)
     {
-        return;
+        if (node == NULL)
+        {
+            return;
+        }
+        if (node->GetValue().getId() <= max && node->GetValue().getId() >= min)
+        {
+            this->getValuesInRange(node->GetLeft(), min, max);
+            //if (node->GetValue().getNumOfPlayers() >= 11 && node->GetValue().getNumOfGoalKeepers() >= 1)
+            //{
+                this->Insert(IDandTotalPoints(node->GetValue().getId(), node->GetValue().getPoints()));
+            //}
+            
+            this->getValuesInRange(node->GetRight(), min, max);
+        }
+        if (node->GetValue().getId() > max && node->GetLeft() != NULL)
+        {
+            this->getValuesInRange(node->GetLeft(), min, max);
+        }
+        else if (node->GetValue().getId() < min && node->GetRight() != NULL)
+        {
+            this->getValuesInRange(node->GetRight(), min, max);
+        }
     }
-    if (node->GetValue().getId() <= max && node->GetValue().getId() >= min)
-    {
-        
-        this->Insert(IDandTotalPoints(node->GetValue().getId(),node->GetValue().getPoints()));
-        this->getValuesInRange(node->GetLeft(), min, max);
-        this->getValuesInRange(node->GetRight(), min, max);
-    }
-    if (node->GetValue().getId() > max && node->GetLeft() != NULL)
-    {
-        this->getValuesInRange(node->GetLeft(),min,max);
-    }
-    else if (node->GetValue().getId() < min && node->GetRight() != NULL)
-    {
-        this->getValuesInRange(node->GetRight(),min,max);
-    }
-
-}
-
-
 
 private:
     // The head and tail pointers of the linked list

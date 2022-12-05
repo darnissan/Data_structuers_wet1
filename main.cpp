@@ -197,6 +197,8 @@ int main()
     world_cup->add_team(2, 2);
     world_cup->add_team(3, 3);
     world_cup->add_team(4, 4);
+    world_cup->add_team(6,3);
+    world_cup->add_team(9, 2);
     world_cup->add_player(21, 1, 1, 1, 20, true); // add player args go by (player id ,team id ,games played, goals,cards)
     
     world_cup->add_player(25, 1, 1, 1, 20, true);
@@ -278,7 +280,7 @@ int main()
    // world_cup->unite_teams(1, 4,4);
     //world_cup->printTeam(4);
 
-    world_cup->knockout_winner(2,4);
+    world_cup->knockout_winner(2,10);
 
 
     delete world_cup; //  printBTs(tree.GetRoot());

@@ -34,7 +34,7 @@ world_cup_t::world_cup_t()
 
 world_cup_t::~world_cup_t()
 {
-	
+
 	// TODO: Your code goes here
 }
 
@@ -118,7 +118,7 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 	{
 		newPlayer = Player(playerId, teamId, gamesPlayed, goals, cards, goalKeeper);
 		newPlayer.setGamesTeamPlayedBefore(TheTeamOfThePlayerNode->GetValue().getGamesTeamPlayed());
-			newPlayerStats = PlayerStats(playerId, goals, cards);
+		newPlayerStats = PlayerStats(playerId, goals, cards);
 	}
 
 	catch (std::bad_alloc &e)
@@ -215,20 +215,20 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 StatusType world_cup_t::remove_player(int playerId)
 {
 	AVLNode<Player> *playerNodeOnAllPlayersTree = findPlayerById(AllPlayers.GetRoot(), playerId); // finding the player on player tree By binary search on AVL tree O(logn)
-	//AVLNode<Team> *TheTeamOfThePlayerNode = playerNodeOnAllPlayersTree->GetValue().getPointerToTeamAvlNode(); //getting player team
+	// AVLNode<Team> *TheTeamOfThePlayerNode = playerNodeOnAllPlayersTree->GetValue().getPointerToTeamAvlNode(); //getting player team
 	AVLNode<PlayerStats> *playerNodeOnPlayerStatsTree = playerNodeOnAllPlayersTree->GetValue().getpointerToPlayerStatsAvlNodeONTeam(); // finding the player on player stats tree By binary search on AVL tree O(logn)
 
 	// checking whether the input is valid
 	if (playerId <= 0)
 		return StatusType::INVALID_INPUT;
-	
+
 	// checking whether the player exists
 	if (playerNodeOnAllPlayersTree == NULL)
 	{
 		return StatusType::FAILURE;
 	}
 
-	//trying to remove player
+	// trying to remove player
 	try
 	{
 		AllPlayers.root = AllPlayers.Remove(AllPlayers.GetRoot(), playerNodeOnAllPlayersTree->GetValue());
@@ -406,8 +406,6 @@ output_t<int> world_cup_t::get_team_points(int teamId)
 StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
 {
 
-
-
 	/**/
 	if (teamId2 == teamId1 || teamId2 <= 0 || teamId1 <= 0 || newTeamId <= 0)
 	{
@@ -430,23 +428,23 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
 
 		if (newTeamId == teamId1) // meaning every player is going to teamid1
 		{
-			
-				ChangePlayersTeamId(team2Node->GetValue().players.root, teamId1);
-				ChangePlayersTeamPointer(team2Node->GetValue().players.root, team1Node);
-				AVLNode<Player> *newPlayerTree = MergeTwoTrees(team1Node->GetValue().players.GetRoot(), team2Node->GetValue().players.GetRoot(), team1Node->GetValue().getNumOfPlayers(), team2Node->GetValue().getNumOfPlayers());
-				AVLNode<PlayerStats> *newPlayerStatsTree = MergeTwoTrees(team1Node->GetValue().PlayersOnTeamOrderdByStats.GetRoot(), team2Node->GetValue().PlayersOnTeamOrderdByStats.GetRoot(), team1Node->GetValue().getNumOfPlayers(), team2Node->GetValue().getNumOfPlayers());
-				team1Node->GetValue().PlayersOnTeamOrderdByStats.root = team1Node->GetValue().PlayersOnTeamOrderdByStats.Clear(team1Node->GetValue().PlayersOnTeamOrderdByStats.root);
-				team1Node->GetValue().players.root=team1Node->GetValue().players.Clear(team1Node->GetValue().players.root);
-				team1Node->GetValue().players.root = newPlayerTree;
-				team1Node->GetValue().PlayersOnTeamOrderdByStats.root = newPlayerStatsTree;
-				team1Node->GetValue().setNumOfPlayers(team1Node->GetValue().getNumOfPlayers() + team2Node->GetValue().getNumOfPlayers());
-				team1Node->GetValue().setPoints(team1Node->GetValue().getPoints() + team2Node->GetValue().getPoints());
-				team1Node->GetValue().setNumOfGoalKeepers(team1Node->GetValue().getNumOfGoalKeepers() + team2Node->GetValue().getNumOfGoalKeepers());
-				team1Node->GetValue().setGamesTeamPlayed(team1Node->GetValue().getGamesTeamPlayed() + team2Node->GetValue().getGamesTeamPlayed());
-				team1Node->GetValue().setTotalGoalsScored(team1Node->GetValue().getTotalGoalsScored() + team2Node->GetValue().getTotalGoalsScored());
-				team1Node->GetValue().setTotalCards(team1Node->GetValue().getTotalCards() + team2Node->GetValue().getTotalCards());
-				//team2Node->GetValue().setTeamID(-1);
-				AllTeams.root=AllTeams.Remove(AllTeams.GetRoot(), team2Node->GetValue());
+
+			ChangePlayersTeamId(team2Node->GetValue().players.root, teamId1);
+			ChangePlayersTeamPointer(team2Node->GetValue().players.root, team1Node);
+			AVLNode<Player> *newPlayerTree = MergeTwoTrees(team1Node->GetValue().players.GetRoot(), team2Node->GetValue().players.GetRoot(), team1Node->GetValue().getNumOfPlayers(), team2Node->GetValue().getNumOfPlayers());
+			AVLNode<PlayerStats> *newPlayerStatsTree = MergeTwoTrees(team1Node->GetValue().PlayersOnTeamOrderdByStats.GetRoot(), team2Node->GetValue().PlayersOnTeamOrderdByStats.GetRoot(), team1Node->GetValue().getNumOfPlayers(), team2Node->GetValue().getNumOfPlayers());
+			team1Node->GetValue().PlayersOnTeamOrderdByStats.root = team1Node->GetValue().PlayersOnTeamOrderdByStats.Clear(team1Node->GetValue().PlayersOnTeamOrderdByStats.root);
+			team1Node->GetValue().players.root = team1Node->GetValue().players.Clear(team1Node->GetValue().players.root);
+			team1Node->GetValue().players.root = newPlayerTree;
+			team1Node->GetValue().PlayersOnTeamOrderdByStats.root = newPlayerStatsTree;
+			team1Node->GetValue().setNumOfPlayers(team1Node->GetValue().getNumOfPlayers() + team2Node->GetValue().getNumOfPlayers());
+			team1Node->GetValue().setPoints(team1Node->GetValue().getPoints() + team2Node->GetValue().getPoints());
+			team1Node->GetValue().setNumOfGoalKeepers(team1Node->GetValue().getNumOfGoalKeepers() + team2Node->GetValue().getNumOfGoalKeepers());
+			team1Node->GetValue().setGamesTeamPlayed(team1Node->GetValue().getGamesTeamPlayed() + team2Node->GetValue().getGamesTeamPlayed());
+			team1Node->GetValue().setTotalGoalsScored(team1Node->GetValue().getTotalGoalsScored() + team2Node->GetValue().getTotalGoalsScored());
+			team1Node->GetValue().setTotalCards(team1Node->GetValue().getTotalCards() + team2Node->GetValue().getTotalCards());
+			// team2Node->GetValue().setTeamID(-1);
+			AllTeams.root = AllTeams.Remove(AllTeams.GetRoot(), team2Node->GetValue());
 		}
 		else if (newTeamId == teamId2) // meaning every player is going to teamid2
 		{
@@ -476,7 +474,7 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
 			int newNumOfPlayers = team1Node->GetValue().getNumOfPlayers() + team2Node->GetValue().getNumOfPlayers();
 
 			AVLNode<Team> *newTeamNode;
-			AllTeams.root=AllTeams.Insert(AllTeams.GetRoot(), Team(newTeamId,newPoints));
+			AllTeams.root = AllTeams.Insert(AllTeams.GetRoot(), Team(newTeamId, newPoints));
 			newTeamNode = findTeamById(AllTeams.GetRoot(), newTeamId);
 			newTeamNode->GetValue().setGamesTeamPlayed(newGamesPlayed);
 			newTeamNode->GetValue().setTotalGoalsScored(newGoalsScored);
@@ -486,41 +484,36 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
 			newTeamNode->GetValue().setNumOfGoalKeepers(team1Node->GetValue().getNumOfGoalKeepers() + team2Node->GetValue().getNumOfGoalKeepers());
 			AVLNode<Player> *newPlayerTree = MergeTwoTrees(team1Node->GetValue().players.GetRoot(), team2Node->GetValue().players.GetRoot(), team1Node->GetValue().getNumOfPlayers(), team2Node->GetValue().getNumOfPlayers());
 			AVLNode<PlayerStats> *newPlayerStatsTree = MergeTwoTrees(team1Node->GetValue().PlayersOnTeamOrderdByStats.GetRoot(), team2Node->GetValue().PlayersOnTeamOrderdByStats.GetRoot(), team1Node->GetValue().getNumOfPlayers(), team2Node->GetValue().getNumOfPlayers());
-			newTeamNode->GetValue().PlayersOnTeamOrderdByStats.root=newPlayerStatsTree;
+			newTeamNode->GetValue().PlayersOnTeamOrderdByStats.root = newPlayerStatsTree;
 			newTeamNode->GetValue().players.root = newPlayerTree;
 
 			AllTeams.root = AllTeams.Remove(AllTeams.GetRoot(), team1Node->GetValue());
 			AllTeams.root = AllTeams.Remove(AllTeams.GetRoot(), team2Node->GetValue());
-			
 
-			
 			ChangePlayersTeamId(newTeamNode->GetValue().players.root, newTeamId);
 			ChangePlayersTeamPointer(newTeamNode->GetValue().players.root, newTeamNode);
-			
 		}
-			 
-			// inOrder travesrsal on both team's players tree to change to the teamId
 
-			// inOrder traversal on Both team's Players Tress to change the pointer to the team Node
+		// inOrder travesrsal on both team's players tree to change to the teamId
 
-			// merging both teams players tree
+		// inOrder traversal on Both team's Players Tress to change the pointer to the team Node
 
-			// merging both teams PlayersStats tree
+		// merging both teams players tree
 
-			// updating the teams fields
+		// merging both teams PlayersStats tree
 
-			// updating worldCup in scenerio both team werent leagel and new team is leagel
+		// updating the teams fields
 
-			// deleting the the team with no Players
+		// updating worldCup in scenerio both team werent leagel and new team is leagel
 
-			// updating the number of teams in world cup
-		
+		// deleting the the team with no Players
+
+		// updating the number of teams in world cup
 	}
-	catch (std::bad_alloc& e)
+	catch (std::bad_alloc &e)
 	{
 		return StatusType::ALLOCATION_ERROR;
 	}
-
 
 	// TODO: Your code goes here
 	return StatusType::SUCCESS;
@@ -555,12 +548,67 @@ output_t<int> world_cup_t::get_closest_player(int playerId, int teamId)
 
 output_t<int> world_cup_t::knockout_winner(int minTeamId, int maxTeamId)
 {
+
+	if (minTeamId < 0 || maxTeamId < 0 || maxTeamId < minTeamId)
+	{
+		return StatusType::INVALID_INPUT;
+	}
+	try
+	{
+		LinkedList<IDandTotalPoints> KnockoutTeams;
+		ListNode<IDandTotalPoints> *tempKnockOut;
+		KnockoutTeams.getValuesInRange(AllTeams.root, minTeamId, maxTeamId);
+		std::cout << "the knockout list   " << KnockoutTeams << std::endl;
+
+		if (KnockoutTeams.IsEmpty())
+		{
+			return StatusType::FAILURE;
+		}
+
+		while (KnockoutTeams.GetHead()->GetNext() != NULL)
+		{
+			tempKnockOut = KnockoutTeams.GetHead();
+			int MatchWinnerId;
+			int MatchWinnerPoints;
+			while (tempKnockOut != NULL && tempKnockOut->GetNext() != NULL)
+			{
+
+				if (tempKnockOut->GetValue().getTotalPoints() > tempKnockOut->GetNext()->GetValue().getTotalPoints())
+				{
+					MatchWinnerId = tempKnockOut->GetValue().getId();
+					MatchWinnerPoints = tempKnockOut->GetValue().getTotalPoints() + tempKnockOut->GetNext()->GetValue().getTotalPoints();
+					tempKnockOut->SetValue(IDandTotalPoints(MatchWinnerId, MatchWinnerPoints));
+					tempKnockOut->SetNext(tempKnockOut->GetNext()->GetNext());
+					tempKnockOut = tempKnockOut->GetNext();
+				}
+				else if (tempKnockOut->GetValue().getTotalPoints() < tempKnockOut->GetNext()->GetValue().getTotalPoints())
+				{
+					MatchWinnerId = tempKnockOut->GetNext()->GetValue().getId();
+					MatchWinnerPoints = tempKnockOut->GetValue().getTotalPoints() + tempKnockOut->GetNext()->GetValue().getTotalPoints();
+					tempKnockOut->SetValue(IDandTotalPoints(MatchWinnerId, MatchWinnerPoints));
+					tempKnockOut->SetNext(tempKnockOut->GetNext()->GetNext());
+					tempKnockOut = tempKnockOut->GetNext();
+				}
+				else
+				{
+					MatchWinnerId = tempKnockOut->GetNext()->GetValue().getId() > tempKnockOut->GetValue().getId() ? tempKnockOut->GetNext()->GetValue().getId() : tempKnockOut->GetValue().getId();
+					MatchWinnerPoints = tempKnockOut->GetValue().getTotalPoints() + tempKnockOut->GetNext()->GetValue().getTotalPoints();
+					tempKnockOut->SetValue(IDandTotalPoints(MatchWinnerId, MatchWinnerPoints));
+					tempKnockOut->SetNext(tempKnockOut->GetNext()->GetNext());
+					tempKnockOut = tempKnockOut->GetNext();
+				}
+			}
+		}
+		std::cout << KnockoutTeams << " this is the knockout winner" << std::endl;
+	}
+	catch (const std::exception &e)
+	{
+		return StatusType::ALLOCATION_ERROR;
+	}
+
 	// TODO: Your code goes here
-	LinkedList <IDandTotalPoints> KnockoutTeams;
 
-	KnockoutTeams.getValuesInRange(AllTeams.root,minTeamId,maxTeamId);
-
-		return 2;
+	return 2;
 }
 
 AVLNode<Team> *findTeamById(AVLNode<Team> *node, int teamId)
@@ -867,8 +915,6 @@ void ChangePlayersTeamPointer(AVLNode<Player> *node, AVLNode<Team> *newTeamNode)
 	ChangePlayersTeamPointer(node->GetRight(), newTeamNode);
 }
 
-
-
 template <class T>
 AVLNode<T> *MergeTwoTrees(AVLNode<T> *root1, AVLNode<T> *root2, int FirstTreesSize, int SecondTreeSize)
 {
@@ -903,9 +949,9 @@ template <class T>
 T *MergeTwoArrays(T *arr1, T *arr2, int size1, int size2)
 {
 	T *arr3 = new T[size1 + size2];
-	int i=0;
-	int j=0;
-	int  k = 0;
+	int i = 0;
+	int j = 0;
+	int k = 0;
 	while (i < size1 && j < size2)
 	{
 		if (arr1[i] < arr2[j])
@@ -943,11 +989,10 @@ AVLNode<T> *SortedArrayToTree(T *sortedArr, int start, int end)
 		return NULL;
 	}
 	int mid = (start + end) / 2;
-	AVLNode<T> *root1 =new AVLNode<T>((sortedArr[mid]));
+	AVLNode<T> *root1 = new AVLNode<T>((sortedArr[mid]));
 	root1->SetValue(sortedArr[mid]);
 	root1->SetLeft(SortedArrayToTree(sortedArr, start, mid - 1));
 	root1->SetRight(SortedArrayToTree(sortedArr, mid + 1, end));
-	
+
 	return root1;
 }
-
