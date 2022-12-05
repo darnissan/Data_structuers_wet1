@@ -19,6 +19,7 @@ protected:
     AVLNode<PlayerStats> *pointerToPlayerStatsAvlNodeONAllPlayers = nullptr;
     AVLNode<Team> *pointerToTeamAvlNode=nullptr;
     AVLNode<PlayerStats> *pointerToPlayerStatsAvlNodeONTeam=nullptr;
+    AVLNode<Player> *pointerToAllPlayerAvlNode=nullptr;
     void DeletePlayer(Player *player);
 
 public:
@@ -160,6 +161,14 @@ public:
     void setTeamId(int newTeamId)
     {
         this->teamId=newTeamId;
+    }
+    AVLNode<Player> *getPointerToAllPlayerAvlNode()
+    {
+        return pointerToAllPlayerAvlNode;
+    }
+    void setPointerToAllPlayerAvlNode(AVLNode<Player> *pointerToAllPlayerAvlNode)
+    {
+        this->pointerToAllPlayerAvlNode = pointerToAllPlayerAvlNode;
     }
 };
 

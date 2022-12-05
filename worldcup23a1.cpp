@@ -222,7 +222,8 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 
 	// adding player to All players_ordered_by_stats
 	PlayerNodeOnTeamPlayersTree->GetValue().setpointerToPlayerStatsAvlNodeONAllPlayers(ALLPayersOrderdByStats.find(ALLPayersOrderdByStats.GetRoot(), newPlayerStats));
-
+	PlayerNodeOnTeamPlayersTree->GetValue().setPointerToAllPlayerAvlNode(AllPlayers.find(AllPlayers.GetRoot(), newPlayer));
+	(AllPlayers.find(AllPlayers.GetRoot(), newPlayer)->GetValue().setPointerToAllPlayerAvlNode(AllPlayers.find(AllPlayers.GetRoot(), newPlayer)));
 	/*
 	std::cout << "player added" <<newPlayer << std::endl;
 	std::cout<<"--------------------------------------"<<std::endl;
@@ -558,8 +559,8 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
 		}
 		else if (newTeamId == teamId2) // meaning every player is going to teamid2
 		{
-			ChangePlayersTeamId(team2Node->GetValue().players.root, teamId2);
-			ChangePlayersTeamPointer(team2Node->GetValue().players.root, team2Node);
+			ChangePlayersTeamId(team1Node->GetValue().players.root, teamId2);
+			ChangePlayersTeamPointer(team1Node->GetValue().players.root, team2Node);
 			AVLNode<Player> *newPlayerTree = MergeTwoTrees(team1Node->GetValue().players.GetRoot(), team2Node->GetValue().players.GetRoot(), team1Node->GetValue().getNumOfPlayers(), team2Node->GetValue().getNumOfPlayers());
 			AVLNode<PlayerStats> *newPlayerStatsTree = MergeTwoTrees(team1Node->GetValue().PlayersOnTeamOrderdByStats.GetRoot(), team2Node->GetValue().PlayersOnTeamOrderdByStats.GetRoot(), team1Node->GetValue().getNumOfPlayers(), team2Node->GetValue().getNumOfPlayers());
 			team2Node->GetValue().PlayersOnTeamOrderdByStats.DeleteTree(team2Node->GetValue().PlayersOnTeamOrderdByStats.GetRoot());
@@ -1026,6 +1027,7 @@ void ChangePlayersTeamId(AVLNode<Player> *node, int newTeamId)
 		return;
 	}
 	ChangePlayersTeamId(node->GetLeft(), newTeamId);
+	node->GetValue().getPointerToAllPlayerAvlNode()->GetValue().setTeamId(newTeamId);
 	node->GetValue().setTeamId(newTeamId);
 	ChangePlayersTeamId(node->GetRight(), newTeamId);
 }
@@ -1036,6 +1038,7 @@ void ChangePlayersTeamPointer(AVLNode<Player> *node, AVLNode<Team> *newTeamNode)
 		return;
 	}
 	ChangePlayersTeamPointer(node->GetLeft(), newTeamNode);
+	node->GetValue().getPointerToAllPlayerAvlNode()->GetValue().setPointerToTeam(newTeamNode);
 	node->GetValue().setPointerToTeam(newTeamNode);
 	ChangePlayersTeamPointer(node->GetRight(), newTeamNode);
 }
