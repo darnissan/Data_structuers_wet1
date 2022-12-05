@@ -268,22 +268,9 @@ StatusType world_cup_t::remove_player(int playerId)
 	{
 		return StatusType::FAILURE;
 	}
-
-
 	
-	//set new closest;
 	int closestFromAllLeftId = playerNodeOnPlayerStatsTree->GetValue().getClosestFromAllLeftID();
 	int closestFromAllRightId = playerNodeOnPlayerStatsTree->GetValue().getClosestFromAllRightID();
-	std::cout << "closest right: " << closestFromAllLeftId;
-	updateClosest(closestFromAllLeftId);
-	updateClosest(closestFromAllRightId);
-	TheTeamOfThePlayerNode->GetValue().setNumOfPlayers(TheTeamOfThePlayerNode->GetValue().getNumOfPlayers() - 1);
-	
-
-		if (playerId == topScorerId)
-	{
-		;
-		}//find new top scorer 
 	
 	//trying to remove player
 	try
@@ -295,6 +282,33 @@ StatusType world_cup_t::remove_player(int playerId)
 	{
 		return StatusType::ALLOCATION_ERROR;
 	}
+	
+	//set new closest;
+	update_player_stats(closestFromAllLeftId, 0, 0, 0);
+	update_player_stats(closestFromAllRightId, 0, 0, 0);
+	TheTeamOfThePlayerNode->GetValue().setNumOfPlayers(TheTeamOfThePlayerNode->GetValue().getNumOfPlayers() - 1);
+	
+	//find new top scorer 
+	if (playerId == topScorerId)
+	{
+		topScorerId = playerNodeOnPlayerStatsTree->GetValue().getPlayerId();
+		AVLNode<PlayerStats> *newTopScorer = ALLPayersOrderdByStats.GetRoot();
+		
+		while(newTopScorer->GetRight() != NULL)
+		{
+			newTopScorer = newTopScorer->GetRight();
+		}
+		topScorerGoals = newTopScorer->GetValue().getGoals();
+		topScorerCards = newTopScorer->GetValue().getCards();
+		topScorerId = newTopScorer->GetValue().getPlayerId();
+	}
+
+	if (playerId == TheTeamOfThePlayerNode->GetValue().getTeamTopScorerId())
+	{
+		;
+	}
+	
+	
 
 	
 	numberOfPlayers--;
