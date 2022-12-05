@@ -259,6 +259,7 @@ StatusType world_cup_t::remove_player(int playerId)
 	AVLNode<Team> *TheTeamOfThePlayerNode = playerNodeOnAllPlayersTree->GetValue().getPointerToTeamAvlNode();						   // getting player team
 	AVLNode<PlayerStats> *playerNodeOnPlayerStatsTree = playerNodeOnAllPlayersTree->GetValue().getpointerToPlayerStatsAvlNodeONTeam(); // finding the player on player stats tree By binary search on AVL tree O(logn)
 	AvlTree<PlayerStats> PlayersOnTeamOrderdByStats = TheTeamOfThePlayerNode->GetValue().PlayersOnTeamOrderdByStats;
+	AvlTree<Player> PlayersOnTeamTree = TheTeamOfThePlayerNode->GetValue().players;
 	
 	// checking whether the input is valid
 	if (playerId <= 0)
