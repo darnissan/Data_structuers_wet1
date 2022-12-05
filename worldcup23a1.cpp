@@ -669,6 +669,8 @@ output_t<int> world_cup_t::knockout_winner(int minTeamId, int maxTeamId)
 	{
 		return StatusType::INVALID_INPUT;
 	}
+	int winnerId;
+	LinkedList<IDandTotalPoints> KnockoutTeams;
 	try
 	{
 		LinkedList<IDandTotalPoints> KnockoutTeams;
@@ -721,7 +723,7 @@ output_t<int> world_cup_t::knockout_winner(int minTeamId, int maxTeamId)
 				}
 			}
 		}
-
+		winnerId = KnockoutTeams.GetHead()->GetValue().getId();
 		std::cout << KnockoutTeams << " this is the knockout winner" << std::endl;
 	}
 	catch (const std::exception &e)
@@ -731,7 +733,7 @@ output_t<int> world_cup_t::knockout_winner(int minTeamId, int maxTeamId)
 
 	// TODO: Your code goes here
 
-	return 2;
+	return winnerId;
 }
 
 AVLNode<Team> *findTeamById(AVLNode<Team> *node, int teamId)
