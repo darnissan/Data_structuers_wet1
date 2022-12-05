@@ -78,6 +78,10 @@ StatusType world_cup_t::remove_team(int teamId)
 		return StatusType::FAILURE;
 	}
 	AllTeams.root = AllTeams.Remove(AllTeams.GetRoot(), TeamAfterSearch->GetValue());
+	if (isInLeagelTeamsTree(teamId))
+	{
+		leagelTeams.Remove(leagelTeams.root, IDandTotalPoints(teamId, 0));
+	}
 	numberOfTeams--;
 	if (isLeagelTeam(TeamAfterSearch))
 	{
@@ -206,8 +210,19 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 	printBTs( ALLPayersOrderdByStats.GetRoot());
 	std::cout << "--------------------------------------" << std::endl;
 	*/
-
 	numberOfPlayers++;
+	if (isLeagelTeam(TheTeamOfThePlayerNode) && isInLeagelTeamsTree(teamId) == false)
+	{
+		int TotalPoints = TheTeamOfThePlayerNode->GetValue().getPoints() + TheTeamOfThePlayerNode->GetValue().getTotalGoalsScored() - TheTeamOfThePlayerNode->GetValue().getTotalCards();
+		IDandTotalPoints teamPair(teamId, TotalPoints);
+		leagelTeams.root = leagelTeams.Insert(leagelTeams.GetRoot(), teamPair);
+	}
+
+	else if (isLeagelTeam(TheTeamOfThePlayerNode))
+	{
+		int oldTotalPoints = (leagelTeams.find(leagelTeams.root, IDandTotalPoints(teamId, 0))->GetValue().getTotalPoints());
+		leagelTeams.find(leagelTeams.root, IDandTotalPoints(teamId, 0))->GetValue().setTotalPoints(oldTotalPoints + goals - cards);
+	}
 
 	return StatusType::SUCCESS;
 }
@@ -375,6 +390,15 @@ StatusType world_cup_t::update_player_stats(int playerId, int gamesPlayed,
 		PlayerStatsTeam->GetValue().setClosestFromAllRightID(NewclosestFromAllRightId);
 		PlayerStatsTeam->GetValue().setClosestFromTeamLeftID(NewclosestFromTeamLeftId);
 		PlayerStatsTeam->GetValue().setClosestFromTeamRightID(NewclosestFromTeamRightId);
+
+		// update Leagel teams tree
+
+		if (isLeagelTeam(teamNodeOnTeamsTree))
+		{
+			int oldTotalPoints = (leagelTeams.find(leagelTeams.root, IDandTotalPoints(teamNodeOnTeamsTree->GetValue().getId(), 0))->GetValue().getTotalPoints());
+			oldTotalPoints = oldTotalPoints + scoredGoals - cardsReceived;
+			leagelTeams.find(leagelTeams.root, IDandTotalPoints(teamNodeOnTeamsTree->GetValue().getId(), 0))->GetValue().setTotalPoints(oldTotalPoints);
+		}
 	}
 	catch (const std::exception &e)
 	{
@@ -425,7 +449,14 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
 
 		AVLNode<Team> *team1Node = findTeamById(AllTeams.GetRoot(), teamId1);
 		AVLNode<Team> *team2Node = findTeamById(AllTeams.GetRoot(), teamId2);
-
+		AVLNode<Team>* nodeForLeagel=nullptr;
+		if (isLeagelTeam(team1Node)){
+			leagelTeams.root = leagelTeams.Remove(leagelTeams.root, IDandTotalPoints(teamId1, 0));
+		}
+		if (isLeagelTeam(team2Node))
+		{
+			leagelTeams.root = leagelTeams.Remove(leagelTeams.root, IDandTotalPoints(teamId1, 0));
+		}
 		if (newTeamId == teamId1) // meaning every player is going to teamid1
 		{
 
@@ -445,6 +476,10 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
 			team1Node->GetValue().setTotalCards(team1Node->GetValue().getTotalCards() + team2Node->GetValue().getTotalCards());
 			// team2Node->GetValue().setTeamID(-1);
 			AllTeams.root = AllTeams.Remove(AllTeams.GetRoot(), team2Node->GetValue());
+			nodeForLeagel=team1Node;
+			//updating leagel teams tree
+
+
 		}
 		else if (newTeamId == teamId2) // meaning every player is going to teamid2
 		{
@@ -464,6 +499,7 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
 			team2Node->GetValue().setTotalCards(team1Node->GetValue().getTotalCards() + team2Node->GetValue().getTotalCards());
 			// team2Node->GetValue().setTeamID(-1);
 			AllTeams.root = AllTeams.Remove(AllTeams.GetRoot(), team1Node->GetValue());
+			nodeForLeagel=team2Node;
 		}
 		else
 		{
@@ -492,8 +528,12 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
 
 			ChangePlayersTeamId(newTeamNode->GetValue().players.root, newTeamId);
 			ChangePlayersTeamPointer(newTeamNode->GetValue().players.root, newTeamNode);
+			nodeForLeagel=newTeamNode;
 		}
-
+		int totalPoints=AllTeams.find(AllTeams.root,nodeForLeagel->GetValue())->GetValue().getPoints();
+		totalPoints += AllTeams.find(AllTeams.root, nodeForLeagel->GetValue())->GetValue().getTotalGoalsScored();
+		totalPoints-=AllTeams.find(AllTeams.root, nodeForLeagel->GetValue())->GetValue().getTotalCards();
+		leagelTeams.root = leagelTeams.Insert(leagelTeams.root, IDandTotalPoints(newTeamId,totalPoints ));
 		// inOrder travesrsal on both team's players tree to change to the teamId
 
 		// inOrder traversal on Both team's Players Tress to change the pointer to the team Node
@@ -557,7 +597,7 @@ output_t<int> world_cup_t::knockout_winner(int minTeamId, int maxTeamId)
 	{
 		LinkedList<IDandTotalPoints> KnockoutTeams;
 		ListNode<IDandTotalPoints> *tempKnockOut;
-		KnockoutTeams.getValuesInRange(AllTeams.root, minTeamId, maxTeamId);
+		KnockoutTeams.getValuesInRange(leagelTeams.root, minTeamId, maxTeamId);
 		std::cout << "the knockout list   " << KnockoutTeams << std::endl;
 
 		if (KnockoutTeams.IsEmpty())
@@ -1002,4 +1042,12 @@ AVLNode<T> *SortedArrayToTree(T *sortedArr, int start, int end)
 	root1->SetRight(SortedArrayToTree(sortedArr, mid + 1, end));
 
 	return root1;
+}
+bool world_cup_t::isInLeagelTeamsTree(int teamId)
+{
+	if (leagelTeams.find(leagelTeams.root, IDandTotalPoints(teamId, 0)) == NULL)
+	{
+		return false;
+	}
+	return true;
 }

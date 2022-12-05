@@ -33,6 +33,22 @@ public:
         os << "id: " << idAndTotalPoints.id << " totalPoints: " << idAndTotalPoints.totalPoints;
         return os;
     }
+    bool operator==(const IDandTotalPoints &rhs) const
+    {
+        return id == rhs.id;
+    }
+    bool operator!=(const IDandTotalPoints &rhs) const
+    {
+        return !(rhs.getId()==this->getId());
+    }
+    bool operator<(const IDandTotalPoints &rhs) const
+    {
+        return id < rhs.id;
+    }
+    bool operator>(const IDandTotalPoints &rhs) const
+    {
+        return rhs.getId()>this->getId();
+    }
 };
 
 template <class T>
@@ -185,7 +201,7 @@ public:
         return os;
     }
 
-    void getValuesInRange(AVLNode<Team> *node, int min, int max)
+    void getValuesInRange(AVLNode<IDandTotalPoints> *node, int min, int max)
     {
         if (node == NULL)
         {
@@ -196,7 +212,7 @@ public:
             this->getValuesInRange(node->GetLeft(), min, max);
             //if (node->GetValue().getNumOfPlayers() >= 11 && node->GetValue().getNumOfGoalKeepers() >= 1)
             //{
-                this->Insert(IDandTotalPoints(node->GetValue().getId(), node->GetValue().getPoints()));
+                this->Insert(IDandTotalPoints(node->GetValue().getId(), node->GetValue().getTotalPoints()));
             //}
             
             this->getValuesInRange(node->GetRight(), min, max);
