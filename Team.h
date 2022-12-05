@@ -114,6 +114,22 @@ public:
         this->TotalCards = TotalCards;
     }
 
+    void setTeamTopScorerGoals(int teamTopScorerGoals)
+    {
+        this->teamTopScorerGoals = teamTopScorerGoals;
+    }
+
+    void setTeamTopScorerId(int teamTopScorerId)
+    {
+        this->teamTopScorerId = teamTopScorerId;
+    }
+
+    void setTeamTopScorerCards(int teamTopScorerCards)
+    {
+        this->teamTopScorerCards = teamTopScorerCards;
+    }
+    
+    
     int getId() const
     {
         return id;
