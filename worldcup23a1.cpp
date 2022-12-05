@@ -272,17 +272,8 @@ StatusType world_cup_t::remove_player(int playerId)
 	// set new closest;
 	int closestFromAllLeftId = playerNodeOnPlayerStatsTree->GetValue().getClosestFromAllLeftID();
 	int closestFromAllRightId = playerNodeOnPlayerStatsTree->GetValue().getClosestFromAllRightID();
-	std::cout << "closest right: " << closestFromAllLeftId;
-	updateClosest(closestFromAllLeftId);
-	updateClosest(closestFromAllRightId);
-	TheTeamOfThePlayerNode->GetValue().setNumOfPlayers(TheTeamOfThePlayerNode->GetValue().getNumOfPlayers() - 1);
-
-	if (playerId == topScorerId)
-	{
-		;
-	} // find new top scorer
-
-	// trying to remove player
+	
+	//trying to remove player
 	try
 	{
 		AllPlayers.root = AllPlayers.Remove(AllPlayers.GetRoot(), playerNodeOnAllPlayersTree->GetValue());
@@ -292,7 +283,35 @@ StatusType world_cup_t::remove_player(int playerId)
 	{
 		return StatusType::ALLOCATION_ERROR;
 	}
+	
+	//set new closest;
+	update_player_stats(closestFromAllLeftId, 0, 0, 0);
+	update_player_stats(closestFromAllRightId, 0, 0, 0);
+	TheTeamOfThePlayerNode->GetValue().setNumOfPlayers(TheTeamOfThePlayerNode->GetValue().getNumOfPlayers() - 1);
+	
+	//find new top scorer 
+	if (playerId == topScorerId)
+	{
+		topScorerId = playerNodeOnPlayerStatsTree->GetValue().getPlayerId();
+		AVLNode<PlayerStats> *newTopScorer = ALLPayersOrderdByStats.GetRoot();
+		
+		while(newTopScorer->GetRight() != NULL)
+		{
+			newTopScorer = newTopScorer->GetRight();
+		}
+		topScorerGoals = newTopScorer->GetValue().getGoals();
+		topScorerCards = newTopScorer->GetValue().getCards();
+		topScorerId = newTopScorer->GetValue().getPlayerId();
+	}
 
+	if (playerId == TheTeamOfThePlayerNode->GetValue().getTeamTopScorerId())
+	{
+		;
+	}
+	
+	
+
+	
 	numberOfPlayers--;
 	std::cout << "player removed" << std::endl;
 	AllTeams.PrintInOrder(AllTeams.GetRoot());
@@ -667,8 +686,30 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
 
 output_t<int> world_cup_t::get_top_scorer(int teamId)
 {
-	// TODO: Your code goes here
-	return 2008;
+	
+	if (teamId == 0)
+	{
+		return StatusType::INVALID_INPUT;
+	}
+	else if(teamId>0)
+	{
+			AVLNode<Team> *TeamAfterSearch = findTeamById(AllTeams.GetRoot(), teamId);
+			if(TeamAfterSearch == NULL || TeamAfterSearch->GetValue().getNumOfPlayers() == 0)
+				return StatusType::FAILURE;
+			else
+			{
+				return StatusType::SUCCESS;
+				return TeamAfterSearch->GetValue().getTeamTopScorerId();
+			}
+	}
+	else
+	{
+		if(numberOfPlayers==0)
+			return StatusType::FAILURE;
+		return StatusType::SUCCESS;
+		return topScorerId;
+	}
+	
 }
 
 output_t<int> world_cup_t::get_all_players_count(int teamId)
