@@ -19,6 +19,7 @@
 #include "Team.h"
 #include "Player.h"
 #include "PlayerStats.h"
+#include "list.h"
 class world_cup_t
 {
 private:

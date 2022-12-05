@@ -117,7 +117,8 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 	try
 	{
 		newPlayer = Player(playerId, teamId, gamesPlayed, goals, cards, goalKeeper);
-		newPlayerStats = PlayerStats(playerId, goals, cards);
+		newPlayer.setGamesTeamPlayedBefore(TheTeamOfThePlayerNode->GetValue().getGamesTeamPlayed());
+			newPlayerStats = PlayerStats(playerId, goals, cards);
 	}
 
 	catch (std::bad_alloc &e)
@@ -150,6 +151,7 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 			}
 		}
 	}
+
 	// creating the node of the player thats going to be added to the tree of players held by the team
 	AVLNode<Player> *PlayerNodeOnTeamPlayersTree;
 	// setting the player node to point on the team node in the tree of teams
@@ -204,6 +206,7 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 	printBTs( ALLPayersOrderdByStats.GetRoot());
 	std::cout << "--------------------------------------" << std::endl;
 	*/
+
 	numberOfPlayers++;
 
 	return StatusType::SUCCESS;
@@ -429,6 +432,7 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
 				team1Node->GetValue().PlayersOnTeamOrderdByStats.root = newPlayerStatsTree;
 				team1Node->GetValue().setNumOfPlayers(team1Node->GetValue().getNumOfPlayers() + team2Node->GetValue().getNumOfPlayers());
 				team1Node->GetValue().setPoints(team1Node->GetValue().getPoints() + team2Node->GetValue().getPoints());
+				team1Node->GetValue().setNumOfGoalKeepers(team1Node->GetValue().getNumOfGoalKeepers() + team2Node->GetValue().getNumOfGoalKeepers());
 				team1Node->GetValue().setGamesTeamPlayed(team1Node->GetValue().getGamesTeamPlayed() + team2Node->GetValue().getGamesTeamPlayed());
 				team1Node->GetValue().setTotalGoalsScored(team1Node->GetValue().getTotalGoalsScored() + team2Node->GetValue().getTotalGoalsScored());
 				team1Node->GetValue().setTotalCards(team1Node->GetValue().getTotalCards() + team2Node->GetValue().getTotalCards());
@@ -447,6 +451,7 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
 			team2Node->GetValue().PlayersOnTeamOrderdByStats.root = newPlayerStatsTree;
 			team2Node->GetValue().setNumOfPlayers(team1Node->GetValue().getNumOfPlayers() + team2Node->GetValue().getNumOfPlayers());
 			team2Node->GetValue().setPoints(team1Node->GetValue().getPoints() + team2Node->GetValue().getPoints());
+			team2Node->GetValue().setNumOfGoalKeepers(team1Node->GetValue().getNumOfGoalKeepers() + team2Node->GetValue().getNumOfGoalKeepers());
 			team2Node->GetValue().setGamesTeamPlayed(team1Node->GetValue().getGamesTeamPlayed() + team2Node->GetValue().getGamesTeamPlayed());
 			team2Node->GetValue().setTotalGoalsScored(team1Node->GetValue().getTotalGoalsScored() + team2Node->GetValue().getTotalGoalsScored());
 			team2Node->GetValue().setTotalCards(team1Node->GetValue().getTotalCards() + team2Node->GetValue().getTotalCards());
@@ -469,7 +474,7 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
 			newTeamNode->GetValue().setTotalCards(newTotalCards);
 			newTeamNode->GetValue().setNumOfPlayers(newNumOfPlayers);
 			newTeamNode->GetValue().setGamesTeamPlayed(newGamesPlayed);
-
+			newTeamNode->GetValue().setNumOfGoalKeepers(team1Node->GetValue().getNumOfGoalKeepers() + team2Node->GetValue().getNumOfGoalKeepers());
 			AVLNode<Player> *newPlayerTree = MergeTwoTrees(team1Node->GetValue().players.GetRoot(), team2Node->GetValue().players.GetRoot(), team1Node->GetValue().getNumOfPlayers(), team2Node->GetValue().getNumOfPlayers());
 			AVLNode<PlayerStats> *newPlayerStatsTree = MergeTwoTrees(team1Node->GetValue().PlayersOnTeamOrderdByStats.GetRoot(), team2Node->GetValue().PlayersOnTeamOrderdByStats.GetRoot(), team1Node->GetValue().getNumOfPlayers(), team2Node->GetValue().getNumOfPlayers());
 			newTeamNode->GetValue().PlayersOnTeamOrderdByStats.root=newPlayerStatsTree;
@@ -542,7 +547,11 @@ output_t<int> world_cup_t::get_closest_player(int playerId, int teamId)
 output_t<int> world_cup_t::knockout_winner(int minTeamId, int maxTeamId)
 {
 	// TODO: Your code goes here
-	return 2;
+	LinkedList <IDandTotalPoints> KnockoutTeams;
+
+	KnockoutTeams.getValuesInRange(AllTeams.root,minTeamId,maxTeamId);
+
+		return 2;
 }
 
 AVLNode<Team> *findTeamById(AVLNode<Team> *node, int teamId)
@@ -933,99 +942,3 @@ AVLNode<T> *SortedArrayToTree(T *sortedArr, int start, int end)
 	return root1;
 }
 
-//trying once again
-/*
-template <class T>
-AVLNode<T> *MergeTwoTrees(AVLNode<T> *root1, AVLNode<T> *root2, int FirstTreesSize, int SecondTreeSize)
-{
-	AVLNode<T> *arr1 = new AVLNode<T>[FirstTreesSize];
-	int index1 = 0;
-	InOrderTreeToArray(root1, arr1, &index1);
-
-	AVLNode<T> *arr2 = new AVLNode<T>[SecondTreeSize];
-	int index2 = 0;
-	InOrderTreeToArray(root2, arr2, &index2);
-
-	AVLNode<T> *arr3 = MergeTwoArrays(arr1, arr2, FirstTreesSize, SecondTreeSize);
-	delete[] arr1;
-	delete[] arr2;
-	AVLNode<T> *newTree = SortedArrayToTree(arr3, 0, FirstTreesSize + SecondTreeSize - 1);
-
-	return newTree;
-}
-
-template <class T>
-void InOrderTreeToArray(AVLNode<T> *root1, AVLNode<T> *arr1, int *index)
-{
-	if (root1 == NULL)
-	{
-		return;
-	}
-	InOrderTreeToArray(root1->GetLeft(), arr1, index);
-	arr1[*index] = root1->GetValue();
-	(*index)++;
-	InOrderTreeToArray(root1->GetRight(), arr1, index);
-}
-
-template <class T>
-AVLNode<T> *MergeTwoArrays(AVLNode<T> *arr1, AVLNode<T> *arr2, int size1, int size2)
-{
-	AVLNode<T> *arr3 = new AVLNode<T>[size1 + size2];
-	int i, j, k = 0;
-	while (i < size1 && j < size2)
-	{
-		if (arr1[i].GetValue() < arr2[j].GetValue())
-		{
-			arr3[k] = arr1[i];
-			 i++;;
-		}
-		else
-		{
-			arr3[k] = arr2[j];
-			j++;
-		}
-		k++;
-	}
-	while (i < size1)
-	{
-		arr3[k] = arr1[i];
-		i++;
-		k++;
-	}
-	while (j < size2)
-	{
-		arr3[k] = arr2[j];
-		j++;
-		k++;
-	}
-	return arr3;
-}
-template <class T>
-AVLNode<T> *SortedArrayToTree(AVLNode<T> *sortedArr, int start, int end)
-{
-	if (start > end)
-	{
-		return NULL;
-	}
-	int mid = (start + end) / 2;
-	AVLNode<T> *root1 = new AVLNode<T>;
-	root1->SetValue(sortedArr[mid].GetValue());
-	root1->SetLeft( SortedArrayToTree(sortedArr, start, mid - 1));
-	root1->SetRight(SortedArrayToTree(sortedArr, mid + 1, end));
-	return root1;
-}
-
-template <class T>
-bool isAvlTREE(AVLNode<T> *node)
-{
-	if (node == NULL)
-	{
-		return true;
-	}
-	if (abs(node->GetLeft()->height - node->GetRight()->height) > 1)
-	{
-		return false;
-	}
-	return isAvlTREE(node->GetLeft()) && isAvlTREE(node->GetRight());
-}
-*/

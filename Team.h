@@ -143,6 +143,8 @@ public:
     {
         players.root = players.Insert(players.GetRoot(), playerToInsert);
         numOfPlayers++;
+        this->TotalCards += playerToInsert.getCards();
+        this->TotalGoalsScored += playerToInsert.getGoals();
         if (playerToInsert.isGoalKeeper())
         {
             numOfGoalKeepers++;
@@ -162,7 +164,7 @@ public:
     //<< operator for team
     friend std::ostream &operator<<(std::ostream &os, const Team &team)
     {
-        os <<"team id" << team.id << " " << team.numOfPlayers << " " << team.numOfGoalKeepers << " " << "points:"<< team.points << " " << team.gamesTeamPlayed << " " << team.TotalGoalsScored << " " << team.TotalCards<<"---"<<std::endl;
+        os <<"team id" << team.id << " number of players " << team.numOfPlayers << " number GK " << team.numOfGoalKeepers << "  points " << "points:"<< team.points << " games Played " << team.gamesTeamPlayed << " totalGoals " << team.TotalGoalsScored << " totalCards " << team.TotalCards<<"---"<<std::endl;
         return os;
     }
     template <class T>
