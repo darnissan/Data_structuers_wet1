@@ -170,6 +170,14 @@ public:
     {
         this->pointerToAllPlayerAvlNode = pointerToAllPlayerAvlNode;
     }
+    int GetGamesPlayed()
+    {
+        return this->gamesPlayed;
+    }
+    int GetGamesTeamPlayedBefore()
+    {
+        return this->gamesTeamPlayedBefore;
+    }
 };
 
 #endif // PLAYER_H_

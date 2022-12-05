@@ -308,6 +308,7 @@ int main()
     
     world_cup->knockout_winner(2,10);
     world_cup->printTeam(2);
+    
 
     delete world_cup; //  printBTs(tree.GetRoot());
 
