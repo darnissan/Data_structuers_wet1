@@ -572,13 +572,15 @@ output_t<int> world_cup_t::knockout_winner(int minTeamId, int maxTeamId)
 			int MatchWinnerPoints;
 			while (tempKnockOut != NULL && tempKnockOut->GetNext() != NULL)
 			{
-
+				ListNode<IDandTotalPoints> *toBeDeleted;
 				if (tempKnockOut->GetValue().getTotalPoints() > tempKnockOut->GetNext()->GetValue().getTotalPoints())
 				{
 					MatchWinnerId = tempKnockOut->GetValue().getId();
 					MatchWinnerPoints = tempKnockOut->GetValue().getTotalPoints() + tempKnockOut->GetNext()->GetValue().getTotalPoints();
 					tempKnockOut->SetValue(IDandTotalPoints(MatchWinnerId, MatchWinnerPoints));
+					toBeDeleted = tempKnockOut->GetNext();
 					tempKnockOut->SetNext(tempKnockOut->GetNext()->GetNext());
+					delete toBeDeleted;
 					tempKnockOut = tempKnockOut->GetNext();
 				}
 				else if (tempKnockOut->GetValue().getTotalPoints() < tempKnockOut->GetNext()->GetValue().getTotalPoints())
@@ -586,7 +588,9 @@ output_t<int> world_cup_t::knockout_winner(int minTeamId, int maxTeamId)
 					MatchWinnerId = tempKnockOut->GetNext()->GetValue().getId();
 					MatchWinnerPoints = tempKnockOut->GetValue().getTotalPoints() + tempKnockOut->GetNext()->GetValue().getTotalPoints();
 					tempKnockOut->SetValue(IDandTotalPoints(MatchWinnerId, MatchWinnerPoints));
+					toBeDeleted = tempKnockOut->GetNext();
 					tempKnockOut->SetNext(tempKnockOut->GetNext()->GetNext());
+					delete toBeDeleted;
 					tempKnockOut = tempKnockOut->GetNext();
 				}
 				else
@@ -594,11 +598,14 @@ output_t<int> world_cup_t::knockout_winner(int minTeamId, int maxTeamId)
 					MatchWinnerId = tempKnockOut->GetNext()->GetValue().getId() > tempKnockOut->GetValue().getId() ? tempKnockOut->GetNext()->GetValue().getId() : tempKnockOut->GetValue().getId();
 					MatchWinnerPoints = tempKnockOut->GetValue().getTotalPoints() + tempKnockOut->GetNext()->GetValue().getTotalPoints();
 					tempKnockOut->SetValue(IDandTotalPoints(MatchWinnerId, MatchWinnerPoints));
+					toBeDeleted = tempKnockOut->GetNext();
 					tempKnockOut->SetNext(tempKnockOut->GetNext()->GetNext());
+					delete toBeDeleted;
 					tempKnockOut = tempKnockOut->GetNext();
 				}
 			}
 		}
+
 		std::cout << KnockoutTeams << " this is the knockout winner" << std::endl;
 	}
 	catch (const std::exception &e)
