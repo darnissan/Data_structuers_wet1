@@ -151,6 +151,32 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 			}
 		}
 	}
+	
+	if (newPlayer.getGoals() > TheTeamOfThePlayerNode->GetValue().getTeamTopScorerGoals())
+	{
+		TheTeamOfThePlayerNode->GetValue().setTeamTopScorerGoals(newPlayer.getGoals());
+		TheTeamOfThePlayerNode->GetValue().setTeamTopScorerId(newPlayer.getPlayerId());
+		TheTeamOfThePlayerNode->GetValue().setTeamTopScorerCards(newPlayer.getCards());
+	}
+	else if (newPlayer.getGoals() == topScorerGoals)
+	{
+		if (newPlayer.getCards() < topScorerCards)
+		{
+			TheTeamOfThePlayerNode->GetValue().setTeamTopScorerGoals(newPlayer.getGoals());
+			TheTeamOfThePlayerNode->GetValue().setTeamTopScorerId(newPlayer.getPlayerId());
+			TheTeamOfThePlayerNode->GetValue().setTeamTopScorerCards(newPlayer.getCards());
+		}
+		else if (newPlayer.getCards() == topScorerCards)
+		{
+			if (newPlayer.getPlayerId() > topScorerId)
+			{
+				TheTeamOfThePlayerNode->GetValue().setTeamTopScorerGoals(newPlayer.getGoals());
+				TheTeamOfThePlayerNode->GetValue().setTeamTopScorerId(newPlayer.getPlayerId());
+				TheTeamOfThePlayerNode->GetValue().setTeamTopScorerCards(newPlayer.getCards());
+			}
+		}
+	}
+	
 
 	// creating the node of the player thats going to be added to the tree of players held by the team
 	AVLNode<Player> *PlayerNodeOnTeamPlayersTree;
