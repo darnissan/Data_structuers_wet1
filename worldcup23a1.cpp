@@ -285,8 +285,8 @@ StatusType world_cup_t::remove_player(int playerId)
 	}
 	
 	//set new closest;
-	update_player_stats(closestFromAllLeftId, 0, 0, 0);
-	update_player_stats(closestFromAllRightId, 0, 0, 0);
+	updateClosest(closestFromAllLeftId);
+	updateClosest(closestFromAllRightId);
 	TheTeamOfThePlayerNode->GetValue().setNumOfPlayers(TheTeamOfThePlayerNode->GetValue().getNumOfPlayers() - 1);
 	
 	//find new top scorer 
