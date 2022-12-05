@@ -17,7 +17,10 @@ private:
     int gamesTeamPlayed = 0;
     int TotalGoalsScored = 0;
     int TotalCards = 0;
-   
+    int teamTopScorerGoals = 0;
+	int teamTopScorerId = 0;
+	int teamTopScorerCards = 0;
+    
     
 public:
     AvlTree<Player> players;
