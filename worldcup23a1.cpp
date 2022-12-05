@@ -214,25 +214,34 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 
 StatusType world_cup_t::remove_player(int playerId)
 {
-	/*
-	// TODO: Your code goes here
+	AVLNode<Player> *playerNodeOnAllPlayersTree = findPlayerById(AllPlayers.GetRoot(), playerId); // finding the player on player tree By binary search on AVL tree O(logn)
+	//AVLNode<Team> *TheTeamOfThePlayerNode = playerNodeOnAllPlayersTree->GetValue().getPointerToTeamAvlNode(); //getting player team
+	AVLNode<PlayerStats> *playerNodeOnPlayerStatsTree = playerNodeOnAllPlayersTree->GetValue().getpointerToPlayerStatsAvlNodeONTeam(); // finding the player on player stats tree By binary search on AVL tree O(logn)
+
+	// checking whether the input is valid
 	if (playerId <= 0)
 		return StatusType::INVALID_INPUT;
-	player = findPlayerById(AllPlayers.GetRoot(), playerId);
-	if (player == NULL)
+	
+	// checking whether the player exists
+	if (playerNodeOnAllPlayersTree == NULL)
+	{
 		return StatusType::FAILURE;
+	}
+
+	//trying to remove player
 	try
 	{
-		// remove code is in the destructor
-		delete player
+		AllPlayers.root = AllPlayers.Remove(AllPlayers.GetRoot(), playerNodeOnAllPlayersTree->GetValue());
+		ALLPayersOrderdByStats.root = ALLPayersOrderdByStats.Remove(ALLPayersOrderdByStats.GetRoot(), playerNodeOnPlayerStatsTree->GetValue());
 	}
 	catch (std::bad_alloc &e)
 	{
 		return StatusType::ALLOCATION_ERROR;
 	}
-
 	numberOfPlayers--;
-	*/
+	std::cout << "player removed" << std::endl;
+	AllTeams.PrintInOrder(AllTeams.GetRoot());
+
 	return StatusType::SUCCESS;
 }
 
