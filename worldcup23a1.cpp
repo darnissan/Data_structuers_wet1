@@ -155,6 +155,32 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 			}
 		}
 	}
+	
+	if (newPlayer.getGoals() > TheTeamOfThePlayerNode->GetValue().getTeamTopScorerGoals())
+	{
+		TheTeamOfThePlayerNode->GetValue().setTeamTopScorerGoals(newPlayer.getGoals());
+		TheTeamOfThePlayerNode->GetValue().setTeamTopScorerId(newPlayer.getPlayerId());
+		TheTeamOfThePlayerNode->GetValue().setTeamTopScorerCards(newPlayer.getCards());
+	}
+	else if (newPlayer.getGoals() == topScorerGoals)
+	{
+		if (newPlayer.getCards() < topScorerCards)
+		{
+			TheTeamOfThePlayerNode->GetValue().setTeamTopScorerGoals(newPlayer.getGoals());
+			TheTeamOfThePlayerNode->GetValue().setTeamTopScorerId(newPlayer.getPlayerId());
+			TheTeamOfThePlayerNode->GetValue().setTeamTopScorerCards(newPlayer.getCards());
+		}
+		else if (newPlayer.getCards() == topScorerCards)
+		{
+			if (newPlayer.getPlayerId() > topScorerId)
+			{
+				TheTeamOfThePlayerNode->GetValue().setTeamTopScorerGoals(newPlayer.getGoals());
+				TheTeamOfThePlayerNode->GetValue().setTeamTopScorerId(newPlayer.getPlayerId());
+				TheTeamOfThePlayerNode->GetValue().setTeamTopScorerCards(newPlayer.getCards());
+			}
+		}
+	}
+	
 
 	// creating the node of the player thats going to be added to the tree of players held by the team
 	AVLNode<Player> *PlayerNodeOnTeamPlayersTree;
@@ -230,20 +256,35 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 StatusType world_cup_t::remove_player(int playerId)
 {
 	AVLNode<Player> *playerNodeOnAllPlayersTree = findPlayerById(AllPlayers.GetRoot(), playerId); // finding the player on player tree By binary search on AVL tree O(logn)
-	// AVLNode<Team> *TheTeamOfThePlayerNode = playerNodeOnAllPlayersTree->GetValue().getPointerToTeamAvlNode(); //getting player team
+	AVLNode<Team> *TheTeamOfThePlayerNode = playerNodeOnAllPlayersTree->GetValue().getPointerToTeamAvlNode(); //getting player team
 	AVLNode<PlayerStats> *playerNodeOnPlayerStatsTree = playerNodeOnAllPlayersTree->GetValue().getpointerToPlayerStatsAvlNodeONTeam(); // finding the player on player stats tree By binary search on AVL tree O(logn)
 
 	// checking whether the input is valid
 	if (playerId <= 0)
 		return StatusType::INVALID_INPUT;
-
+	
 	// checking whether the player exists
 	if (playerNodeOnAllPlayersTree == NULL)
 	{
 		return StatusType::FAILURE;
 	}
 
-	// trying to remove player
+
+	
+	//set new closest;
+	int closestFromAllLeftId = playerNodeOnPlayerStatsTree->GetValue().getClosestFromAllLeftID();
+	int closestFromAllRightId = playerNodeOnPlayerStatsTree->GetValue().getClosestFromAllRightID();
+	std::cout << "closest right: " << closestFromAllLeftId;
+	update_player_stats(closestFromAllLeftId, 0, 0, 0);
+	update_player_stats(closestFromAllRightId, 0, 0, 0);
+
+
+	if (playerId == topScorerId)
+	{
+		;
+		}//find new top scorer 
+	
+	//trying to remove player
 	try
 	{
 		AllPlayers.root = AllPlayers.Remove(AllPlayers.GetRoot(), playerNodeOnAllPlayersTree->GetValue());
@@ -253,10 +294,17 @@ StatusType world_cup_t::remove_player(int playerId)
 	{
 		return StatusType::ALLOCATION_ERROR;
 	}
+
+	
 	numberOfPlayers--;
 	std::cout << "player removed" << std::endl;
 	AllTeams.PrintInOrder(AllTeams.GetRoot());
-
+	
+	//check if the removed player's team is still legal
+	if (!(isLeagelTeam(TheTeamOfThePlayerNode)))
+	{
+		numberOfLeagelTeams--;
+	}
 	return StatusType::SUCCESS;
 }
 

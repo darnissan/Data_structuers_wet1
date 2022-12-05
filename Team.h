@@ -17,7 +17,10 @@ private:
     int gamesTeamPlayed = 0;
     int TotalGoalsScored = 0;
     int TotalCards = 0;
-   
+    int teamTopScorerGoals = 0;
+    int teamTopScorerId = 0;
+    int teamTopScorerCards = 0;
+    
     
 public:
     AvlTree<Player> players;
@@ -111,6 +114,22 @@ public:
         this->TotalCards = TotalCards;
     }
 
+    void setTeamTopScorerGoals(int teamTopScorerGoals)
+    {
+        this->teamTopScorerGoals = teamTopScorerGoals;
+    }
+
+    void setTeamTopScorerId(int teamTopScorerId)
+    {
+        this->teamTopScorerId = teamTopScorerId;
+    }
+
+    void setTeamTopScorerCards(int teamTopScorerCards)
+    {
+        this->teamTopScorerCards = teamTopScorerCards;
+    }
+    
+    
     int getId() const
     {
         return id;
@@ -139,6 +158,22 @@ public:
     {
         return TotalCards;
     }
+    
+    int getTeamTopScorerGoals()
+    {
+        return teamTopScorerGoals;
+    }
+
+    int getTeamTopScorerId()
+    {
+        return teamTopScorerId;
+    }
+
+    int getTeamTopScorerCards()
+    {
+        return teamTopScorerCards;
+    }
+    
     AVLNode<Player> *InsertPlayerToTeam( const Player &playerToInsert) 
     {
         players.root = players.Insert(players.GetRoot(), playerToInsert);
