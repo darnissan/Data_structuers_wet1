@@ -142,6 +142,22 @@ public:
     {
         return TotalCards;
     }
+    
+    int getTeamTopScorerGoals()
+    {
+        return teamTopScorerGoals;
+    }
+
+    int getTeamTopScorerId()
+    {
+        return teamTopScorerId;
+    }
+
+    int getTeamTopScorerCards()
+    {
+        return teamTopScorerCards;
+    }
+    
     AVLNode<Player> *InsertPlayerToTeam( const Player &playerToInsert) 
     {
         players.root = players.Insert(players.GetRoot(), playerToInsert);
