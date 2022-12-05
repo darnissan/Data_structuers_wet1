@@ -651,8 +651,30 @@ StatusType world_cup_t::unite_teams(int teamId1, int teamId2, int newTeamId)
 
 output_t<int> world_cup_t::get_top_scorer(int teamId)
 {
-	// TODO: Your code goes here
-	return 2008;
+	
+	if (teamId == 0)
+	{
+		return StatusType::INVALID_INPUT;
+	}
+	else if(teamId>0)
+	{
+			AVLNode<Team> *TeamAfterSearch = findTeamById(AllTeams.GetRoot(), teamId);
+			if(TeamAfterSearch == NULL || TeamAfterSearch->GetValue().getNumOfPlayers() == 0)
+				return StatusType::FAILURE;
+			else
+			{
+				return StatusType::SUCCESS;
+				return TeamAfterSearch->GetValue().getTeamTopScorerId();
+			}
+	}
+	else
+	{
+		if(numberOfPlayers==0)
+			return StatusType::FAILURE;
+		return StatusType::SUCCESS;
+		return topScorerId;
+	}
+	
 }
 
 output_t<int> world_cup_t::get_all_players_count(int teamId)
