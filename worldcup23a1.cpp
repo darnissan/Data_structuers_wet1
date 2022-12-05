@@ -307,11 +307,16 @@ StatusType world_cup_t::remove_player(int playerId)
 
 	if (playerId == TheTeamOfThePlayerNode->GetValue().getTeamTopScorerId())
 	{
-		;
+		AVLNode<PlayerStats> *newTopScorer = PlayersOnTeamOrderdByStats.GetRoot();
+		
+		while(newTopScorer->GetRight() != NULL)
+		{
+			newTopScorer = newTopScorer->GetRight();
+		}
+		TheTeamOfThePlayerNode->GetValue().setTeamTopScorerGoals(newTopScorer->GetValue().getGoals());
+		TheTeamOfThePlayerNode->GetValue().setTeamTopScorerId(newTopScorer->GetValue().getCards());
+		TheTeamOfThePlayerNode->GetValue().setTeamTopScorerCards(newTopScorer->GetValue().getPlayerId());
 	}
-	
-	
-
 	
 	numberOfPlayers--;
 	std::cout << "player removed" << std::endl;
