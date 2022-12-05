@@ -155,24 +155,24 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 			}
 		}
 	}
-	
+
 	if (newPlayer.getGoals() > TheTeamOfThePlayerNode->GetValue().getTeamTopScorerGoals())
 	{
 		TheTeamOfThePlayerNode->GetValue().setTeamTopScorerGoals(newPlayer.getGoals());
 		TheTeamOfThePlayerNode->GetValue().setTeamTopScorerId(newPlayer.getPlayerId());
 		TheTeamOfThePlayerNode->GetValue().setTeamTopScorerCards(newPlayer.getCards());
 	}
-	else if (newPlayer.getGoals() == topScorerGoals)
+	else if (newPlayer.getGoals() == TheTeamOfThePlayerNode->GetValue().getTeamTopScorerGoals())
 	{
-		if (newPlayer.getCards() < topScorerCards)
+		if (newPlayer.getCards() < TheTeamOfThePlayerNode->GetValue().getTeamTopScorerCards())
 		{
 			TheTeamOfThePlayerNode->GetValue().setTeamTopScorerGoals(newPlayer.getGoals());
 			TheTeamOfThePlayerNode->GetValue().setTeamTopScorerId(newPlayer.getPlayerId());
 			TheTeamOfThePlayerNode->GetValue().setTeamTopScorerCards(newPlayer.getCards());
 		}
-		else if (newPlayer.getCards() == topScorerCards)
+		else if (newPlayer.getCards() == TheTeamOfThePlayerNode->GetValue().getTeamTopScorerCards())
 		{
-			if (newPlayer.getPlayerId() > topScorerId)
+			if (newPlayer.getPlayerId() > TheTeamOfThePlayerNode->GetValue().getTeamTopScorerId())
 			{
 				TheTeamOfThePlayerNode->GetValue().setTeamTopScorerGoals(newPlayer.getGoals());
 				TheTeamOfThePlayerNode->GetValue().setTeamTopScorerId(newPlayer.getPlayerId());
@@ -180,7 +180,6 @@ StatusType world_cup_t::add_player(int playerId, int teamId, int gamesPlayed,
 			}
 		}
 	}
-	
 
 	// creating the node of the player thats going to be added to the tree of players held by the team
 	AVLNode<Player> *PlayerNodeOnTeamPlayersTree;
@@ -363,6 +362,32 @@ StatusType world_cup_t::update_player_stats(int playerId, int gamesPlayed,
 					topScorerGoals = newGoals;
 					topScorerId = playerId;
 					topScorerCards = newCards;
+				}
+			}
+		}
+
+
+		if (newGoals > teamNodeOnTeamsTree->GetValue().getTeamTopScorerGoals())
+		{
+			teamNodeOnTeamsTree->GetValue().setTeamTopScorerGoals(newGoals);
+			teamNodeOnTeamsTree->GetValue().setTeamTopScorerId(playerId);
+			teamNodeOnTeamsTree->GetValue().setTeamTopScorerCards(newCards);
+		}
+		else if (newGoals == teamNodeOnTeamsTree->GetValue().getTeamTopScorerGoals())
+		{
+			if (newCards < teamNodeOnTeamsTree->GetValue().getTeamTopScorerCards())
+			{
+				teamNodeOnTeamsTree->GetValue().setTeamTopScorerGoals(newGoals);
+				teamNodeOnTeamsTree->GetValue().setTeamTopScorerId(playerId);
+				teamNodeOnTeamsTree->GetValue().setTeamTopScorerCards(newCards);
+			}
+			else if (newCards == teamNodeOnTeamsTree->GetValue().getTeamTopScorerCards())
+			{
+				if (playerId > teamNodeOnTeamsTree->GetValue().getTeamTopScorerId())
+				{
+					teamNodeOnTeamsTree->GetValue().setTeamTopScorerGoals(newGoals);
+					teamNodeOnTeamsTree->GetValue().setTeamTopScorerId(playerId);
+					teamNodeOnTeamsTree->GetValue().setTeamTopScorerCards(newCards);
 				}
 			}
 		}
