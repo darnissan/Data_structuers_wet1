@@ -5,8 +5,6 @@
 #include "AvlTree.h"
 class Team;
 
-
-
 class Team
 {
 private:
@@ -20,8 +18,7 @@ private:
     int teamTopScorerGoals = 0;
     int teamTopScorerId = 0;
     int teamTopScorerCards = 0;
-    
-    
+
 public:
     AvlTree<Player> players;
     AvlTree<PlayerStats> PlayersOnTeamOrderdByStats;
@@ -37,11 +34,9 @@ public:
     }
     Team(int id, int points) : id(id), numOfPlayers(0), numOfGoalKeepers(0), points(points), gamesTeamPlayed(0), TotalGoalsScored(0), TotalCards(0)
     {
-        
     }
     ~Team()
     {
-       
     }
     void setTeamID(int id)
     {
@@ -60,12 +55,12 @@ public:
             this->TotalGoalsScored = other.TotalGoalsScored;
             this->TotalCards = other.TotalCards;
             this->players.Clear();
-            this->players.root=nullptr;
+            this->players.root = nullptr;
 
             this->players.root = copyTree(this->players.root, other.players.root);
             this->PlayersOnTeamOrderdByStats.Clear();
-            this->PlayersOnTeamOrderdByStats.root=nullptr;
-            this->PlayersOnTeamOrderdByStats.root=copyTree(this->PlayersOnTeamOrderdByStats.root, other.PlayersOnTeamOrderdByStats.root);
+            this->PlayersOnTeamOrderdByStats.root = nullptr;
+            this->PlayersOnTeamOrderdByStats.root = copyTree(this->PlayersOnTeamOrderdByStats.root, other.PlayersOnTeamOrderdByStats.root);
         }
         return *this;
     }
@@ -128,8 +123,7 @@ public:
     {
         this->teamTopScorerCards = teamTopScorerCards;
     }
-    
-    
+
     int getId() const
     {
         return id;
@@ -158,7 +152,7 @@ public:
     {
         return TotalCards;
     }
-    
+
     int getTeamTopScorerGoals()
     {
         return teamTopScorerGoals;
@@ -173,8 +167,8 @@ public:
     {
         return teamTopScorerCards;
     }
-    
-    AVLNode<Player> *InsertPlayerToTeam( const Player &playerToInsert) 
+
+    AVLNode<Player> *InsertPlayerToTeam(const Player &playerToInsert)
     {
         players.root = players.Insert(players.GetRoot(), playerToInsert);
         numOfPlayers++;
@@ -184,22 +178,22 @@ public:
         {
             numOfGoalKeepers++;
         }
-     //   std::cout<<"Player "<<playerToInsert.getPlayerId()<<" was added to team "<<id<<std::endl;
-     //   players.PrintInOrder(players.GetRoot());
-
+        //   std::cout<<"Player "<<playerToInsert.getPlayerId()<<" was added to team "<<id<<std::endl;
+        //   players.PrintInOrder(players.GetRoot());
 
         return players.find(players.GetRoot(), playerToInsert);
     }
     AVLNode<PlayerStats> *InsertPlayerToTeamStatsTree(const PlayerStats &playerToInsert)
     {
-        PlayersOnTeamOrderdByStats.root = PlayersOnTeamOrderdByStats.Insert(PlayersOnTeamOrderdByStats.GetRoot(), playerToInsert);//o(logn)
-        return PlayersOnTeamOrderdByStats.find(PlayersOnTeamOrderdByStats.GetRoot(), playerToInsert);//o(logn)
+        PlayersOnTeamOrderdByStats.root = PlayersOnTeamOrderdByStats.Insert(PlayersOnTeamOrderdByStats.GetRoot(), playerToInsert); // o(logn)
+        return PlayersOnTeamOrderdByStats.find(PlayersOnTeamOrderdByStats.GetRoot(), playerToInsert);                              // o(logn)
     }
-   
+
     //<< operator for team
     friend std::ostream &operator<<(std::ostream &os, const Team &team)
     {
-        os <<"team id" << team.id << " number of players " << team.numOfPlayers << " number GK " << team.numOfGoalKeepers << "  points " << "points:"<< team.points << " games Played " << team.gamesTeamPlayed << " totalGoals " << team.TotalGoalsScored << " totalCards " << team.TotalCards<<"---"<<std::endl;
+        os << "team id" << team.id << " number of players " << team.numOfPlayers << " number GK " << team.numOfGoalKeepers << "  points "
+           << "points:" << team.points << " games Played " << team.gamesTeamPlayed << " totalGoals " << team.TotalGoalsScored << " totalCards " << team.TotalCards << "---" << std::endl;
         return os;
     }
     template <class T>
@@ -210,21 +204,36 @@ public:
         if (src == nullptr)
             return nullptr;
 
-        if (dst == nullptr){
+        if (dst == nullptr)
+        {
             dst = new AVLNode<T>(src->GetValue());
         }
         // Copy the value from the source tree to the destination tree
-        dst->SetValue ( src->GetValue() );
+        dst->SetValue(src->GetValue());
 
         // Recursively copy the left and right subtrees of the source tree
         // to the destination tree
         dst->SetLeft(copyTree(dst->GetLeft(), src->GetLeft()));
-        dst->SetRight(copyTree(dst->GetRight() ,src->GetRight()));
-        //how to delete the new memory carfully?
+        dst->SetRight(copyTree(dst->GetRight(), src->GetRight()));
+        // how to delete the new memory carfully?
         return dst;
-        
-
-
+    }
+    void RemovePlayerFromTeam(const Player &PlayerToRemove)
+    {
+        players.root = players.Remove(players.GetRoot(), PlayerToRemove);
+        numOfPlayers--;
+        this->TotalCards -= PlayerToRemove.getCards();
+        this->TotalGoalsScored -= PlayerToRemove.getGoals();
+        if (PlayerToRemove.isGoalKeeper())
+        {
+            numOfGoalKeepers--;
+        }
+        //   std::cout<<"Player "<<playerToInsert.getPlayerId()<<" was added to team "<<id<<std::endl;
+        //   players.PrintInOrder(players.GetRoot());
+    }
+    void removePlayerFromStatsTeam(const PlayerStats &playerToRemove)
+    {
+        PlayersOnTeamOrderdByStats.root = PlayersOnTeamOrderdByStats.Remove(PlayersOnTeamOrderdByStats.GetRoot(), playerToRemove); // o(logn)
     }
 
     AVLNode<Player> *findPlayerById(AVLNode<Player> *node, int playerId)
@@ -246,7 +255,6 @@ public:
             return findPlayerById(node->GetRight(), playerId);
         }
     }
-    
 };
 
 #endif // TEAMANDPLAYER_H_

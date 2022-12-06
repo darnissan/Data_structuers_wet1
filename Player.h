@@ -17,9 +17,9 @@ protected:
 
     int gamesTeamPlayedBefore;
     AVLNode<PlayerStats> *pointerToPlayerStatsAvlNodeONAllPlayers = nullptr;
-    AVLNode<Team> *pointerToTeamAvlNode=nullptr;
-    AVLNode<PlayerStats> *pointerToPlayerStatsAvlNodeONTeam=nullptr;
-    AVLNode<Player> *pointerToAllPlayerAvlNode=nullptr;
+    AVLNode<Team> *pointerToTeamAvlNode = nullptr;
+    AVLNode<PlayerStats> *pointerToPlayerStatsAvlNodeONTeam = nullptr;
+    AVLNode<Player> *pointerToAllPlayerAvlNode = nullptr;
     void DeletePlayer(Player *player);
 
 public:
@@ -124,16 +124,13 @@ public:
     // operator <<
     friend std::ostream &operator<<(std::ostream &os, const Player &player)
     {
-        os << "playerId: " << player.playerId << " teamId: " << player.teamId << " gamesPlayed: " << player.gamesPlayed << " goals: " << player.goals << " cards: " << player.cards << " goalKeeper: " << player.goalKeeper  << std::endl;
+        os << "playerId: " << player.playerId << " teamId: " << player.teamId << " gamesPlayed: " << player.gamesPlayed << " goals: " << player.goals << " cards: " << player.cards << " goalKeeper: " << player.goalKeeper << std::endl;
         return os;
     }
     void setpointerToPlayerStatsAvlNodeONAllPlayers(AVLNode<PlayerStats> *pointerToPlayerStatsAvlNodeONAllPlayers)
     {
-        
-            
-        
+
         this->pointerToPlayerStatsAvlNodeONAllPlayers = pointerToPlayerStatsAvlNodeONAllPlayers;
-      
     }
     void SetpointerToPlayerStatsAvlNodeONTeam(AVLNode<PlayerStats> *pointerToPlayerStatsAvlNodeONTeam)
     {
@@ -151,7 +148,7 @@ public:
     {
         return pointerToPlayerStatsAvlNodeONTeam;
     }
-    void updatePlayerStats(int gamesPlayed,int goals, int cards)
+    void updatePlayerStats(int gamesPlayed, int goals, int cards)
     {
         this->gamesPlayed += gamesPlayed;
         this->goals += goals;
@@ -160,7 +157,7 @@ public:
 
     void setTeamId(int newTeamId)
     {
-        this->teamId=newTeamId;
+        this->teamId = newTeamId;
     }
     AVLNode<Player> *getPointerToAllPlayerAvlNode()
     {

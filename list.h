@@ -39,7 +39,7 @@ public:
     }
     bool operator!=(const IDandTotalPoints &rhs) const
     {
-        return !(rhs.getId()==this->getId());
+        return !(rhs.getId() == this->getId());
     }
     bool operator<(const IDandTotalPoints &rhs) const
     {
@@ -47,7 +47,7 @@ public:
     }
     bool operator>(const IDandTotalPoints &rhs) const
     {
-        return rhs.getId()>this->getId();
+        return this->getId() > rhs.getId();
     }
 };
 
@@ -80,7 +80,7 @@ public:
     LinkedList() : head(nullptr), tail(nullptr) {}
 
     // Destructor to free the memory used by the nodes in the list
-    
+
     ~LinkedList()
     {
         // Iterate through the list and delete each node
@@ -156,8 +156,6 @@ public:
         }
     }
 
-
-
     bool IsEmpty() const
     {
         return head == nullptr;
@@ -210,11 +208,11 @@ public:
         if (node->GetValue().getId() <= max && node->GetValue().getId() >= min)
         {
             this->getValuesInRange(node->GetLeft(), min, max);
-            //if (node->GetValue().getNumOfPlayers() >= 11 && node->GetValue().getNumOfGoalKeepers() >= 1)
+            // if (node->GetValue().getNumOfPlayers() >= 11 && node->GetValue().getNumOfGoalKeepers() >= 1)
             //{
-                this->Insert(IDandTotalPoints(node->GetValue().getId(), node->GetValue().getTotalPoints()));
+            this->Insert(IDandTotalPoints(node->GetValue().getId(), node->GetValue().getTotalPoints()));
             //}
-            
+
             this->getValuesInRange(node->GetRight(), min, max);
         }
         if (node->GetValue().getId() > max && node->GetLeft() != NULL)

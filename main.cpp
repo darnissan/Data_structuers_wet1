@@ -204,11 +204,77 @@ int main()
         */
     // tree.PrintInOrder(tree.GetRoot());
     world_cup_t *obj = new world_cup_t();
+
     StatusType res = obj->add_team(1, 2);
     //REQUIRE(res == StatusType::SUCCESS);
-    output_t<int> resn1 = obj->get_team_points(1);
-    //REQUIRE(resn1.status() == StatusType::SUCCESS);
-    //REQUIRE(resn1.ans() == 2);
+    res = obj->add_team(2, 2);
+    //REQUIRE(res == StatusType::SUCCESS);
+
+    // first team players
+    res = obj->add_player(1001, 1, 1, 1, 1, true);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(1002, 1, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(1003, 1, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(1004, 1, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(1005, 1, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(1006, 1, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(1007, 1, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(1008, 1, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(1009, 1, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(1010, 1, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(1011, 1, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+
+    // second team players
+    res = obj->add_player(2001, 2, 1, 1, 1, true);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(2002, 2, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(2003, 2, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(2004, 2, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(2005, 2, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(2006, 2, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(2007, 2, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(2008, 2, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(2009, 2, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(2010, 2, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->add_player(2011, 2, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+
+    res = obj->play_match(1, 2);
+    //REQUIRE(res == StatusType::SUCCESS);
+
+    res = obj->remove_player(1001);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->play_match(1, 2);
+    //REQUIRE(res == StatusType::FAILURE);
+    res = obj->add_player(1001, 1, 1, 1, 1, false);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->play_match(1, 2);
+    //REQUIRE(res == StatusType::FAILURE);
+    res = obj->add_player(1020, 1, 1, 1, 1, true);
+    //REQUIRE(res == StatusType::SUCCESS);
+    res = obj->play_match(1, 2);
+    //REQUIRE(res == StatusType::SUCCESS);
+
+    delete obj;
     foo(res);
     delete obj;
     /*

@@ -2,18 +2,19 @@
 #define PLAYER_STATS_H_
 #include <iostream>
 #include "AvlTree.h"
-class PlayerStats 
+class PlayerStats
 {
 private:
     int playerId;
     int goals;
     int cards;
-    int closesetFromAllLeftID=-1;
-    int closesetFromAllRightID=-1;
-    int closesetFromTeamLeftID=-1;
-    int closesetFromTeamRightID=-1;
+    int closesetFromAllLeftID = -1;
+    int closesetFromAllRightID = -1;
+    int closesetFromTeamLeftID = -1;
+    int closesetFromTeamRightID = -1;
 
-        public : PlayerStats() : playerId(0), goals(0), cards(0), closesetFromAllLeftID(-1), closesetFromAllRightID(-1), closesetFromTeamLeftID(-1), closesetFromTeamRightID(-1)
+public:
+    PlayerStats() : playerId(0), goals(0), cards(0), closesetFromAllLeftID(-1), closesetFromAllRightID(-1), closesetFromTeamLeftID(-1), closesetFromTeamRightID(-1)
     {
     }
 
@@ -23,8 +24,6 @@ private:
         this->goals = goals;
         this->cards = cards;
     }
-  
- 
 
     void setClosestFromAllLeftID(int id)
     {
@@ -126,7 +125,7 @@ private:
     // operator <<
     friend std::ostream &operator<<(std::ostream &os, const PlayerStats &player)
     {
-        os << "playerId: " << player.playerId  << " goals: " << player.goals << " cards: " << player.cards << std::endl;
+        os << "playerId: " << player.playerId << " goals: " << player.goals << " cards: " << player.cards << std::endl;
         return os;
     }
     int getPlayerId() const
@@ -141,9 +140,9 @@ private:
     {
         return cards;
     }
-    void updatePlayerStats( int goals, int cards)
+    void updatePlayerStats(int goals, int cards)
     {
-        
+
         this->goals += goals;
         this->cards += cards;
     }
