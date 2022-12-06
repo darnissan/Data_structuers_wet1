@@ -264,7 +264,9 @@ StatusType world_cup_t::remove_player(int playerId)
 	}																																   // finding the player on player tree By binary search on AVL tree O(logn)
 	AVLNode<Team> *TheTeamOfThePlayerNode = playerNodeOnAllPlayersTree->GetValue().getPointerToTeamAvlNode();						   // getting player team
 	AVLNode<PlayerStats> *playerNodeOnPlayerStatsTree = playerNodeOnAllPlayersTree->GetValue().getpointerToPlayerStatsAvlNodeONTeam(); // finding the player on player stats tree By binary search on AVL tree O(logn)
-
+	AvlTree<PlayerStats> PlayersOnTeamOrderdByStats = TheTeamOfThePlayerNode->GetValue().PlayersOnTeamOrderdByStats;
+	AvlTree<Player> PlayersOnTeamTree = TheTeamOfThePlayerNode->GetValue().players;
+	
 	// checking whether the input is valid
 	
 
@@ -280,6 +282,7 @@ StatusType world_cup_t::remove_player(int playerId)
 	{
 		AllPlayers.root = AllPlayers.Remove(AllPlayers.GetRoot(), playerNodeOnAllPlayersTree->GetValue());
 		ALLPayersOrderdByStats.root = ALLPayersOrderdByStats.Remove(ALLPayersOrderdByStats.GetRoot(), playerNodeOnPlayerStatsTree->GetValue());
+		//remove from player tree by team and player tree by stats in team
 	}
 	catch (std::bad_alloc &e)
 	{
@@ -309,9 +312,17 @@ StatusType world_cup_t::remove_player(int playerId)
 	}
 	if (playerId == TheTeamOfThePlayerNode->GetValue().getTeamTopScorerId())
 	{
-		;
+		AVLNode<PlayerStats> *newTopScorer = PlayersOnTeamOrderdByStats.GetRoot();
+		
+		while(newTopScorer->GetRight() != NULL)
+		{
+			newTopScorer = newTopScorer->GetRight();
+		}
+		TheTeamOfThePlayerNode->GetValue().setTeamTopScorerGoals(newTopScorer->GetValue().getGoals());
+		TheTeamOfThePlayerNode->GetValue().setTeamTopScorerId(newTopScorer->GetValue().getCards());
+		TheTeamOfThePlayerNode->GetValue().setTeamTopScorerCards(newTopScorer->GetValue().getPlayerId());
 	}
-
+	
 	numberOfPlayers--;
 	//std::cout << "player removed" << std::endl;
 	AllTeams.PrintInOrder(AllTeams.GetRoot());
