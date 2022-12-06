@@ -1,3 +1,10 @@
+#include <string>
+
+#include <sstream>
+#include <vector>
+#include <cassert>
+#include <stdlib.h>
+
 
 #include "orderedTriple.h"
 #include "worldcup23a1.h"
@@ -5,6 +12,10 @@
 #include <iostream>
 #include <climits>
 using namespace std;
+void foo(StatusType t)
+{
+    
+}
 template <class T>
 void printBT(const std::string &prefix, const AVLNode<T> *node, bool isLeft)
 {
@@ -192,15 +203,15 @@ int main()
         cout << ClosestDealBreakerWrapper(tree.GetRoot(), f) << endl;
         */
     // tree.PrintInOrder(tree.GetRoot());
-    world_cup_t *world_cup = new world_cup_t();
-    world_cup->add_team(1, 1);
-    world_cup->add_team(2, 2);
-    world_cup->add_team(3, 3);
-    world_cup->add_team(4, 4);
-    world_cup->add_team(6,3);
-    world_cup->add_team(9, 2);
-    world_cup->add_player(21, 1, 1, 1, 20, true); // add player args go by (player id ,team id ,games played, goals,cards)
-    
+    world_cup_t *obj = new world_cup_t();
+    StatusType res = obj->add_team(1, 2);
+    //REQUIRE(res == StatusType::SUCCESS);
+    output_t<int> resn1 = obj->get_team_points(1);
+    //REQUIRE(resn1.status() == StatusType::SUCCESS);
+    //REQUIRE(resn1.ans() == 2);
+    foo(res);
+    delete obj;
+    /*
     world_cup->add_player(25, 1, 1, 1, 20, true);
     world_cup->add_player(3, 1, 1, 1, 5, true);
     world_cup->add_player(4, 1, 1, 1, 1, true);
@@ -311,9 +322,9 @@ int main()
 
         world_cup->knockout_winner(2, 10);
     world_cup->printTeam(2);
-    
+    */
 
-    delete world_cup; //  printBTs(tree.GetRoot());
+  //  printBTs(tree.GetRoot());
 
     return 0;
 }
