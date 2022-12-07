@@ -15,8 +15,8 @@ private:
 
 public:
     PlayerStats();
-
-    explicit PlayerStats(int playerId, int goals, int cards);
+    ~PlayerStats();
+     PlayerStats(int playerId, int goals, int cards);
 
     void setClosestFromAllLeftID(int id);
 
@@ -27,7 +27,10 @@ public:
     int getClosestFromAllRightID();
     int getClosestFromTeamLeftID();
     int getClosestFromTeamRightID();
-
+    void setPlayerId(int id)
+    {
+        playerId = id;
+    }
     // operator <
     bool operator<(const PlayerStats &other) const;
     // operator >

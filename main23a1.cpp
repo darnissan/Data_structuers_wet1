@@ -22,6 +22,29 @@ void query_get_all_players(string cmd, world_cup_t *obj, int teamID);
 
 int main()
 {
+    world_cup_t *obj = new world_cup_t();
+    obj->add_team(1, 1);
+    obj->add_team(2, 2);
+
+    obj->add_player(1, 1, 1, 1, 1, true);
+    obj->add_player(2, 1, 1, 1, 1, true);
+
+
+    obj->add_player(6, 2, 1, 1, 1, true);
+    obj->add_player(7, 2, 1, 1, 1, true);
+
+
+    obj->remove_player(1);
+
+    obj->remove_player(6);
+
+    obj->update_player_stats(2, 1, 1, 1);
+
+    obj->update_player_stats(7, 1, 1, 1);
+    obj->unite_teams(1, 2, 3);
+
+    obj->get_closest_player(7,1);
+    /*
     cin >> std::boolalpha;
 	
     int d1, d2, d3, d4, d5;
@@ -85,7 +108,8 @@ int main()
             cout << "Invalid input format" << endl;
             return -1;
         }
-    }
+        */
+    
 
     // Quit 
 	delete obj;

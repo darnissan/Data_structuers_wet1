@@ -40,6 +40,9 @@ private:
 	int MatchTheWinningClosest(PlayerStats &searcher, int leftID, int rightID);
 	AVLNode<PlayerStats> *findPlayerStatsByStats(AVLNode<PlayerStats> *node, PlayerStats &playerStats);
 	bool isInLeagelTeamsTree(int teamId);
+	void ChangePlayersTeamId(AVLNode<Player> *node, int newTeamId);
+	
+	void ChangePlayersTeamPointer(AVLNode<Player> *node, AVLNode<Team> *newTeamNode);
 
 public:
 	// <DO-NOT-MODIFY> {

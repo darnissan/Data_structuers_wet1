@@ -2,6 +2,7 @@
     PlayerStats::PlayerStats() : playerId(0), goals(0), cards(0), closesetFromAllLeftID(-1), closesetFromAllRightID(-1), closesetFromTeamLeftID(-1), closesetFromTeamRightID(-1)
     {
     }
+   PlayerStats::~PlayerStats()=default;
 
      PlayerStats::PlayerStats(int playerId, int goals, int cards)
     {

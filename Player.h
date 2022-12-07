@@ -31,7 +31,7 @@ public:
     //}
 
     Player(int playerId, int teamId);
-
+    
     Player(int playerId, int teamId, int gamesPlayed, int goals, int cards, bool goalKeeper);
     // get pointer to team
     AVLNode<Team> *getPointerToTeamAvlNode() const;
