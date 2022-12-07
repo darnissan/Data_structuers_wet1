@@ -1,7 +1,7 @@
 #ifndef PLAYER_H_
 #define PLAYER_H_
 #include <iostream>
-#include "AvlTree.h"
+
 #include "PlayerStats.h"
 class Team;
 
@@ -25,155 +25,49 @@ protected:
 public:
     // defualt constructor
 
-    Player()
-    {
-        playerId = 0;
-        teamId = 0;
-        gamesPlayed = 0;
-        goals = 0;
-        cards = 0;
-        goalKeeper = false;
-        gamesTeamPlayedBefore = 0;
-
-        pointerToTeamAvlNode = NULL;
-    }
+    Player();
     //~Player()
     //{
     //}
 
-    Player(int playerId, int teamId) : playerId(playerId), teamId(teamId), gamesPlayed(0), goals(0), cards(0), goalKeeper(false)
-    {
-        // gamesTeamPlayedBefore =
-        // closesetFromLeft =
-        // closesetFromRight =
-        // pointerToTeam =
-    }
-    Player(int playerId, int teamId, int gamesPlayed, int goals, int cards, bool goalKeeper) : playerId(playerId), teamId(teamId), gamesPlayed(gamesPlayed),
-                                                                                               goals(goals), cards(cards), goalKeeper(goalKeeper)
-    {
-        // gamesTeamPlayedBefore =
-        // closesetFromLeft =
-        // closesetFromRight =
-        // pointerToTeam =
-    }
-    // get pointer to team
-    AVLNode<Team> *getPointerToTeamAvlNode() const
-    {
-        return pointerToTeamAvlNode;
-    }
-    void setPointerToTeam(AVLNode<Team> *pointerToTeam)
-    {
-        this->pointerToTeamAvlNode = pointerToTeam;
-    }
+    Player(int playerId, int teamId);
 
-    bool isGoalKeeper() const
-    {
-        return goalKeeper;
-    }
-    int getPlayerId() const
-    {
-        return playerId;
-    }
-    int getGoals() const
-    {
-        return goals;
-    }
-    int getCards() const
-    {
-        return cards;
-    }
+    Player(int playerId, int teamId, int gamesPlayed, int goals, int cards, bool goalKeeper);
+    // get pointer to team
+    AVLNode<Team> *getPointerToTeamAvlNode() const;
+    void setPointerToTeam(AVLNode<Team> *pointerToTeam);
+
+    bool isGoalKeeper() const;
+    int getPlayerId() const;
+    int getGoals() const;
+    int getCards() const;
     // operator <
-    bool operator<(const Player &player) const
-    {
-        if (playerId < player.playerId)
-        {
-            return true;
-        }
-        return false;
-    }
+    bool operator<(const Player &player) const;
     // operator >
-    bool operator>(const Player &player) const
-    {
-        if (playerId > player.playerId)
-        {
-            return true;
-        }
-        return false;
-    }
+    bool operator>(const Player &player) const;
     // operator ==
-    bool operator==(const Player &player) const
-    {
-        if (playerId == player.playerId)
-        {
-            return true;
-        }
-        return false;
-    }
+    bool operator==(const Player &player) const;
     // operator !=
-    bool operator!=(const Player &player) const
-    {
-        if (playerId != player.playerId)
-        {
-            return true;
-        }
-    }
-    void setGamesTeamPlayedBefore(int gamesTeamPlayedBefore)
-    {
-        this->gamesTeamPlayedBefore = gamesTeamPlayedBefore;
-    }
+    bool operator!=(const Player &player) const;
+    void setGamesTeamPlayedBefore(int gamesTeamPlayedBefore);
     // operator <<
+    
+    void setpointerToPlayerStatsAvlNodeONAllPlayers(AVLNode<PlayerStats> *pointerToPlayerStatsAvlNodeONAllPlayers);
+    void SetpointerToPlayerStatsAvlNodeONTeam(AVLNode<PlayerStats> *pointerToPlayerStatsAvlNodeONTeam);
+    AVLNode<Team> *getTeamNode() const;
+    AVLNode<PlayerStats> *getpointerToPlayerStatsAvlNodeONAllPlayers() const;
+    AVLNode<PlayerStats> *getpointerToPlayerStatsAvlNodeONTeam() const;
+    void updatePlayerStats(int gamesPlayed, int goals, int cards);
+
+    void setTeamId(int newTeamId);
+    AVLNode<Player> *getPointerToAllPlayerAvlNode();
+    void setPointerToAllPlayerAvlNode(AVLNode<Player> *pointerToAllPlayerAvlNode);
+    int GetGamesPlayed();
+    int GetGamesTeamPlayedBefore();
     friend std::ostream &operator<<(std::ostream &os, const Player &player)
     {
         os << "playerId: " << player.playerId << " teamId: " << player.teamId << " gamesPlayed: " << player.gamesPlayed << " goals: " << player.goals << " cards: " << player.cards << " goalKeeper: " << player.goalKeeper << std::endl;
         return os;
-    }
-    void setpointerToPlayerStatsAvlNodeONAllPlayers(AVLNode<PlayerStats> *pointerToPlayerStatsAvlNodeONAllPlayers)
-    {
-
-        this->pointerToPlayerStatsAvlNodeONAllPlayers = pointerToPlayerStatsAvlNodeONAllPlayers;
-    }
-    void SetpointerToPlayerStatsAvlNodeONTeam(AVLNode<PlayerStats> *pointerToPlayerStatsAvlNodeONTeam)
-    {
-        this->pointerToPlayerStatsAvlNodeONTeam = pointerToPlayerStatsAvlNodeONTeam;
-    }
-    AVLNode<Team> *getTeamNode() const
-    {
-        return pointerToTeamAvlNode;
-    }
-    AVLNode<PlayerStats> *getpointerToPlayerStatsAvlNodeONAllPlayers() const
-    {
-        return pointerToPlayerStatsAvlNodeONAllPlayers;
-    }
-    AVLNode<PlayerStats> *getpointerToPlayerStatsAvlNodeONTeam() const
-    {
-        return pointerToPlayerStatsAvlNodeONTeam;
-    }
-    void updatePlayerStats(int gamesPlayed, int goals, int cards)
-    {
-        this->gamesPlayed += gamesPlayed;
-        this->goals += goals;
-        this->cards += cards;
-    }
-
-    void setTeamId(int newTeamId)
-    {
-        this->teamId = newTeamId;
-    }
-    AVLNode<Player> *getPointerToAllPlayerAvlNode()
-    {
-        return pointerToAllPlayerAvlNode;
-    }
-    void setPointerToAllPlayerAvlNode(AVLNode<Player> *pointerToAllPlayerAvlNode)
-    {
-        this->pointerToAllPlayerAvlNode = pointerToAllPlayerAvlNode;
-    }
-    int GetGamesPlayed()
-    {
-        return this->gamesPlayed;
-    }
-    int GetGamesTeamPlayedBefore()
-    {
-        return this->gamesTeamPlayedBefore;
     }
 };
 

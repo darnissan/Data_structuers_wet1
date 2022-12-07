@@ -14,137 +14,37 @@ private:
     int closesetFromTeamRightID = -1;
 
 public:
-    PlayerStats() : playerId(0), goals(0), cards(0), closesetFromAllLeftID(-1), closesetFromAllRightID(-1), closesetFromTeamLeftID(-1), closesetFromTeamRightID(-1)
-    {
-    }
+    PlayerStats();
 
-    explicit PlayerStats(int playerId, int goals, int cards)
-    {
-        this->playerId = playerId;
-        this->goals = goals;
-        this->cards = cards;
-    }
+    explicit PlayerStats(int playerId, int goals, int cards);
 
-    void setClosestFromAllLeftID(int id)
-    {
-        closesetFromAllLeftID = id;
-    }
+    void setClosestFromAllLeftID(int id);
 
-    void setClosestFromAllRightID(int id)
-    {
-        closesetFromAllRightID = id;
-    }
-    void setClosestFromTeamLeftID(int id)
-    {
-        closesetFromTeamLeftID = id;
-    }
-    void setClosestFromTeamRightID(int id)
-    {
-        closesetFromTeamRightID = id;
-    }
-    int getClosestFromAllLeftID()
-    {
-        return closesetFromAllLeftID;
-    }
-    int getClosestFromAllRightID()
-    {
-        return closesetFromAllRightID;
-    }
-    int getClosestFromTeamLeftID()
-    {
-        return closesetFromTeamLeftID;
-    }
-    int getClosestFromTeamRightID()
-    {
-        return closesetFromTeamRightID;
-    }
+    void setClosestFromAllRightID(int id);
+    void setClosestFromTeamLeftID(int id);
+    void setClosestFromTeamRightID(int id);
+    int getClosestFromAllLeftID();
+    int getClosestFromAllRightID();
+    int getClosestFromTeamLeftID();
+    int getClosestFromTeamRightID();
 
     // operator <
-    bool operator<(const PlayerStats &other) const
-    {
-        if (this->goals < other.goals)
-            return true;
-        if (this->goals > other.goals)
-            return false;
-        if (this->goals == other.goals)
-        {
-            if (this->cards < other.cards)
-                return false;
-            if (this->cards > other.cards)
-                return true;
-            if (this->cards == other.cards)
-            {
-                if (playerId < other.playerId)
-                    return true;
-                if (playerId > other.playerId)
-                    return false;
-            }
-        }
-        return false;
-    }
+    bool operator<(const PlayerStats &other) const;
     // operator >
-    bool operator>(const PlayerStats &other) const
-    {
-        if (goals > other.goals)
-            return true;
-        if (goals < other.goals)
-            return false;
-        if (goals == other.goals)
-        {
-            if (cards > other.cards)
-                return false;
-            if (cards < other.cards)
-                return true;
-            if (cards == other.cards)
-            {
-                if (playerId > other.playerId)
-                    return true;
-                if (playerId < other.playerId)
-                    return false;
-            }
-        }
-        return false;
-    }
+    bool operator>(const PlayerStats &other) const;
     // operator ==
-    bool operator==(const PlayerStats &other) const
-    {
-        if (playerId == other.playerId)
-        {
-            return true;
-        }
-        return false;
-    }
+    bool operator==(const PlayerStats &other) const;
     // operator !=
-    bool operator!=(const PlayerStats &other) const
-    {
-        if (playerId != other.playerId)
-        {
-            return true;
-        }
-    }
+    bool operator!=(const PlayerStats &other) const;
     // operator <<
     friend std::ostream &operator<<(std::ostream &os, const PlayerStats &player)
     {
         os << "playerId: " << player.playerId << " goals: " << player.goals << " cards: " << player.cards << std::endl;
         return os;
     }
-    int getPlayerId() const
-    {
-        return playerId;
-    }
-    int getGoals() const
-    {
-        return goals;
-    }
-    int getCards() const
-    {
-        return cards;
-    }
-    void updatePlayerStats(int goals, int cards)
-    {
-
-        this->goals += goals;
-        this->cards += cards;
-    }
+    int getPlayerId() const;
+    int getGoals() const;
+    int getCards() const;
+    void updatePlayerStats(int goals, int cards);
 };
 #endif // PLAYER_STATS_H_

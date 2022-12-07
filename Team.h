@@ -2,7 +2,7 @@
 #define TEAMANDPLAYER_H_
 #include <iostream>
 #include "Player.h"
-#include "AvlTree.h"
+
 class Team;
 
 class Team
@@ -22,180 +22,16 @@ private:
 public:
     AvlTree<Player> players;
     AvlTree<PlayerStats> PlayersOnTeamOrderdByStats;
-    Team()
-    {
-        this->id = 0;
-        this->numOfPlayers = 0;
-        this->numOfGoalKeepers = 0;
-        this->points = 0;
-        this->gamesTeamPlayed = 0;
-        this->TotalGoalsScored = 0;
-        this->TotalCards = 0;
-    }
-    Team(int id, int points) : id(id), numOfPlayers(0), numOfGoalKeepers(0), points(points), gamesTeamPlayed(0), TotalGoalsScored(0), TotalCards(0)
-    {
-    }
-    ~Team()
-    {
-    }
-    void setTeamID(int id)
-    {
-        this->id = id;
-    }
+    Team();
+    Team(int id, int points);
+    ~Team();
+    void setTeamID(int id);
     // assign operator
-    Team &operator=(const Team &other)
-    {
-        if (this != &other)
-        {
-            this->id = other.id;
-            this->numOfPlayers = other.numOfPlayers;
-            this->numOfGoalKeepers = other.numOfGoalKeepers;
-            this->points = other.points;
-            this->gamesTeamPlayed = other.gamesTeamPlayed;
-            this->TotalGoalsScored = other.TotalGoalsScored;
-            this->TotalCards = other.TotalCards;
-            this->players.Clear();
-            this->players.root = nullptr;
-
-            this->players.root = copyTree(this->players.root, other.players.root);
-            this->PlayersOnTeamOrderdByStats.Clear();
-            this->PlayersOnTeamOrderdByStats.root = nullptr;
-            this->PlayersOnTeamOrderdByStats.root = copyTree(this->PlayersOnTeamOrderdByStats.root, other.PlayersOnTeamOrderdByStats.root);
-        }
-        return *this;
-    }
+    Team &operator=(const Team &other);
+ 
     // copy constructor
-    Team(const Team &other) : id(other.id), numOfPlayers(other.numOfPlayers), numOfGoalKeepers(other.numOfGoalKeepers),
-                              points(other.points), gamesTeamPlayed(other.gamesTeamPlayed), TotalGoalsScored(other.TotalGoalsScored), TotalCards(other.TotalCards), players(other.players), PlayersOnTeamOrderdByStats(other.PlayersOnTeamOrderdByStats) {}
+    Team(const Team &other);
     // defult constructor
-
-    // operator== for team
-    bool operator==(const Team &other) const
-    {
-        return (this->id == other.id);
-    }
-    // operator > for team
-    bool operator>(const Team &other) const
-    {
-        return (this->id > other.id);
-    }
-    // operator < for team
-    bool operator<(const Team &other) const
-    {
-        return (this->id < other.id);
-    }
-    void setNumOfPlayers(int numOfPlayers)
-    {
-        this->numOfPlayers = numOfPlayers;
-    }
-    void setNumOfGoalKeepers(int numOfGoalKeepers)
-    {
-        this->numOfGoalKeepers = numOfGoalKeepers;
-    }
-    void setPoints(int points)
-    {
-        this->points = points;
-    }
-    void setGamesTeamPlayed(int gamesTeamPlayed)
-    {
-        this->gamesTeamPlayed = gamesTeamPlayed;
-    }
-    void setTotalGoalsScored(int TotalGoalsScored)
-    {
-        this->TotalGoalsScored = TotalGoalsScored;
-    }
-    void setTotalCards(int TotalCards)
-    {
-        this->TotalCards = TotalCards;
-    }
-
-    void setTeamTopScorerGoals(int teamTopScorerGoals)
-    {
-        this->teamTopScorerGoals = teamTopScorerGoals;
-    }
-
-    void setTeamTopScorerId(int teamTopScorerId)
-    {
-        this->teamTopScorerId = teamTopScorerId;
-    }
-
-    void setTeamTopScorerCards(int teamTopScorerCards)
-    {
-        this->teamTopScorerCards = teamTopScorerCards;
-    }
-
-    int getId() const
-    {
-        return id;
-    }
-    int getNumOfPlayers() const
-    {
-        return numOfPlayers;
-    }
-    int getNumOfGoalKeepers() const
-    {
-        return numOfGoalKeepers;
-    }
-    int getPoints() const
-    {
-        return points;
-    }
-    int getGamesTeamPlayed() const
-    {
-        return gamesTeamPlayed;
-    }
-    int getTotalGoalsScored() const
-    {
-        return TotalGoalsScored;
-    }
-    int getTotalCards() const
-    {
-        return TotalCards;
-    }
-
-    int getTeamTopScorerGoals()
-    {
-        return teamTopScorerGoals;
-    }
-
-    int getTeamTopScorerId()
-    {
-        return teamTopScorerId;
-    }
-
-    int getTeamTopScorerCards()
-    {
-        return teamTopScorerCards;
-    }
-
-    AVLNode<Player> *InsertPlayerToTeam(const Player &playerToInsert)
-    {
-        players.root = players.Insert(players.GetRoot(), playerToInsert);
-        numOfPlayers++;
-        this->TotalCards += playerToInsert.getCards();
-        this->TotalGoalsScored += playerToInsert.getGoals();
-        if (playerToInsert.isGoalKeeper())
-        {
-            numOfGoalKeepers++;
-        }
-        //   std::cout<<"Player "<<playerToInsert.getPlayerId()<<" was added to team "<<id<<std::endl;
-        //   players.PrintInOrder(players.GetRoot());
-
-        return players.find(players.GetRoot(), playerToInsert);
-    }
-    AVLNode<PlayerStats> *InsertPlayerToTeamStatsTree(const PlayerStats &playerToInsert)
-    {
-        PlayersOnTeamOrderdByStats.root = PlayersOnTeamOrderdByStats.Insert(PlayersOnTeamOrderdByStats.GetRoot(), playerToInsert); // o(logn)
-        return PlayersOnTeamOrderdByStats.find(PlayersOnTeamOrderdByStats.GetRoot(), playerToInsert);                              // o(logn)
-    }
-
-    //<< operator for team
-    friend std::ostream &operator<<(std::ostream &os, const Team &team)
-    {
-        os << "team id" << team.id << " number of players " << team.numOfPlayers << " number GK " << team.numOfGoalKeepers << "  points "
-           << "points:" << team.points << " games Played " << team.gamesTeamPlayed << " totalGoals " << team.TotalGoalsScored << " totalCards " << team.TotalCards << "---" << std::endl;
-        return os;
-    }
     template <class T>
     AVLNode<T> *copyTree(AVLNode<T> *dst, AVLNode<T> *src)
     {
@@ -218,43 +54,53 @@ public:
         // how to delete the new memory carfully?
         return dst;
     }
-    void RemovePlayerFromTeam(const Player &PlayerToRemove)
-    {
-        players.root = players.Remove(players.GetRoot(), PlayerToRemove);
-        numOfPlayers--;
-        this->TotalCards -= PlayerToRemove.getCards();
-        this->TotalGoalsScored -= PlayerToRemove.getGoals();
-        if (PlayerToRemove.isGoalKeeper())
-        {
-            numOfGoalKeepers--;
-        }
-        //   std::cout<<"Player "<<playerToInsert.getPlayerId()<<" was added to team "<<id<<std::endl;
-        //   players.PrintInOrder(players.GetRoot());
-    }
-    void removePlayerFromStatsTeam(const PlayerStats &playerToRemove)
-    {
-        PlayersOnTeamOrderdByStats.root = PlayersOnTeamOrderdByStats.Remove(PlayersOnTeamOrderdByStats.GetRoot(), playerToRemove); // o(logn)
-    }
+    // operator== for team
+    bool operator==(const Team &other) const;
+    // operator > for team
+    bool operator>(const Team &other) const;
+    // operator < for team
+    bool operator<(const Team &other) const;
+    void setNumOfPlayers(int numOfPlayers);
+    void setNumOfGoalKeepers(int numOfGoalKeepers);
+    void setPoints(int points);
+    void setGamesTeamPlayed(int gamesTeamPlayed);
+    void setTotalGoalsScored(int TotalGoalsScored);
+    void setTotalCards(int TotalCards);
 
-    AVLNode<Player> *findPlayerById(AVLNode<Player> *node, int playerId)
+    void setTeamTopScorerGoals(int teamTopScorerGoals);
+    void setTeamTopScorerId(int teamTopScorerId);
+
+    void setTeamTopScorerCards(int teamTopScorerCards);
+
+    int getId() const;
+    int getNumOfPlayers() const;
+    int getNumOfGoalKeepers() const;
+    int getPoints() const;
+    int getGamesTeamPlayed() const;
+    int getTotalGoalsScored() const;
+    int getTotalCards() const;
+
+    int getTeamTopScorerGoals();
+
+    int getTeamTopScorerId();
+
+    int getTeamTopScorerCards();
+
+    AVLNode<Player> *InsertPlayerToTeam(const Player &playerToInsert);
+    AVLNode<PlayerStats> *InsertPlayerToTeamStatsTree(const PlayerStats &playerToInsert);
+
+    //<< operator for team
+    friend std::ostream &operator<<(std::ostream &os, const Team &team)
     {
-        if (node == NULL)
-        {
-            return nullptr;
-        }
-        if (node->GetValue().getPlayerId() == playerId)
-        {
-            return node;
-        }
-        if (node->GetValue().getPlayerId() > playerId)
-        {
-            return findPlayerById(node->GetLeft(), playerId);
-        }
-        else
-        {
-            return findPlayerById(node->GetRight(), playerId);
-        }
+        os << "team id" << team.id << " number of players " << team.numOfPlayers << " number GK " << team.numOfGoalKeepers << "  points "
+           << "points:" << team.points << " games Played " << team.gamesTeamPlayed << " totalGoals " << team.TotalGoalsScored << " totalCards " << team.TotalCards << "---" << std::endl;
+        return os;
     }
+    
+    void RemovePlayerFromTeam(const Player &PlayerToRemove);
+    void removePlayerFromStatsTeam(const PlayerStats &playerToRemove);
+
+    AVLNode<Player> *findPlayerById(AVLNode<Player> *node, int playerId);
 };
 
 #endif // TEAMANDPLAYER_H_

@@ -9,46 +9,20 @@ class IDandTotalPoints
     int totalPoints;
 
 public:
-    int getId() const
-    {
-        return id;
-    }
-    int getTotalPoints() const
-    {
-        return totalPoints;
-    }
-    IDandTotalPoints(int id, int totalPoints) : id(id), totalPoints(totalPoints)
-    {
-    }
-    void setTotalPoints(int totalPoints)
-    {
-        this->totalPoints = totalPoints;
-    }
-    void setId(int id)
-    {
-        this->id = id;
-    }
+    int getId() const;
+    int getTotalPoints() const;
+    IDandTotalPoints(int id, int totalPoints);
+    void setTotalPoints(int totalPoints);
+    void setId(int id);
     friend std::ostream &operator<<(std::ostream &os, const IDandTotalPoints &idAndTotalPoints)
     {
         os << "id: " << idAndTotalPoints.id << " totalPoints: " << idAndTotalPoints.totalPoints;
         return os;
     }
-    bool operator==(const IDandTotalPoints &rhs) const
-    {
-        return id == rhs.id;
-    }
-    bool operator!=(const IDandTotalPoints &rhs) const
-    {
-        return !(rhs.getId() == this->getId());
-    }
-    bool operator<(const IDandTotalPoints &rhs) const
-    {
-        return id < rhs.id;
-    }
-    bool operator>(const IDandTotalPoints &rhs) const
-    {
-        return this->getId() > rhs.getId();
-    }
+    bool operator==(const IDandTotalPoints &rhs) const;
+    bool operator!=(const IDandTotalPoints &rhs) const;
+    bool operator<(const IDandTotalPoints &rhs) const;
+    bool operator>(const IDandTotalPoints &rhs) const;
 };
 
 template <class T>

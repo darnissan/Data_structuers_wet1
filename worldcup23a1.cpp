@@ -1,4 +1,5 @@
 #include "worldcup23a1.h"
+
 template <class T>
 void printBT(const std::string &prefix, const AVLNode<T> *node, bool isLeft);
 template <class T>
